@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { ViewTransitions } from 'next-view-transitions';
-import { Inter } from 'next/font/google';
 import React from 'react';
 
 import { Footer } from '@/components/footer';
@@ -13,12 +12,6 @@ import { getLocaleClasses } from '@/lib/rtl-utils';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
-});
 
 // Default Global SEO for pages without them
 export async function generateMetadata(props: {
@@ -89,7 +82,7 @@ export default async function LocaleLayout(props: {
           <CartProvider>
             <div
               className={cn(
-                locale === 'fa' ? iranSans.className : inter.className,
+                locale === 'fa' ? iranSans.className : 'font-sans',
                 fontClass,
                 'bg-background text-foreground antialiased h-full w-full'
               )}

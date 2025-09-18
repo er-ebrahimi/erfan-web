@@ -23,7 +23,7 @@ export const Hero = ({
   locale: string;
 }) => {
   return (
-    <div className="h-screen overflow-hidden bg-black relative flex flex-col items-center justify-center ">
+    <div className="h-screen overflow-hidden bg-background relative flex flex-col items-center justify-center ">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -34,12 +34,12 @@ export const Hero = ({
       </motion.div>
       <Heading
         as="h1"
-        className="text-4xl md:text-4xl lg:text-8xl text-white font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
+        className="text-4xl md:text-4xl lg:text-8xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
       >
         {heading.substring(0, heading.lastIndexOf(' '))}{' '}
         <Cover>{heading.split(' ').pop()}</Cover>
       </Heading>
-      <Subheading className="text-center mt-2 text-white md:mt-6  md:text-xl  max-w-3xl mx-auto relative z-10">
+      <Subheading className="text-center mt-2 text-muted-foreground md:mt-6  md:text-xl  max-w-3xl mx-auto relative z-10">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
@@ -55,7 +55,7 @@ export const Hero = ({
             </Button>
           ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-charcoal to-transparent light:from-white light:to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-background to-transparent" />
     </div>
   );
 };

@@ -54,10 +54,12 @@ export function FormNextToSection({
       <div className="flex relative z-20 items-center w-full justify-center px-4 py-4 lg:py-40 sm:px-6 lg:flex-none lg:px-20  xl:px-24">
         <div className="mx-auto w-full max-w-md">
           <div>
-            <h1 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-white">
+            <h1 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-foreground">
               {heading}
             </h1>
-            <p className="mt-4 text-muted   text-sm max-w-sm">{sub_heading}</p>
+            <p className="mt-4 text-muted-foreground text-sm max-w-sm">
+              {sub_heading}
+            </p>
           </div>
 
           <div className="py-10">
@@ -69,7 +71,7 @@ export function FormNextToSection({
                       {input.type !== 'submit' && (
                         <label
                           htmlFor="name"
-                          className="block text-sm font-medium leading-6 text-neutral-400 "
+                          className="block text-sm font-medium leading-6 text-muted-foreground "
                         >
                           {input.name}
                         </label>
@@ -81,7 +83,7 @@ export function FormNextToSection({
                             rows={5}
                             id="message"
                             placeholder={input.placeholder}
-                            className="block w-full bg-neutral-900  px-4 rounded-md border-0 py-1.5  shadow-aceternity text-neutral-100 placeholder:text-gray-400 focus:ring-2 focus:ring-neutral-400 focus:outline-none sm:text-sm sm:leading-6 "
+                            className="block w-full bg-input px-4 rounded-md border-0 py-1.5 shadow-aceternity text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none sm:text-sm sm:leading-6 "
                           />
                         ) : input.type === 'submit' ? (
                           <div>
@@ -94,7 +96,7 @@ export function FormNextToSection({
                             id="name"
                             type={input.type}
                             placeholder={input.placeholder}
-                            className="block w-full bg-neutral-900 px-4 rounded-md border-0 py-1.5  shadow-aceternity text-neutral-100 placeholder:text-gray-400 focus:ring-2 focus:ring-neutral-400 focus:outline-none sm:text-sm sm:leading-6 "
+                            className="block w-full bg-input px-4 rounded-md border-0 py-1.5 shadow-aceternity text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none sm:text-sm sm:leading-6 "
                           />
                         )}
                       </div>
@@ -112,7 +114,7 @@ export function FormNextToSection({
           </div>
         </div>
       </div>
-      <div className="relative w-full z-20 hidden md:flex border-l border-charcoal overflow-hidden bg-neutral-900 items-center justify-center">
+      <div className="relative w-full z-20 hidden md:flex border-l border-border overflow-hidden bg-muted items-center justify-center">
         <StarBackground />
         <ShootingStars />
         <div className="max-w-sm mx-auto">
@@ -121,14 +123,14 @@ export function FormNextToSection({
           </div>
           <p
             className={
-              'font-semibold text-xl text-center  text-muted text-balance'
+              'font-semibold text-xl text-center text-muted-foreground text-balance'
             }
           >
             {section.heading}
           </p>
           <p
             className={
-              'font-normal text-base text-center text-neutral-500  mt-8 text-balance'
+              'font-normal text-base text-center text-muted-foreground mt-8 text-balance'
             }
           >
             {section.sub_heading}

@@ -23,7 +23,7 @@ export const Launches = ({
     ...entry,
     icon: <IconRocket className="h-8 w-8 text-secondary" />,
     content: (
-      <p className="text-4xl md:text-7xl font-bold text-neutral-800">
+      <p className="text-4xl md:text-7xl font-bold text-foreground">
         {entry.mission_number}
       </p>
     ),
@@ -34,7 +34,11 @@ export const Launches = ({
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const backgrounds = ['var(--charcoal)', 'var(--zinc-900)', 'var(--charcoal)'];
+  const backgrounds = [
+    'var(--background)',
+    'var(--muted)',
+    'var(--background)',
+  ];
 
   const [gradient, setGradient] = useState(backgrounds[0]);
 
@@ -67,7 +71,7 @@ export const Launches = ({
     >
       <div className="px-6">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconRocket className="h-6 w-6 text-white" />
+          <IconRocket className="h-6 w-6 text-foreground" />
         </FeatureIconContainer>
         <Heading className="mt-4">{heading}</Heading>
         <Subheading>{sub_heading}</Subheading>

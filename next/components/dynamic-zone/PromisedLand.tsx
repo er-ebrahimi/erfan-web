@@ -59,10 +59,10 @@ const PromisedLand: React.FC<PromisedLandProps> = ({
         dir="rtl"
         className="mx-8 flex justify-center flex-col items-center max-w-4xl gap-4"
       >
-        <h2 className="max-w-7xl pl-4 mx-auto text-2xl md:text-4xl font-bold text-neutral-800 dark:text-neutral-200 font-sans text-center">
+        <h2 className="max-w-7xl pl-4 mx-auto text-2xl md:text-4xl font-bold text-foreground font-sans text-center">
           {Title}
         </h2>
-        <p className="max-w-7xl pt-4 pl-4 mx-auto text-sm md:text-base text-neutral-200 dark:text-neutral-200 font-sans text-center">
+        <p className="max-w-7xl pt-4 pl-4 mx-auto text-sm md:text-base text-muted-foreground font-sans text-center">
           {Description}
         </p>
       </div>

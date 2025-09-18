@@ -19,7 +19,7 @@ interface GuideProps {
 
 const Guide: React.FC<GuideProps> = ({ Title, Description, Profile }) => {
   return (
-    <section className="w-full d text-white py-32 px-4 rtl">
+    <section className="w-full bg-background py-32 px-4 rtl">
       <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
         <div className="w-60 h-60 rounded-full overflow-hidden mb-8   shadow-lg">
           <Image
@@ -33,10 +33,10 @@ const Guide: React.FC<GuideProps> = ({ Title, Description, Profile }) => {
             }}
           />
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
           {Title}
         </h2>
-        <p className="text-lg md:text-xl text-gray-200 leading-relaxed">
+        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
           {Description}
         </p>
       </div>

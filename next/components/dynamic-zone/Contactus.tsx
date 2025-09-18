@@ -19,6 +19,7 @@ const Contactus = ({
     message: string;
   }>({ type: null, message: '' });
   const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,6 +35,26 @@ const Contactus = ({
   const handleTurnstileCallback = (token: string) => {
     setTurnstileToken(token);
   };
+
+  // Check for dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
+
+    // Check initial state
+    checkDarkMode();
+
+    // Watch for theme changes
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Load Turnstile script
   useEffect(() => {
@@ -153,18 +174,18 @@ const Contactus = ({
   };
 
   return (
-    <section className=" py-16 px-4  dark:bg-neutral-950 rtl" dir="rtl">
+    <section className="py-16 px-4 bg-background rtl" dir="rtl">
       <div className="max-w-lg mx-auto text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black dark:text-white">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
           {Title}
         </h2>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300">
+        <p className="text-lg md:text-xl text-muted-foreground">
           {Description}
         </p>
       </div>
       <form
         onSubmit={handleSubmit}
-        className="max-w-lg mx-auto  dark:bg-neutral-950 rounded-xl shadow-lg p-8 flex flex-col gap-6"
+        className="max-w-lg mx-auto bg-card rounded-xl shadow-lg p-8 flex flex-col gap-6"
       >
         {submitStatus.type && (
           <div
@@ -181,7 +202,7 @@ const Contactus = ({
         <div className="flex flex-col gap-2 text-right">
           <label
             htmlFor="contact"
-            className="text-sm font-medium text-black dark:text-white"
+            className="text-sm font-medium text-foreground"
           >
             شماره تماس یا ایمیل
           </label>
@@ -193,14 +214,14 @@ const Contactus = ({
             value={formData.contact}
             onChange={handleInputChange}
             placeholder="شماره تماس یا ایمیل خود را وارد کنید"
-            className="rounded-lg p-3 bg-gray-50 dark:bg-zinc-800 text-black dark:text-white border-none focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+            className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition"
             dir="rtl"
           />
         </div>
         <div className="flex flex-col gap-2 text-right">
           <label
             htmlFor="message"
-            className="text-sm font-medium text-black dark:text-white"
+            className="text-sm font-medium text-foreground"
           >
             پیام
           </label>
@@ -212,7 +233,7 @@ const Contactus = ({
             onChange={handleInputChange}
             placeholder="پیام خود را بنویسید"
             rows={5}
-            className="rounded-lg p-3 bg-gray-50 dark:bg-zinc-800 text-black dark:text-white border-none focus:ring-2 focus:ring-blue-400 focus:outline-none transition resize-none"
+            className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition resize-none"
             dir="rtl"
           />
         </div>
@@ -224,7 +245,7 @@ const Contactus = ({
             className="cf-turnstile"
             data-sitekey="0x4AAAAAABoVMFyRhby1F6w1"
             data-callback="handleTurnstileCallback"
-            data-theme="dark"
+            data-theme={isDarkMode ? 'dark' : 'light'}
             data-language="en"
           ></div>
         </div>

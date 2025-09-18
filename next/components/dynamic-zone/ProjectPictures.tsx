@@ -43,12 +43,14 @@ const ProjectPictures: React.FC<ProjectPicturesProps> = ({
   Pics,
 }) => {
   return (
-    <section className="w-full py-16 px-4">
+    <section className="w-full py-16 px-4 bg-background">
       <div className="max-w-4xl mx-auto text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">{Title}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          {Title}
+        </h2>
       </div>
       <DraggableCardContainer className="relative flex min-h-screen w-full items-center justify-center overflow-clip">
-        <p className="absolute top-1/2 mx-auto max-w-sm -translate-y-3/4 text-center text-2xl font-bold text-neutral-400 md:text-4xl dark:text-neutral-600 ">
+        <p className="absolute top-1/2 mx-auto max-w-sm -translate-y-3/4 text-center text-2xl font-bold text-muted-foreground md:text-4xl">
           {Description}
         </p>
         {Pics.map((item) => (
@@ -69,7 +71,7 @@ const ProjectPictures: React.FC<ProjectPicturesProps> = ({
               width={320}
               height={320}
             />
-            <h3 className="mt-4 text-center text-2xl font-bold text-neutral-700 dark:text-neutral-300">
+            <h3 className="mt-4 text-center text-2xl font-bold text-foreground">
               {item.Name}
             </h3>
           </DraggableCardBody>
