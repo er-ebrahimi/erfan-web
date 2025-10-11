@@ -1,5 +1,6 @@
 import { IconArrowLeft } from '@tabler/icons-react';
 import { format } from 'date-fns';
+import { getTranslations } from 'next-intl/server';
 import { Link } from 'next-view-transitions';
 
 import { Container } from './container';
@@ -16,6 +17,8 @@ export async function BlogLayout({
   locale: string;
   children: React.ReactNode;
 }) {
+  const t = await getTranslations({ locale, namespace: 'blog' });
+
   return (
     <Container className="mt-16 lg:mt-32">
       <div className="flex justify-between items-center px-2 py-8">
@@ -24,7 +27,7 @@ export async function BlogLayout({
           className="flex space-x-2 items-center hover:text-foreground transition-colors"
         >
           <IconArrowLeft className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">Back</span>
+          <span className="text-sm text-muted-foreground">{t('back')}</span>
         </Link>
       </div>
       <div className="w-full mx-auto">

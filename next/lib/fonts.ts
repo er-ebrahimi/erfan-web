@@ -28,3 +28,38 @@ export const getFontForLocale = (locale: string) => {
       return null; // Use system fonts for English and French
   }
 };
+
+// RTL language detection
+export const isRTLLocale = (locale: string): boolean => {
+  const rtlLocales = ['fa', 'ar', 'he', 'ur']; // Add more RTL languages as needed
+  return rtlLocales.includes(locale);
+};
+
+// Get direction for locale
+export const getDirectionForLocale = (locale: string): 'ltr' | 'rtl' => {
+  return isRTLLocale(locale) ? 'rtl' : 'ltr';
+};
+
+// Get text alignment for locale
+export const getTextAlignForLocale = (locale: string): string => {
+  return isRTLLocale(locale) ? 'text-right' : 'text-left';
+};
+
+// Unified locale configuration
+export const getLocaleConfig = (locale: string) => {
+  const font = getFontForLocale(locale);
+  const isRTL = isRTLLocale(locale);
+
+  return {
+    font,
+    direction: getDirectionForLocale(locale),
+    textAlign: getTextAlignForLocale(locale),
+    isRTL,
+    fontClass: font?.className || 'font-sans',
+    // Additional utility classes
+    rtlClasses: isRTL ? 'rtl text-right' : 'ltr text-left',
+    // Spacing utilities for RTL
+    spacingPrefix: isRTL ? 'mr' : 'ml',
+    paddingPrefix: isRTL ? 'pr' : 'pl',
+  };
+};

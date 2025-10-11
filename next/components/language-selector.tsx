@@ -1,13 +1,13 @@
 'use client';
 
 import { IconChevronDown, IconLanguage } from '@tabler/icons-react';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { useSlugContext } from '@/app/context/SlugContext';
-import { i18n } from '@/i18n.config';
-import { iranSans } from '@/lib/fonts';
+import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 
 // Language labels for display
@@ -17,16 +17,19 @@ const languageLabels: Record<string, { label: string; flag: string }> = {
   fa: { label: 'فارسی', flag: '🇮🇷' },
 };
 
-export function LanguageSelector({ currentLocale }: { currentLocale: string }) {
+export function LanguageSelector() {
   const { state } = useSlugContext();
   const { localizedSlugs } = state;
   const [isOpen, setIsOpen] = useState(false);
+  const locale = useLocale();
+  const t = useTranslations('common');
+  const localeConfig = getLocaleConfig(locale);
 
   const pathname = usePathname();
   const segments = pathname?.split('/') || [];
 
-  // Always use locales from i18n config for consistency
-  const availableLocales = i18n.locales;
+  // Available locales
+  const availableLocales = ['en', 'fr', 'fa'];
 
   // Generate localized path for each locale
   const generateLocalizedPath = (locale: string): string => {
@@ -49,8 +52,8 @@ export function LanguageSelector({ currentLocale }: { currentLocale: string }) {
     return segments.join('/');
   };
 
-  const currentLanguage = languageLabels[currentLocale] || {
-    label: currentLocale.toUpperCase(),
+  const currentLanguage = languageLabels[locale] || {
+    label: locale.toUpperCase(),
     flag: '🌐',
   };
 
@@ -63,12 +66,7 @@ export function LanguageSelector({ currentLocale }: { currentLocale: string }) {
       >
         <IconLanguage className="h-4 w-4" />
         <span className="text-sm font-medium">{currentLanguage.flag}</span>
-        <span
-          className={cn(
-            'text-sm',
-            currentLocale === 'fa' ? iranSans.className : ''
-          )}
-        >
+        <span className={cn('text-sm', localeConfig.fontClass)}>
           {currentLanguage.label}
         </span>
         <IconChevronDown
@@ -83,17 +81,17 @@ export function LanguageSelector({ currentLocale }: { currentLocale: string }) {
       {isOpen && (
         <div className="absolute bottom-full left-0 mb-2 w-48 bg-card/95 backdrop-blur-md border border-border rounded-lg shadow-lg z-50 bg-muted dark:bg-primary/20">
           <div className="py-2">
-            {availableLocales.map((locale) => {
-              const language = languageLabels[locale] || {
-                label: locale.toUpperCase(),
+            {availableLocales.map((loc) => {
+              const language = languageLabels[loc] || {
+                label: loc.toUpperCase(),
                 flag: '🌐',
               };
-              const isActive = locale === currentLocale;
+              const isActive = loc === locale;
 
               return (
                 <Link
-                  key={locale}
-                  href={generateLocalizedPath(locale)}
+                  key={loc}
+                  href={generateLocalizedPath(loc)}
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     'flex items-center gap-3 px-4 py-2 text-sm hover:bg-accent/50 transition-colors duration-150',
@@ -102,10 +100,7 @@ export function LanguageSelector({ currentLocale }: { currentLocale: string }) {
                 >
                   <span className="text-lg">{language.flag}</span>
                   <span
-                    className={cn(
-                      'flex-1',
-                      locale === 'fa' ? iranSans.className : ''
-                    )}
+                    className={cn('flex-1', getLocaleConfig(loc).fontClass)}
                   >
                     {language.label}
                   </span>

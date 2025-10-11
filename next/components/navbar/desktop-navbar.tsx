@@ -92,7 +92,7 @@ export const DesktopNavbar = ({
       </div>
       <div className="flex space-x-2 items-center">
         <ThemeToggle />
-        <LocaleSwitcher currentLocale={locale} />
+        <LocaleSwitcher />
 
         {rightNavbarItems.map((item, index) => (
           <Button

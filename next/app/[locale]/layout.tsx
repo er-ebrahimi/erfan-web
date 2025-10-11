@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { ViewTransitions } from 'next-view-transitions';
+import { notFound } from 'next/navigation';
 import React from 'react';
 
 import { Footer } from '@/components/footer';
@@ -7,7 +10,8 @@ import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AuthProvider } from '@/context/auth-context';
 import { CartProvider } from '@/context/cart-context';
-import { iranSans } from '@/lib/fonts';
+import { routing } from '@/i18n/routing';
+import { getFontForLocale } from '@/lib/fonts';
 import { getLocaleClasses } from '@/lib/rtl-utils';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
@@ -39,9 +43,20 @@ export default async function LocaleLayout(props: {
   const params = await props.params;
 
   const { locale } = params;
+
+  // Validate that the incoming `locale` parameter is valid
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
   const { fontClass, direction } = getLocaleClasses(locale);
+  const font = getFontForLocale(locale);
 
   const { children } = props;
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages({ locale });
 
   let pageData;
   try {
@@ -71,30 +86,32 @@ export default async function LocaleLayout(props: {
     };
   }
   return (
-    <ViewTransitions>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <AuthProvider>
-          <CartProvider>
-            <div
-              className={cn(
-                locale === 'fa' ? iranSans.className : 'font-sans',
-                fontClass,
-                'bg-background text-foreground antialiased h-full w-full'
-              )}
-              dir={direction}
-            >
-              <Navbar data={pageData.navbar} locale={locale} />
-              {children}
-              <Footer data={pageData.footer} locale={locale} />
-            </div>
-          </CartProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </ViewTransitions>
+    <NextIntlClientProvider messages={messages} locale={locale}>
+      <ViewTransitions>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <CartProvider>
+              <div
+                className={cn(
+                  font?.className || 'font-sans',
+                  fontClass,
+                  'bg-background text-foreground antialiased h-full w-full'
+                )}
+                dir={direction}
+              >
+                <Navbar data={pageData.navbar} locale={locale} />
+                {children}
+                <Footer data={pageData.footer} locale={locale} />
+              </div>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </ViewTransitions>
+    </NextIntlClientProvider>
   );
 }

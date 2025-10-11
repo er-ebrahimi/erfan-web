@@ -52,7 +52,7 @@ export const BlogCard = ({
           <p className="text-lg md:text-4xl font-bold mb-4 text-foreground">
             <Balancer>{article.title}</Balancer>
           </p>
-          <p className="text-left text-base md:text-xl mt-2 text-primary-foreground-foreground">
+          <p className="text-base md:text-xl mt-2 text-primary-foreground-foreground">
             {truncate(article.description, 500)}
           </p>
         </div>

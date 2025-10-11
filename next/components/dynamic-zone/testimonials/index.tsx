@@ -20,7 +20,7 @@ export const Testimonials = ({
   testimonials: object;
 }) => {
   return (
-    <div className="relative">
+    <div className="relative" dir="ltr">
       <AmbientColor />
       <div className="pb-20">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">

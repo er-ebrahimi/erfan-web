@@ -67,7 +67,7 @@ export const MobileNavbar = ({
             <Logo locale={locale} image={logo?.image} />
             <div className="flex items-center space-x-2">
               <ThemeToggle />
-              <LocaleSwitcher currentLocale={locale} />
+              <LocaleSwitcher />
               <IoIosClose
                 className="h-8 w-8 text-foreground"
                 onClick={() => setOpen(!open)}

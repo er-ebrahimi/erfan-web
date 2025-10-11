@@ -6,9 +6,6 @@
 @layer base {
   :root {
     --radius: 0.625rem;
-    --font-iran-sans:
-      'IRANSans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      Roboto, 'Helvetica Neue', Arial, sans-serif;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -85,22 +82,13 @@
     @apply bg-background text-foreground;
   }
 
-  /* Ensure Persian font is applied when locale is Persian */
-  body[dir='rtl'] {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  body[dir='rtl'] * {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  /* Override Inter font specifically */
+  /* Persian font only when explicitly applied */
   .font-iran-sans {
-    font-family: var(--font-iran-sans) !important;
+    font-family: 'IRANSans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
 
   .font-persian {
-    font-family: var(--font-iran-sans) !important;
+    font-family: 'IRANSans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
 }
 
@@ -120,32 +108,11 @@
 
   /* Persian font utility classes */
   .font-persian {
-    font-family: var(--font-iran-sans) !important;
+    font-family: 'IRANSans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
 
   .font-iran-sans {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  /* Override Inter font for Persian content */
-  [dir='rtl'] {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  [dir='rtl'] * {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  /* Additional specificity to override Inter */
-  .font-iran-sans,
-  .font-persian {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  /* Override any existing font classes for RTL */
-  [dir='rtl'] .font-sans,
-  [dir='rtl'] .font-inter {
-    font-family: var(--font-iran-sans) !important;
+    font-family: 'IRANSans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
 
   /* RTL text alignment utilities */
@@ -168,20 +135,5 @@
     margin-right: 1rem;
   }
 
-  /* Force Persian font for RTL content */
-  [dir='rtl'] {
-    font-family: var(--font-iran-sans) !important;
-  }
-
-  [dir='rtl'] h1,
-  [dir='rtl'] h2,
-  [dir='rtl'] h3,
-  [dir='rtl'] h4,
-  [dir='rtl'] h5,
-  [dir='rtl'] h6,
-  [dir='rtl'] p,
-  [dir='rtl'] span,
-  [dir='rtl'] div {
-    font-family: var(--font-iran-sans) !important;
-  }
+  /* Persian font inheritance is handled automatically by CSS cascade */
 }

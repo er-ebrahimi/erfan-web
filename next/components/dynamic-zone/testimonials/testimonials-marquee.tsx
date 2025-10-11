@@ -15,7 +15,7 @@ export const TestimonialsMarquee = ({
   const levelOne = testimonials.slice(0, 8);
   const levelTwo = testimonials.slice(8, 16);
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto bg-gray-950">
       <div className="flex h-full relative">
         <div className="h-full absolute w-20 left-0 inset-y-0 z-30 bg-gradient-to-r from-charcoal to-transparent" />
         <div className="h-full absolute w-20 right-0 inset-y-0 z-30 bg-gradient-to-l from-charcoal to-transparent" />
