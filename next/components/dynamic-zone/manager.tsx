@@ -40,8 +40,8 @@ const componentMapping: { [key: string]: any } = {
     { ssr: true }
   ),
   'dynamic-zone.launches': dynamic(
-    () => import('./launches').then((mod) => mod.Launches),
-    { ssr: true }
+    () => import('./launches-card').then((mod) => mod.LaunchesCard),
+    { ssr: false }
   ),
   'dynamic-zone.cta': dynamic(() => import('./cta').then((mod) => mod.CTA), {
     ssr: true,
@@ -68,31 +68,37 @@ const componentMapping: { [key: string]: any } = {
     }
   ),
   'dynamic-zone.promised-land': dynamic(
-    () => import('./PromisedLand').then((mod) => mod.default),
+    () => import('./promised-land').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.guide': dynamic(
-    () => import('./Guide').then((mod) => mod.default),
+    () => import('./guide').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.plans': dynamic(
-    () => import('./Plans').then((mod) => mod.default),
+    () => import('./plans').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.project-pictures': dynamic(
-    () => import('./ProjectPictures').then((mod) => mod.default),
+    () => import('./project-pictures').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.contact': dynamic(
-    () => import('./Contactus').then((mod) => mod.default),
+    () => import('./contactus').then((mod) => mod.default),
+    {
+      ssr: true,
+    }
+  ),
+  'dynamic-zone.team-members': dynamic(
+    () => import('./team-members').then((mod) => mod.default),
     {
       ssr: true,
     }
