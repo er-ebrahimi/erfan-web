@@ -17,7 +17,7 @@ type CardItem = {
 
 export const ThreeDCard = ({ items }: { items: CardItem[] }) => {
   const router = useRouter();
-  
+
   return (
     <div className="mt-8 flex justify-center">
       {items.map((item, idx) => (
