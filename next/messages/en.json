@@ -90,5 +90,16 @@
     "price": "Price",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock"
+  },
+  "contact": {
+    "contactLabel": "Contact or Email",
+    "contactPlaceholder": "Enter your contact or email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write your message",
+    "submitButton": "Send Message",
+    "submittingButton": "Sending...",
+    "fillFieldsError": "Please fill in all fields.",
+    "captchaError": "Please verify that you are not a robot.",
+    "sendError": "Error sending message. Please try again."
   }
 }

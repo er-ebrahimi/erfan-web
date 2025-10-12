@@ -1,0 +1,23 @@
+{
+    "collectionName": "components_dynamic_zone_team_members",
+    "info": {
+        "displayName": "Team Members",
+        "icon": "gate",
+        "description": ""
+    },
+    "options": {},
+    "attributes": {
+        "Title": {
+            "type": "string"
+        },
+        "Description": {
+            "type": "text"
+        },
+        "Member": {
+            "displayName": "Member",
+            "type": "component",
+            "repeatable": true,
+            "component": "cards.member"
+        }
+    }
+}

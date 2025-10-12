@@ -90,5 +90,16 @@
     "price": "قیمت",
     "inStock": "موجود",
     "outOfStock": "ناموجود"
+  },
+  "contact": {
+    "contactLabel": "شماره تماس یا ایمیل",
+    "contactPlaceholder": "شماره تماس یا ایمیل خود را وارد کنید",
+    "messageLabel": "پیام",
+    "messagePlaceholder": "پیام خود را بنویسید",
+    "submitButton": "ارسال پیام",
+    "submittingButton": "در حال ارسال...",
+    "fillFieldsError": "لطفاً تمام فیلدها را پر کنید.",
+    "captchaError": "لطفاً تأیید کنید که ربات نیستید.",
+    "sendError": "خطا در ارسال پیام. لطفاً دوباره تلاش کنید."
   }
 }

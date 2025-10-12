@@ -24,11 +24,11 @@ export const LaunchesCard = ({
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
     icon: `${url}${entry.Image.formats.large.url}`,
-    content: (
-      <p className="text-4xl md:text-7xl font-bold text-neutral-800">
-        {entry.mission_number}
-      </p>
-    ),
+    // content: (
+    //   <p className="text-4xl md:text-7xl font-bold text-neutral-800">
+    //     {entry.mission_number}
+    //   </p>
+    // ),
   }));
 
   const ref = useRef<HTMLDivElement>(null);
@@ -36,7 +36,11 @@ export const LaunchesCard = ({
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const backgrounds = ['var(--charcoal)', 'var(--zinc-900)', 'var(--charcoal)'];
+  const backgrounds = [
+    'hsl(var(--background))',
+    'hsl(var(--muted))',
+    'hsl(var(--background))',
+  ];
 
   const [gradient, setGradient] = useState(backgrounds[0]);
 
@@ -69,10 +73,10 @@ export const LaunchesCard = ({
     >
       <div className="px-6">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconRocket className="h-6 w-6 text-white" />
+          <IconRocket className="h-6 w-6 text-foreground" />
         </FeatureIconContainer>
-        <Heading className="mt-4">{heading}</Heading>
-        <Subheading>{sub_heading}</Subheading>
+        <Heading className="mt-4 text-foreground">{heading}</Heading>
+        <Subheading className="text-muted-foreground">{sub_heading}</Subheading>
       </div>
       <ThreeDCard items={launchesWithDecoration} />
     </motion.div>

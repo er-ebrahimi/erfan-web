@@ -90,5 +90,16 @@
     "price": "Prix",
     "inStock": "En stock",
     "outOfStock": "Rupture de stock"
+  },
+  "contact": {
+    "contactLabel": "Contact ou Email",
+    "contactPlaceholder": "Entrez votre contact ou email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Écrivez votre message",
+    "submitButton": "Envoyer le message",
+    "submittingButton": "Envoi en cours...",
+    "fillFieldsError": "Veuillez remplir tous les champs.",
+    "captchaError": "Veuillez vérifier que vous n'êtes pas un robot.",
+    "sendError": "Erreur lors de l'envoi du message. Veuillez réessayer."
   }
 }

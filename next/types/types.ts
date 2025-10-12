@@ -12,7 +12,7 @@ export interface Article {
   description: string;
   slug: string;
   content: string;
-  dynamic_zone: any[];
+  dynamic_zone: unknown[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -27,9 +27,80 @@ export interface Product {
   slug: string;
   description: string;
   price: number;
-  plans: any[];
-  perks: any[];
+  plans: unknown[];
+  perks: unknown[];
   featured?: boolean;
-  images: any[];
-  categories?: any[];
+  images: StrapiImage[];
+  categories?: Category[];
+}
+
+export interface StrapiImage {
+  id: number;
+  documentId: string;
+  name: string;
+  alternativeText: string | null;
+  caption: string | null;
+  width: number;
+  height: number;
+  formats: {
+    thumbnail: {
+      name: string;
+      hash: string;
+      ext: string;
+      mime: string;
+      path: string | null;
+      width: number;
+      height: number;
+      size: number;
+      sizeInBytes: number;
+      url: string;
+    };
+    small: {
+      name: string;
+      hash: string;
+      ext: string;
+      mime: string;
+      path: string | null;
+      width: number;
+      height: number;
+      size: number;
+      sizeInBytes: number;
+      url: string;
+    };
+    medium: {
+      name: string;
+      hash: string;
+      ext: string;
+      mime: string;
+      path: string | null;
+      width: number;
+      height: number;
+      size: number;
+      sizeInBytes: number;
+      url: string;
+    };
+    large: {
+      name: string;
+      hash: string;
+      ext: string;
+      mime: string;
+      path: string | null;
+      width: number;
+      height: number;
+      size: number;
+      sizeInBytes: number;
+      url: string;
+    };
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl: string | null;
+  provider: string;
+  provider_metadata: unknown;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }

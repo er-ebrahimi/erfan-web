@@ -30,6 +30,21 @@ export interface CardsGraphCard extends Struct.ComponentSchema {
   };
 }
 
+export interface CardsMember extends Struct.ComponentSchema {
+  collectionName: 'components_cards_members';
+  info: {
+    description: '';
+    displayName: 'Member';
+    icon: 'user';
+  };
+  attributes: {
+    Description: Schema.Attribute.Text;
+    Positions: Schema.Attribute.Component<'items.text', true>;
+    Profile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    Title: Schema.Attribute.String;
+  };
+}
+
 export interface CardsRayCard extends Struct.ComponentSchema {
   collectionName: 'components_cards_ray_cards';
   info: {
@@ -304,6 +319,20 @@ export interface DynamicZoneRelatedProducts extends Struct.ComponentSchema {
   };
 }
 
+export interface DynamicZoneTeamMembers extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_team_members';
+  info: {
+    description: '';
+    displayName: 'Team Members';
+    icon: 'gate';
+  };
+  attributes: {
+    Description: Schema.Attribute.Text;
+    Member: Schema.Attribute.Component<'cards.member', true>;
+    Title: Schema.Attribute.String;
+  };
+}
+
 export interface DynamicZoneTestimonials extends Struct.ComponentSchema {
   collectionName: 'components_dynamic_zone_testimonials';
   info: {
@@ -429,6 +458,17 @@ export interface ItemsRayItems extends Struct.ComponentSchema {
     item_1: Schema.Attribute.String;
     item_2: Schema.Attribute.String;
     item_3: Schema.Attribute.String;
+  };
+}
+
+export interface ItemsText extends Struct.ComponentSchema {
+  collectionName: 'components_items_texts';
+  info: {
+    displayName: 'Text';
+    icon: 'file';
+  };
+  attributes: {
+    Position: Schema.Attribute.String;
   };
 }
 
@@ -674,6 +714,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'cards.globe-card': CardsGlobeCard;
       'cards.graph-card': CardsGraphCard;
+      'cards.member': CardsMember;
       'cards.ray-card': CardsRayCard;
       'cards.social-media-card': CardsSocialMediaCard;
       'dynamic-zone.brands': DynamicZoneBrands;
@@ -693,6 +734,7 @@ declare module '@strapi/strapi' {
       'dynamic-zone.promised-land': DynamicZonePromisedLand;
       'dynamic-zone.related-articles': DynamicZoneRelatedArticles;
       'dynamic-zone.related-products': DynamicZoneRelatedProducts;
+      'dynamic-zone.team-members': DynamicZoneTeamMembers;
       'dynamic-zone.testimonials': DynamicZoneTestimonials;
       'global.footer': GlobalFooter;
       'global.navbar': GlobalNavbar;
@@ -700,6 +742,7 @@ declare module '@strapi/strapi' {
       'items.input': ItemsInput;
       'items.left-navbar-items': ItemsLeftNavbarItems;
       'items.ray-items': ItemsRayItems;
+      'items.text': ItemsText;
       'shared.button': SharedButton;
       'shared.cons': SharedCons;
       'shared.form': SharedForm;

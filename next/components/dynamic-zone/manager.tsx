@@ -19,6 +19,12 @@ const componentMapping: { [key: string]: any } = {
   'dynamic-zone.hero': dynamic(() => import('./hero').then((mod) => mod.Hero), {
     ssr: true,
   }),
+  'dynamic-zone.hero-picture': dynamic(
+    () => import('./hero-picture').then((mod) => mod.HeroPicture),
+    {
+      ssr: true,
+    }
+  ),
   'dynamic-zone.features': dynamic(
     () => import('./features').then((mod) => mod.Features),
     { ssr: true }
@@ -92,7 +98,7 @@ const componentMapping: { [key: string]: any } = {
     }
   ),
   'dynamic-zone.contact': dynamic(
-    () => import('./contactus').then((mod) => mod.default),
+    () => import('./contact-us').then((mod) => mod.default),
     {
       ssr: true,
     }
@@ -108,7 +114,7 @@ const componentMapping: { [key: string]: any } = {
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
   return (
     <div>
-      {dynamicZone.map((componentData) => {
+      {dynamicZone.map((componentData, index) => {
         const Component = componentMapping[componentData.__component];
         if (!Component) {
           console.warn(`No component found for: ${componentData.__component}`);
@@ -116,7 +122,7 @@ const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
         }
         return (
           <Component
-            key={componentData.id}
+            key={`${componentData.__component}-${componentData.id}-${index}`}
             {...componentData}
             locale={locale}
           />

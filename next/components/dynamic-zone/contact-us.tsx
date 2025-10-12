@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 const Contactus = ({
@@ -20,6 +21,9 @@ const Contactus = ({
   }>({ type: null, message: '' });
   const [turnstileToken, setTurnstileToken] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  // Use next-intl for translations
+  const t = useTranslations('contact');
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -108,15 +112,14 @@ const Contactus = ({
         console.error('Failed to send contact form:', result);
         return {
           success: false,
-          message:
-            result.message || 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
+          message: result.message || t('sendError'),
         };
       }
     } catch (error) {
       console.error('Error sending contact form:', error);
       return {
         success: false,
-        message: 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
+        message: t('sendError'),
       };
     }
   };
@@ -127,7 +130,7 @@ const Contactus = ({
     if (!formData.contact.trim() || !formData.message.trim()) {
       setSubmitStatus({
         type: 'error',
-        message: 'لطفاً تمام فیلدها را پر کنید.',
+        message: t('fillFieldsError'),
       });
       return;
     }
@@ -135,7 +138,7 @@ const Contactus = ({
     if (!turnstileToken) {
       setSubmitStatus({
         type: 'error',
-        message: 'لطفاً تأیید کنید که ربات نیستید.',
+        message: t('captchaError'),
       });
       return;
     }
@@ -166,7 +169,7 @@ const Contactus = ({
     } catch (error) {
       setSubmitStatus({
         type: 'error',
-        message: 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
+        message: t('sendError'),
       });
     } finally {
       setIsSubmitting(false);
@@ -174,7 +177,7 @@ const Contactus = ({
   };
 
   return (
-    <section className="py-16 px-4 bg-background rtl" dir="rtl">
+    <section className="py-16 px-4 bg-background">
       <div className="max-w-lg mx-auto text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
           {Title}
@@ -199,12 +202,12 @@ const Contactus = ({
           </div>
         )}
 
-        <div className="flex flex-col gap-2 text-right">
+        <div className="flex flex-col gap-2">
           <label
             htmlFor="contact"
             className="text-sm font-medium text-foreground"
           >
-            شماره تماس یا ایمیل
+            {t('contactLabel')}
           </label>
           <input
             id="contact"
@@ -213,17 +216,16 @@ const Contactus = ({
             required
             value={formData.contact}
             onChange={handleInputChange}
-            placeholder="شماره تماس یا ایمیل خود را وارد کنید"
+            placeholder={t('contactPlaceholder')}
             className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition"
-            dir="rtl"
           />
         </div>
-        <div className="flex flex-col gap-2 text-right">
+        <div className="flex flex-col gap-2">
           <label
             htmlFor="message"
             className="text-sm font-medium text-foreground"
           >
-            پیام
+            {t('messageLabel')}
           </label>
           <textarea
             id="message"
@@ -231,10 +233,9 @@ const Contactus = ({
             required
             value={formData.message}
             onChange={handleInputChange}
-            placeholder="پیام خود را بنویسید"
+            placeholder={t('messagePlaceholder')}
             rows={5}
             className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition resize-none"
-            dir="rtl"
           />
         </div>
 
@@ -255,7 +256,7 @@ const Contactus = ({
           disabled={isSubmitting || !turnstileToken}
           className="mt-4 w-full py-3 rounded-lg bg-secondary text-primary hover:bg-secondary-dark font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'در حال ارسال...' : 'ارسال پیام'}
+          {isSubmitting ? t('submittingButton') : t('submitButton')}
         </button>
       </form>
     </section>

@@ -29,7 +29,7 @@ export const TeamMembers: React.FC<{
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4 flex justify-center flex-col items-center">
         {Title && <h2 className="text-3xl font-semibold mb-2">{Title}</h2>}
-        {Description && <p className="text-muted mb-6">{Description}</p>}
+        {Description && <p className=" mb-6">{Description}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {Member.map((m) => (
@@ -63,9 +63,7 @@ export const TeamMembers: React.FC<{
               )}
 
               {m.Title && <h2 className="text-lg font-bold mt-2">{m.Title}</h2>}
-              {m.Description && (
-                <p className="text-sm text-muted mt-1">{m.Description}</p>
-              )}
+              {m.Description && <p className="text-sm mt-1">{m.Description}</p>}
             </article>
           ))}
         </div>

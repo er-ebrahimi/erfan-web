@@ -13,7 +13,12 @@ interface TimelineEntry {
   content: React.ReactNode;
 }
 
-export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
+interface TimelineProps {
+  data: TimelineEntry[];
+  locale?: string;
+}
+
+export const Timeline = ({ data, locale }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
@@ -32,7 +37,8 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-  let dir: 'rtl' | 'ltr' = 'rtl';
+  const isRTL = locale === 'fa' || locale === 'ar';
+  const dir: 'rtl' | 'ltr' = isRTL ? 'rtl' : 'ltr';
   return (
     <div
       className="w-full  dark:bg-neutral-950 font-sans lg:px-10"
