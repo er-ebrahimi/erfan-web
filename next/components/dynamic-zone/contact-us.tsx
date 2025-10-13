@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
-const Contactus = ({
+const ContactUs = ({
   Title,
   Description,
 }: {
@@ -177,90 +177,92 @@ const Contactus = ({
   };
 
   return (
-    <section className="py-16 px-4 bg-background">
-      <div className="max-w-lg mx-auto text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-          {Title}
-        </h2>
-        <p className="text-lg md:text-xl text-muted-foreground">
-          {Description}
-        </p>
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-lg mx-auto bg-card rounded-xl shadow-lg p-8 flex flex-col gap-6"
-      >
-        {submitStatus.type && (
-          <div
-            className={`p-4 rounded-lg text-center ${
-              submitStatus.type === 'success'
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-            }`}
-          >
-            {submitStatus.message}
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="contact"
-            className="text-sm font-medium text-foreground"
-          >
-            {t('contactLabel')}
-          </label>
-          <input
-            id="contact"
-            name="contact"
-            type="text"
-            required
-            value={formData.contact}
-            onChange={handleInputChange}
-            placeholder={t('contactPlaceholder')}
-            className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition"
-          />
+    <section className="py-16 px-4 flex justify-center items-center">
+      <div className="container border border-border rounded-xl p-12 w-fit shadow-lg">
+        <div className="max-w-lg text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            {Title}
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground">
+            {Description}
+          </p>
         </div>
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="message"
-            className="text-sm font-medium text-foreground"
-          >
-            {t('messageLabel')}
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            required
-            value={formData.message}
-            onChange={handleInputChange}
-            placeholder={t('messagePlaceholder')}
-            rows={5}
-            className="rounded-lg p-3 bg-input text-foreground border-none focus:ring-2 focus:ring-ring focus:outline-none transition resize-none"
-          />
-        </div>
-
-        {/* Cloudflare Turnstile Widget */}
-
-        <div className="flex justify-center">
-          <div
-            className="cf-turnstile"
-            data-sitekey="0x4AAAAAABoVMFyRhby1F6w1"
-            data-callback="handleTurnstileCallback"
-            data-theme={isDarkMode ? 'dark' : 'light'}
-            data-language="en"
-          ></div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitting || !turnstileToken}
-          className="mt-4 w-full py-3 rounded-lg bg-secondary text-primary hover:bg-secondary-dark font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-lg bg-card rounded-xl flex flex-col gap-6"
         >
-          {isSubmitting ? t('submittingButton') : t('submitButton')}
-        </button>
-      </form>
+          {submitStatus.type && (
+            <div
+              className={`p-4 rounded-lg text-center ${
+                submitStatus.type === 'success'
+                  ? 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-200 border border-green-200 dark:border-green-700'
+                  : 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-200 border border-red-200 dark:border-red-700'
+              }`}
+            >
+              {submitStatus.message}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="contact"
+              className="text-sm font-medium text-foreground"
+            >
+              {t('contactLabel')}
+            </label>
+            <input
+              id="contact"
+              name="contact"
+              type="text"
+              required
+              value={formData.contact}
+              onChange={handleInputChange}
+              placeholder={t('contactPlaceholder')}
+              className="rounded-lg p-3 bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="message"
+              className="text-sm font-medium text-foreground"
+            >
+              {t('messageLabel')}
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              value={formData.message}
+              onChange={handleInputChange}
+              placeholder={t('messagePlaceholder')}
+              rows={5}
+              className="rounded-lg p-3 bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition resize-none"
+            />
+          </div>
+
+          {/* Cloudflare Turnstile Widget */}
+
+          <div className="flex justify-center">
+            <div
+              className="cf-turnstile"
+              data-sitekey="0x4AAAAAABoVMFyRhby1F6w1"
+              data-callback="handleTurnstileCallback"
+              data-theme={isDarkMode ? 'dark' : 'light'}
+              data-language="en"
+            ></div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting || !turnstileToken}
+            className="mt-4 w-full py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? t('submittingButton') : t('submitButton')}
+          </button>
+        </form>
+      </div>
     </section>
   );
 };
 
-export default Contactus;
+export default ContactUs;

@@ -1,11 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 import { Button } from '../elements/button';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { StrapiImage } from '@/types/types';
+
+type CTA = {
+  id: string;
+  text: string;
+  URL: string;
+  variant?: 'simple' | 'outline' | 'primary' | 'muted';
+};
 
 export const HeroPicture = ({
   heading,
@@ -16,7 +22,7 @@ export const HeroPicture = ({
 }: {
   heading: string;
   sub_heading: string;
-  CTAs: any[];
+  CTAs: CTA[];
   locale: string;
   background?: StrapiImage;
 }) => {
@@ -61,7 +67,7 @@ export const HeroPicture = ({
             </Button>
           ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-charcoal to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-slate-50 dark:from-charcoal to-transparent" />
     </div>
   );
 };
