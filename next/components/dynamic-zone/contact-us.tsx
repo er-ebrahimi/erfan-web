@@ -178,7 +178,7 @@ const ContactUs = ({
 
   return (
     <section className="py-16 px-4 flex justify-center items-center">
-      <div className="container border border-border rounded-xl p-12 w-fit shadow-lg">
+      <div className="container border border-border rounded-xl p-12 w-fit shadow-lg bg-card">
         <div className="max-w-lg text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             {Title}
@@ -189,7 +189,7 @@ const ContactUs = ({
         </div>
         <form
           onSubmit={handleSubmit}
-          className="max-w-lg bg-card rounded-xl flex flex-col gap-6"
+          className="max-w-lg rounded-xl flex flex-col gap-6"
         >
           {submitStatus.type && (
             <div

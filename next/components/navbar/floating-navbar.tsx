@@ -15,12 +15,9 @@ import {
   IconUser,
 } from '@tabler/icons-react';
 import { useTheme } from 'next-themes';
-import { Link } from 'next-view-transitions';
 import { useEffect, useState } from 'react';
 
 import { LanguageSelector } from '../language-selector';
-import { Button } from '@/components/elements/button';
-import { Logo } from '@/components/logo';
 import { FloatingDock } from '@/components/ui/floating-dock';
 
 type Props = {
@@ -38,6 +35,8 @@ type Props = {
   }[];
   logo: any;
   locale: string;
+  showTheme?: boolean;
+  showLanguage?: boolean;
 };
 
 // Icon mapping for Strapi icon field or text-based fallback
@@ -101,6 +100,8 @@ export const FloatingNavbar = ({
   rightNavbarItems,
   logo,
   locale,
+  showTheme = false,
+  showLanguage = false,
 }: Props) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -120,25 +121,33 @@ export const FloatingNavbar = ({
       icon: getIconForNavItem(item.text || '', item.icon),
       href: `/${locale}${item.URL || '/'}`,
     })),
-    {
-      title: 'Toggle Theme',
-      icon:
-        theme === 'dark' ? (
-          <IconSun className="h-full w-full" />
-        ) : (
-          <IconMoon className="h-full w-full" />
-        ),
-      href: '#',
-      onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
-    },
-    {
-      title: 'Change Language',
-      icon: <IconLanguage className="h-full w-full" />,
-      href: '#',
-      onClick: () => {
-        setShowLanguageSelector(!showLanguageSelector);
-      },
-    },
+    ...(showTheme
+      ? [
+          {
+            title: 'Toggle Theme',
+            icon:
+              theme === 'dark' ? (
+                <IconSun className="h-full w-full" />
+              ) : (
+                <IconMoon className="h-full w-full" />
+              ),
+            href: '#',
+            onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
+          },
+        ]
+      : []),
+    ...(showLanguage
+      ? [
+          {
+            title: 'Change Language',
+            icon: <IconLanguage className="h-full w-full" />,
+            href: '#',
+            onClick: () => {
+              setShowLanguageSelector(!showLanguageSelector);
+            },
+          },
+        ]
+      : []),
     ...(rightNavbarItems && Array.isArray(rightNavbarItems)
       ? rightNavbarItems
       : []

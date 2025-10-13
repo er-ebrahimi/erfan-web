@@ -47,7 +47,7 @@ const componentMapping: { [key: string]: any } = {
   ),
   'dynamic-zone.launches': dynamic(
     () => import('./launches-card').then((mod) => mod.LaunchesCard),
-    { ssr: false }
+    { ssr: true }
   ),
   'dynamic-zone.cta': dynamic(() => import('./cta').then((mod) => mod.CTA), {
     ssr: true,

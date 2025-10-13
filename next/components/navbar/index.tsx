@@ -14,6 +14,8 @@ export function Navbar({ data, locale }: { data: any; locale: string }) {
       leftNavbarItems={data.left_navbar_items || []}
       rightNavbarItems={data.right_navbar_items || []}
       logo={data.logo}
+      showTheme={data.theme}
+      showLanguage={data.language}
     />
   );
 }
