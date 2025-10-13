@@ -3,12 +3,19 @@
 
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, extend, useThree } from '@react-three/fiber';
-import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from 'three';
 import ThreeGlobe from 'three-globe';
 
 import countries from './data/globe.json';
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
