@@ -89,8 +89,6 @@ const ContactUs = ({
     token: string
   ) => {
     try {
-      console.log('Sending contact form...');
-
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -106,17 +104,14 @@ const ContactUs = ({
       const result = await response.json();
 
       if (response.ok && result.success) {
-        console.log('Contact form sent successfully:', result);
         return { success: true, message: result.message };
       } else {
-        console.error('Failed to send contact form:', result);
         return {
           success: false,
           message: result.message || t('sendError'),
         };
       }
     } catch (error) {
-      console.error('Error sending contact form:', error);
       return {
         success: false,
         message: t('sendError'),

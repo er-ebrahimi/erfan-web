@@ -39,7 +39,7 @@ export const Pricing = ({
   plans: any[];
 }) => {
   const onClick = (plan: Plan) => {
-    console.log('click', plan);
+    // Handle plan click
   };
   return (
     <div className="pt-40">
