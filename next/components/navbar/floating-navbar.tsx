@@ -17,7 +17,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-import { LanguageSelector } from '../language-selector';
+import { BackendLanguageSelector } from '../backend-language-selector';
 import { FloatingDock } from '@/components/ui/floating-dock';
 
 type Props = {
@@ -37,6 +37,11 @@ type Props = {
   locale: string;
   showTheme?: boolean;
   showLanguage?: boolean;
+  languages?: {
+    id: number;
+    code: string;
+    name: string;
+  }[];
 };
 
 // Icon mapping for Strapi icon field or text-based fallback
@@ -102,6 +107,7 @@ export const FloatingNavbar = ({
   locale,
   showTheme = false,
   showLanguage = false,
+  languages = [],
 }: Props) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -178,7 +184,10 @@ export const FloatingNavbar = ({
       {showLanguageSelector && (
         <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-card/90 backdrop-blur-md border border-border rounded-lg p-2 shadow-lg bg-muted dark:bg-primary/20">
-            <LanguageSelector />
+            <BackendLanguageSelector
+              languages={languages}
+              onClose={() => setShowLanguageSelector(false)}
+            />
           </div>
         </div>
       )}

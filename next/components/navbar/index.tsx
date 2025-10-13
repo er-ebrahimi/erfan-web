@@ -2,7 +2,15 @@
 
 import { FloatingNavbar } from './floating-navbar';
 
-export function Navbar({ data, locale }: { data: any; locale: string }) {
+export function Navbar({
+  data,
+  locale,
+  languages,
+}: {
+  data: any;
+  locale: string;
+  languages?: any[];
+}) {
   // Add safety checks to prevent errors during SSR
   if (!data || !data.left_navbar_items) {
     return null;
@@ -16,6 +24,7 @@ export function Navbar({ data, locale }: { data: any; locale: string }) {
       logo={data.logo}
       showTheme={data.theme}
       showLanguage={data.language}
+      languages={languages || []}
     />
   );
 }

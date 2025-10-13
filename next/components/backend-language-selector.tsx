@@ -1,7 +1,7 @@
 'use client';
 
 import { IconChevronDown, IconLanguage } from '@tabler/icons-react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -11,19 +11,27 @@ import { languageLabels } from '@/lib/constants';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 
-export function LanguageSelector() {
+type BackendLanguageSelectorProps = {
+  languages: {
+    id: number;
+    code: string;
+    name: string;
+  }[];
+  onClose?: () => void;
+};
+
+export function BackendLanguageSelector({
+  languages,
+  onClose,
+}: BackendLanguageSelectorProps) {
   const { state } = useSlugContext();
   const { localizedSlugs } = state;
   const [isOpen, setIsOpen] = useState(false);
   const locale = useLocale();
-  const t = useTranslations('common');
   const localeConfig = getLocaleConfig(locale);
 
   const pathname = usePathname();
   const segments = pathname?.split('/') || [];
-
-  // Available locales
-  const availableLocales = ['en', 'fr', 'fa'];
 
   // Generate localized path for each locale
   const generateLocalizedPath = (locale: string): string => {
@@ -51,6 +59,13 @@ export function LanguageSelector() {
     flag: '🌐',
   };
 
+  const handleLanguageChange = (newLocale: string) => {
+    setIsOpen(false);
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
     <div className="relative">
       {/* Language Button */}
@@ -75,28 +90,31 @@ export function LanguageSelector() {
       {isOpen && (
         <div className="absolute bottom-full left-0 mb-2 w-48 bg-card/95 backdrop-blur-md border border-border rounded-lg shadow-lg z-50 bg-muted dark:bg-primary/20">
           <div className="py-2">
-            {availableLocales.map((loc) => {
-              const language = languageLabels[loc] || {
-                label: loc.toUpperCase(),
+            {languages.map((language) => {
+              const languageInfo = languageLabels[language.code] || {
+                label: language.name || language.code.toUpperCase(),
                 flag: '🌐',
               };
-              const isActive = loc === locale;
+              const isActive = language.code === locale;
 
               return (
                 <Link
-                  key={loc}
-                  href={generateLocalizedPath(loc)}
-                  onClick={() => setIsOpen(false)}
+                  key={language.id}
+                  href={generateLocalizedPath(language.code)}
+                  onClick={() => handleLanguageChange(language.code)}
                   className={cn(
                     'flex items-center gap-3 px-4 py-2 text-sm hover:bg-accent/50 transition-colors duration-150',
                     isActive && 'bg-accent/30 text-accent-foreground'
                   )}
                 >
-                  <span className="text-lg">{language.flag}</span>
+                  <span className="text-lg">{languageInfo.flag}</span>
                   <span
-                    className={cn('flex-1', getLocaleConfig(loc).fontClass)}
+                    className={cn(
+                      'flex-1',
+                      getLocaleConfig(language.code).fontClass
+                    )}
                   >
-                    {language.label}
+                    {languageInfo.label}
                   </span>
                   {isActive && (
                     <div className="w-2 h-2 bg-primary rounded-full" />

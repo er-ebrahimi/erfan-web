@@ -104,7 +104,11 @@ export default async function LocaleLayout(props: {
                 )}
                 dir={direction}
               >
-                <Navbar data={pageData.navbar} locale={locale} />
+                <Navbar
+                  data={pageData.navbar}
+                  locale={locale}
+                  languages={pageData.languages}
+                />
                 {children}
                 <Footer data={pageData.footer} locale={locale} />
               </div>
