@@ -3,6 +3,7 @@ import type { Viewport } from 'next';
 import './globals.css';
 
 import { SlugProvider } from './context/SlugContext';
+import { GlobalErrorBoundary } from '@/components/global-error-boundary';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <SlugProvider>{children}</SlugProvider>
+        <GlobalErrorBoundary>
+          <SlugProvider>{children}</SlugProvider>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );

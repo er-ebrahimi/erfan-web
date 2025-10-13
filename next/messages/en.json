@@ -101,5 +101,21 @@
     "fillFieldsError": "Please fill in all fields.",
     "captchaError": "Please verify that you are not a robot.",
     "sendError": "Error sending message. Please try again."
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or doesn't exist.",
+    "goHome": "Go Home",
+    "browseBlog": "Browse Blog",
+    "supportMessage": "If you believe this is an error, please contact our support team."
+  },
+  "serverError": {
+    "title": "500",
+    "heading": "Internal Server Error",
+    "description": "Something went wrong on our end. We're working to fix this issue. Please try again later.",
+    "goHome": "Go Home",
+    "tryAgain": "Try Again",
+    "supportMessage": "If this problem persists, please contact our support team."
   }
 }

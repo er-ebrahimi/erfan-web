@@ -50,7 +50,6 @@ export default async function HomePage(props: {
     },
     { [params.locale]: '' }
   );
-
   return (
     <>
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
