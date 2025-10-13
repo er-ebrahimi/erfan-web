@@ -4,6 +4,7 @@ import React from 'react';
 
 import { BlurImage } from '@/components/blur-image';
 import { strapiImage } from '@/lib/strapi/strapiImage';
+import { StrapiImage } from '@/types/types';
 
 type Position = {
   Position?: string;
@@ -12,7 +13,7 @@ type Position = {
 type Member = {
   Title?: string;
   Description?: string;
-  Profile?: any;
+  Profile?: StrapiImage;
   Positions?: Position[];
   id?: number;
 };
@@ -28,8 +29,14 @@ export const TeamMembers: React.FC<{
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4 flex justify-center flex-col items-center">
-        {Title && <h2 className="text-3xl font-semibold mb-2">{Title}</h2>}
-        {Description && <p className=" mb-6">{Description}</p>}
+        {Title && (
+          <h2 className="text-3xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+            {Title}
+          </h2>
+        )}
+        {Description && (
+          <p className="mb-6 text-gray-700 dark:text-gray-300">{Description}</p>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {Member.map((m) => (
@@ -40,7 +47,7 @@ export const TeamMembers: React.FC<{
               {m.Profile && (
                 <div className="w-32 h-32 mb-2 rounded-full overflow-hidden">
                   <BlurImage
-                    src={strapiImage(m.Profile.url || m.Profile)}
+                    src={strapiImage(m.Profile.url)}
                     width={128}
                     height={128}
                     alt={m.Title || 'Profile'}
@@ -53,8 +60,7 @@ export const TeamMembers: React.FC<{
                   {m.Positions.map((p, idx) => (
                     <li
                       key={idx}
-                      style={{ marginTop: '0' }}
-                      className="bg-gray-800 rounded-full px-2 mt-0 list-none"
+                      className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full px-2 mt-0 list-none"
                     >
                       {p.Position}
                     </li>
@@ -62,8 +68,16 @@ export const TeamMembers: React.FC<{
                 </ul>
               )}
 
-              {m.Title && <h2 className="text-lg font-bold mt-2">{m.Title}</h2>}
-              {m.Description && <p className="text-sm mt-1">{m.Description}</p>}
+              {m.Title && (
+                <h2 className="text-lg font-bold mt-2 text-gray-900 dark:text-gray-100">
+                  {m.Title}
+                </h2>
+              )}
+              {m.Description && (
+                <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">
+                  {m.Description}
+                </p>
+              )}
             </article>
           ))}
         </div>
