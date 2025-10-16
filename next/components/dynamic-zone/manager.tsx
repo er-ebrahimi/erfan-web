@@ -3,12 +3,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-interface DynamicZoneComponent {
-  __component: string;
-  id: number;
-  documentId?: string;
-  [key: string]: unknown;
-}
+import { DynamicZoneComponent } from '@/types/types';
 
 interface Props {
   dynamicZone: DynamicZoneComponent[];

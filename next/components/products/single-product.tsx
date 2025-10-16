@@ -54,7 +54,7 @@ export const SingleProduct = ({ product }: { product: Product }) => {
                   aria-label={`View product image ${index + 1}`}
                   className={cn(
                     'h-20 w-20 rounded-xl',
-                    activeThumbnail === image
+                    activeThumbnail === strapiImage(image.url)
                       ? 'border-2 border-neutral-200'
                       : 'border-2 border-transparent'
                   )}

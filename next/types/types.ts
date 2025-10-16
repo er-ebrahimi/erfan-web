@@ -7,12 +7,19 @@ export interface Image {
   alternativeText: string;
 }
 
+export interface DynamicZoneComponent {
+  __component: string;
+  id: number;
+  documentId?: string;
+  [key: string]: unknown;
+}
+
 export interface Article {
   title: string;
   description: string;
   slug: string;
   content: string;
-  dynamic_zone: unknown[];
+  dynamic_zone: DynamicZoneComponent[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -21,14 +28,22 @@ export interface Article {
   categories: Category[];
 }
 
+export interface Perk {
+  text: string;
+}
+
+export interface Plan {
+  name: string;
+}
+
 export interface Product {
   id: number;
   name: string;
   slug: string;
   description: string;
   price: number;
-  plans: unknown[];
-  perks: unknown[];
+  plans: Plan[];
+  perks: Perk[];
   featured?: boolean;
   images: StrapiImage[];
   categories?: Category[];
