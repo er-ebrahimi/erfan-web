@@ -56,7 +56,7 @@ export const TeamMembers: React.FC<{
                 </div>
               )}
               {m.Positions && m.Positions.length > 0 && (
-                <ul className="mt-3 text-xs space-y-1 flex flex-wrap justify-center gap-2">
+                <ul className="mt-3 text-xs flex flex-wrap justify-center gap-2">
                   {m.Positions.map((p, idx) => (
                     <li
                       key={idx}

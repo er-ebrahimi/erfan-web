@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface TimelineEntry {
@@ -61,7 +56,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
               height: heightTransform,
               opacity: opacityTransform,
             }}
-            className="absolute inset-x-0 top-0  w-[2px] bg-gradient-to-t from-amber-800 via-orange-300 to-transparent from-[0%] via-[10%] rounded-full"
+            className="absolute inset-x-0 top-0  w-[2px] bg-gradient-to-t from-blue-800 via-blue-300 to-transparent from-[0%] via-[10%] rounded-full"
           />
         </div>
         {data.map((item, index) => (
