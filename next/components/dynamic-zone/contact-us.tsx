@@ -240,7 +240,7 @@ const ContactUs = ({
           <div className="flex justify-center">
             <div
               className="cf-turnstile"
-              data-sitekey="0x4AAAAAABoVMFyRhby1F6w1"
+              data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
               data-callback="handleTurnstileCallback"
               data-theme={isDarkMode ? 'dark' : 'light'}
               data-language="en"
