@@ -29,6 +29,8 @@ import countries from './data/globe.json';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 extend({ ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
