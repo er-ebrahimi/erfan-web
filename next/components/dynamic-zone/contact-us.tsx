@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 const ContactUs = ({
@@ -24,6 +24,7 @@ const ContactUs = ({
 
   // Use next-intl for translations
   const t = useTranslations('contact');
+  const locale = useLocale();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -98,6 +99,7 @@ const ContactUs = ({
           contact,
           message,
           turnstileToken: token,
+          locale, // Pass current locale to API
         }),
       });
 
@@ -174,7 +176,7 @@ const ContactUs = ({
   return (
     <section className="py-16 px-4 flex justify-center items-center">
       <div className="container border border-border rounded-xl p-12 w-fit shadow-lg bg-card">
-        <div className="max-w-lg text-center">
+        <div className="max-w-lg text-center mb-6">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             {Title}
           </h2>

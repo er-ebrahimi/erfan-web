@@ -23,7 +23,7 @@ export async function BlogLayout({
     <Container className="mt-16 lg:mt-32">
       <div className="flex justify-between items-center px-2 py-8">
         <Link
-          href="/blog"
+          href={`/${locale}/blog`}
           className="flex space-x-2 items-center hover:text-foreground transition-colors"
         >
           <IconArrowLeft className="w-4 h-4 text-muted-foreground" />
@@ -68,7 +68,7 @@ export async function BlogLayout({
             </div>
             <div className="flex space-x-2 items-center pt-12 border-t border-border mt-12">
               <div className="flex space-x-2 items-center ">
-                {/* <StrapiImage 
+                {/* <StrapiImage
                   src={article.authorAvatar}
                   alt={article.author}
                   width={20}

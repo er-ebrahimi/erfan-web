@@ -46,7 +46,10 @@ export default async function fetchContentType(
     // Perform the fetch request with the provided query parameters
     const response = await fetch(`${url.href}?${qs.stringify(queryParams)}`, {
       method: 'GET',
-      cache: 'no-store',
+      next: {
+        revalidate: isEnabled ? 0 : 60 * 60 * 15, // No cache in draft mode, 15 minutes cache in production
+        tags: [contentType, `locale-${params.locale || 'default'}`], // Enable tag-based revalidation
+      },
     });
 
     if (!response.ok) {

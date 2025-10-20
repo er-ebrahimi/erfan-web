@@ -100,6 +100,13 @@
     "submittingButton": "Envoi en cours...",
     "fillFieldsError": "Veuillez remplir tous les champs.",
     "captchaError": "Veuillez vérifier que vous n'êtes pas un robot.",
-    "sendError": "Erreur lors de l'envoi du message. Veuillez réessayer."
+    "sendError": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+    "apiErrors": {
+      "requiredFields": "Tous les champs sont requis.",
+      "securityFailed": "La vérification de sécurité a échoué. Veuillez réessayer.",
+      "sendSuccess": "Votre message a été envoyé avec succès !",
+      "sendFailed": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+      "processError": "Erreur lors du traitement de la demande. Veuillez réessayer."
+    }
   }
 }

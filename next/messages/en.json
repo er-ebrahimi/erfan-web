@@ -100,7 +100,14 @@
     "submittingButton": "Sending...",
     "fillFieldsError": "Please fill in all fields.",
     "captchaError": "Please verify that you are not a robot.",
-    "sendError": "Error sending message. Please try again."
+    "sendError": "Error sending message. Please try again.",
+    "apiErrors": {
+      "requiredFields": "All fields are required.",
+      "securityFailed": "Security verification failed. Please try again.",
+      "sendSuccess": "Your message has been sent successfully!",
+      "sendFailed": "Error sending message. Please try again.",
+      "processError": "Error processing request. Please try again."
+    }
   },
   "notFound": {
     "title": "404",
