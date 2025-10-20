@@ -88,7 +88,6 @@ Sent at: ${new Date().toLocaleString('en-US')}
     const emailResult = await emailResponse.json();
 
     if (emailResponse.ok && emailResult.success) {
-      console.log('Email sent successfully:', emailResult);
       const successMessage = await getApiMessage(
         'contact.apiErrors.sendSuccess',
         locale
