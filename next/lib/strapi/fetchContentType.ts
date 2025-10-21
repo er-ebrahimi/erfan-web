@@ -61,10 +61,29 @@ export default async function fetchContentType(
         errorDetails = 'Unable to read error response';
       }
 
+      // Enhanced error logging with detailed information
+      const fullUrl = `${url.href}?${qs.stringify(queryParams)}`;
+      console.error('='.repeat(80));
+      console.error('❌ STRAPI API REQUEST FAILED');
+      console.error('='.repeat(80));
+      console.error(`📡 Content Type: ${contentType}`);
+      console.error(`🌐 API URL: ${process.env.NEXT_PUBLIC_API_URL}`);
+      console.error(`🔗 Full URL: ${fullUrl}`);
+      console.error(`📊 Status Code: ${response.status}`);
+      console.error(`📝 Status Text: ${response.statusText}`);
+      console.error(`⏰ Timestamp: ${new Date().toISOString()}`);
+      console.error(`📋 Query Params:`, JSON.stringify(queryParams, null, 2));
       console.error(
-        `Failed to fetch data from Strapi (url=${url.toString()}, status=${response.status})`
+        `📥 Response Headers:`,
+        JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)
       );
-      console.error('Error details:', errorDetails);
+      console.error(`📄 Error Details:`, errorDetails);
+
+      // Generate and log curl command for debugging
+      const curlCommand = `curl -X GET "${fullUrl}" -H "Content-Type: application/json" -v`;
+      console.error('🔧 CURL COMMAND FOR DEBUGGING:');
+      console.error(curlCommand);
+      console.error('='.repeat(80));
 
       // Return appropriate fallback based on expected data structure
       return spreadData ? null : { data: [] };
@@ -72,8 +91,33 @@ export default async function fetchContentType(
     const jsonData: StrapiResponse = await response.json();
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
-    // Log any errors that occur during the fetch process
-    console.error('FetchContentTypeError', error);
+    // Enhanced error logging for network/fetch errors
+    const fullUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/${contentType}?${qs.stringify(params)}`;
+    console.error('='.repeat(80));
+    console.error('❌ STRAPI API NETWORK ERROR');
+    console.error('='.repeat(80));
+    console.error(`📡 Content Type: ${contentType}`);
+    console.error(`🌐 API URL: ${process.env.NEXT_PUBLIC_API_URL}`);
+    console.error(`🔗 Full URL: ${fullUrl}`);
+    console.error(`⏰ Timestamp: ${new Date().toISOString()}`);
+    console.error(`📋 Query Params:`, JSON.stringify(params, null, 2));
+    console.error(
+      `❌ Error Name: ${error instanceof Error ? error.name : 'Unknown'}`
+    );
+    console.error(
+      `❌ Error Message: ${error instanceof Error ? error.message : String(error)}`
+    );
+    console.error(
+      `❌ Error Stack:`,
+      error instanceof Error ? error.stack : 'No stack trace'
+    );
+
+    // Generate and log curl command for debugging
+    const curlCommand = `curl -X GET "${fullUrl}" -H "Content-Type: application/json" -v`;
+    console.error('🔧 CURL COMMAND FOR DEBUGGING:');
+    console.error(curlCommand);
+    console.error('='.repeat(80));
+
     // Return appropriate fallback based on expected data structure
     return spreadData ? null : { data: [] };
   }
