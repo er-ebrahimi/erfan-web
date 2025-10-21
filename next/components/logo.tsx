@@ -1,5 +1,4 @@
 import { Link } from 'next-view-transitions';
-import React from 'react';
 
 import { BlurImage } from './blur-image';
 import { strapiImage } from '@/lib/strapi/strapiImage';
@@ -20,7 +19,7 @@ export const Logo = ({ image, locale }: { image?: Image; locale?: string }) => {
           className="h-10 w-10 rounded-xl mr-2"
         />
 
-        <span className="text-white font-bold">LaunchPad</span>
+        <span className="text-white font-bold">Painfools</span>
       </Link>
     );
   }

@@ -4,7 +4,6 @@ import {
   IconBrandGithubFilled,
   IconBrandGoogleFilled,
 } from '@tabler/icons-react';
-import React from 'react';
 
 import { Container } from './container';
 import { Button } from './elements/button';
@@ -15,7 +14,7 @@ export const Register = () => {
     <Container className="h-screen max-w-lg mx-auto flex flex-col items-center justify-center">
       <Logo />
       <h1 className="text-xl md:text-4xl font-bold my-4">
-        Sign up for LaunchPad
+        Sign up for Painfools
       </h1>
 
       <form className="w-full my-4">

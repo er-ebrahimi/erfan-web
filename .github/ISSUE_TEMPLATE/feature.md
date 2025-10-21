@@ -9,7 +9,7 @@ assignees: mcastres
 
 ### Describe your request
 
-A clear and concise description of your the feature you want to see on LaunchPad.
+A clear and concise description of your the feature you want to see on Painfools.
 
 ### Expected behavior
 

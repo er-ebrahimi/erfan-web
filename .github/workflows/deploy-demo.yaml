@@ -1,4 +1,4 @@
-name: Deploy LaunchPad images for the Strapi demos
+name: Deploy Painfools images for the Strapi demos
 
 on:
   workflow_dispatch:
@@ -18,4 +18,4 @@ jobs:
           access_token: ${{ secrets.GITLAB_API_TOKEN }}
           id: '21258300'
           ref: 'master'
-          variables: '{ "BUILD_LAUNCHPAD_IMAGES":"true" }'
+          variables: '{ "BUILD_Painfools_IMAGES":"true" }'

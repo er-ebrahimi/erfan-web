@@ -1,5 +1,4 @@
 import { Link } from 'next-view-transitions';
-import React from 'react';
 
 import { Logo } from '@/components/logo';
 
@@ -20,59 +19,6 @@ export const Footer = async ({
             </div>
             <div className="max-w-xs">{data?.description}</div>
             <div className="mt-4">{data?.copyright}</div>
-            <div className="mt-10">
-              Designed and Developed by{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://aceternity.com"
-              >
-                Aceternity
-              </a>{' '}
-              &{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://strapi.io"
-              >
-                Strapi
-              </a>
-            </div>
-            <div className="mt-2">
-              built with{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://strapi.io"
-              >
-                Strapi
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://nextjs.org"
-              >
-                Next.js
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://tailwindcss.com"
-              >
-                Tailwind CSS
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://framer.com/motion"
-              >
-                Motion Animation Lib
-              </a>
-              , and{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://ui.aceternity.com"
-              >
-                Aceternity UI
-              </a>
-            </div>
           </div>
           <div className="grid grid-cols-3 gap-10 items-start mt-10 md:mt-0">
             <LinkSection links={data?.internal_links} locale={locale} />
