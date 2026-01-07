@@ -18,46 +18,37 @@
   "attributes": {
     "seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false
     },
     "title": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "string"
+      }
     },
     "description": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "string"
-    },
-    "slug": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "uid",
-      "targetField": "title"
+      }
     },
     "content": {
+      "type": "blocks",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "blocks"
+      }
     },
     "categories": {
       "type": "relation",
@@ -66,12 +57,12 @@
       "inversedBy": "articles"
     },
     "dynamic_zone": {
+      "type": "dynamiczone",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "dynamiczone",
       "components": [
         "dynamic-zone.related-articles",
         "dynamic-zone.cta"
@@ -79,6 +70,11 @@
     },
     "image": {
       "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
       "multiple": false,
       "required": false,
       "allowedTypes": [
@@ -86,12 +82,22 @@
         "files",
         "videos",
         "audios"
-      ],
+      ]
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article.article"
+    },
+    "slug": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "required": true,
+      "unique": true
     }
   }
 }

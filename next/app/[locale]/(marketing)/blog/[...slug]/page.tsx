@@ -6,15 +6,18 @@ import { BlogLayout } from '@/components/blog-layout';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
 export default async function SingleArticlePage(props: {
-  params: Promise<{ slug: string; locale: string }>;
+  params: Promise<{ slug: string[]; locale: string }>;
 }) {
   const params = await props.params;
+  const { slug, locale } = params;
+  const slugString = Array.isArray(slug) ? slug.join('/') : slug;
+
   const article = await fetchContentType(
     'articles',
     {
       filters: {
-        slug: params.slug,
-        locale: params.locale,
+        slug: slugString,
+        locale: locale,
       },
     },
     true
@@ -29,11 +32,11 @@ export default async function SingleArticlePage(props: {
       acc[localization.locale] = localization.slug;
       return acc;
     },
-    { [params.locale]: params.slug }
+    { [locale]: slugString }
   );
 
   return (
-    <BlogLayout article={article} locale={params.locale}>
+    <BlogLayout article={article} locale={locale}>
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
       <BlocksRenderer content={article.content} />
     </BlogLayout>
