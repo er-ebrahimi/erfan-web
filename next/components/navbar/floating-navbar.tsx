@@ -109,6 +109,8 @@ export const FloatingNavbar = ({
   showLanguage = false,
   languages = [],
 }: Props) => {
+  console.log("🚀 ~ FloatingNavbar ~ showTheme:", showTheme)
+  console.log("🚀 ~ FloatingNavbar ~ leftNavbarItems:", leftNavbarItems)
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);

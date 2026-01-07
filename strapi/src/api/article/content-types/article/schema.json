@@ -40,7 +40,7 @@
           "localized": true
         }
       },
-      "type": "text"
+      "type": "string"
     },
     "slug": {
       "pluginOptions": {

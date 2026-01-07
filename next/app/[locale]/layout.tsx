@@ -60,7 +60,8 @@ export default async function LocaleLayout(props: {
 
   let pageData;
   try {
-    pageData = await fetchContentType('global', { filters: { locale } }, true);
+    pageData = await fetchContentType('global', {  }, true);
+    console.log("🚀 ~ LocaleLayout ~ pageData:", pageData)
   } catch (error) {
     console.error('Failed to fetch global content type:', error);
     // Provide fallback data structure
@@ -69,6 +70,8 @@ export default async function LocaleLayout(props: {
         left_navbar_items: [],
         right_navbar_items: [],
         logo: null,
+        theme: false,
+        language: false,
       },
       footer: null,
     };
@@ -81,6 +84,8 @@ export default async function LocaleLayout(props: {
         left_navbar_items: [],
         right_navbar_items: [],
         logo: null,
+        theme: false,
+        language: false,
       },
       footer: null,
     };
@@ -90,7 +95,7 @@ export default async function LocaleLayout(props: {
       <ViewTransitions>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

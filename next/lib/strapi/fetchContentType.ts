@@ -1,5 +1,6 @@
 import { draftMode } from 'next/headers';
 import qs from 'qs';
+import axios from 'axios';
 
 /**
  * Fetches data for a specified Strapi content type.
@@ -43,34 +44,14 @@ export default async function fetchContentType(
     }
     const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
 
-    // Perform the fetch request with the provided query parameters
-    const response = await fetch(`${url.href}?${qs.stringify(queryParams)}`, {
-      method: 'GET',
-      cache: 'default',
+    const response = await axios.get<StrapiResponse>(url.href, {
+      params: queryParams,
+      paramsSerializer: (params) => qs.stringify(params as any),
     });
-
-    if (!response.ok) {
-      let errorDetails = '';
-      try {
-        const errorBody = await response.text();
-        errorDetails = errorBody;
-      } catch (e) {
-        errorDetails = 'Unable to read error response';
-      }
-
-      console.error(
-        `Failed to fetch data from Strapi (url=${url.toString()}, status=${response.status})`
-      );
-      console.error('Error details:', errorDetails);
-
-      // Return appropriate fallback based on expected data structure
-      return spreadData ? null : { data: [] };
-    }
-    const jsonData: StrapiResponse = await response.json();
+    const jsonData: StrapiResponse = response.data;
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
     // Log any errors that occur during the fetch process
-    console.error('FetchContentTypeError', error);
     // Return appropriate fallback based on expected data structure
     return spreadData ? null : { data: [] };
   }

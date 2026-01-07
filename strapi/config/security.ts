@@ -1,0 +1,46 @@
+export default {
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      'connect-src': ["'self'", 'https:'],
+      'img-src': [
+        "'self'",
+        'data:',
+        'blob:',
+        'market-assets.strapi.io',
+        'res.cloudinary.com',
+        'localhost:*',
+        '127.0.0.1:*',
+        '*.localhost:*',
+        'http://localhost:*',
+        'http://127.0.0.1:*',
+      ],
+      'media-src': [
+        "'self'",
+        'data:',
+        'blob:',
+        'market-assets.strapi.io',
+        'res.cloudinary.com',
+        'localhost:*',
+        '127.0.0.1:*',
+        '*.localhost:*',
+        'http://localhost:*',
+        'http://127.0.0.1:*',
+      ],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        'localhost:*',
+        '127.0.0.1:*',
+      ],
+      'style-src': [
+        "'self'",
+        "'unsafe-inline'",
+        'localhost:*',
+        '127.0.0.1:*',
+      ],
+      upgradeInsecureRequests: null,
+    },
+  },
+};

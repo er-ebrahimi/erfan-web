@@ -7,12 +7,6 @@
   },
   "options": {},
   "attributes": {
-    "heading": {
-      "type": "string"
-    },
-    "sub_heading": {
-      "type": "string"
-    },
     "CTAs": {
       "displayName": "Button",
       "type": "component",

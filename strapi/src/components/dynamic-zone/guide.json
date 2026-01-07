@@ -1,26 +1,26 @@
 {
   "collectionName": "components_dynamic_zone_guides",
   "info": {
-    "displayName": "Guide"
+    "displayName": "Guide",
+    "icon": "heart"
   },
   "options": {},
   "attributes": {
-    "Title": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "text"
-    },
     "Profile": {
-      "type": "media",
-      "multiple": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ]
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "string"
     }
-  },
-  "config": {}
+  }
 }

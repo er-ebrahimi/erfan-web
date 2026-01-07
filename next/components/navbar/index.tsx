@@ -15,7 +15,8 @@ export function Navbar({
   if (!data || !data.left_navbar_items) {
     return null;
   }
-
+  console.log("🚀 ~ Navbar ~ data:", data)
+  
   return (
     <FloatingNavbar
       locale={locale}

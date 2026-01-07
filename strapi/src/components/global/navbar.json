@@ -12,16 +12,20 @@
       "target": "api::logo.logo"
     },
     "left_navbar_items": {
-      "displayName": "Left_Navbar_Items",
       "type": "component",
-      "repeatable": true,
-      "component": "shared.link"
+      "component": "shared.link",
+      "repeatable": true
     },
     "right_navbar_items": {
-      "displayName": "Right_Navbar_Items",
       "type": "component",
-      "repeatable": true,
-      "component": "shared.link"
+      "component": "shared.link",
+      "repeatable": true
+    },
+    "language": {
+      "type": "boolean"
+    },
+    "theme": {
+      "type": "boolean"
     }
   }
 }

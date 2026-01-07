@@ -8,7 +8,11 @@ const nextConfig = {
     root: process.cwd().replace('/next', ''),
   },
   images: {
-    remotePatterns: [{ hostname: process.env.IMAGE_HOSTNAME || 'localhost' }],
+    remotePatterns: [
+      { hostname: (process.env.IMAGE_HOSTNAME || 'localhost').split(':')[0] },
+      { hostname: '127.0.0.1' },
+      { hostname: 'localhost' },
+    ],
   },
   pageExtensions: ['ts', 'tsx'],
   async redirects() {

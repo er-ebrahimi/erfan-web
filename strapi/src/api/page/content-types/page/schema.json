@@ -18,31 +18,31 @@
   "attributes": {
     "seo": {
       "type": "component",
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo",
-      "repeatable": false
+      "component": "shared.seo"
     },
     "slug": {
-      "type": "uid",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "required": true,
-      "default": "slug"
+      "type": "uid",
+      "default": "slug",
+      "required": true
     },
     "dynamic_zone": {
-      "type": "dynamiczone",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
+      "type": "dynamiczone",
       "components": [
         "dynamic-zone.hero",
         "dynamic-zone.features",
@@ -54,15 +54,14 @@
         "dynamic-zone.cta",
         "dynamic-zone.form-next-to-section",
         "dynamic-zone.faq",
-        "dynamic-zone.guide",
-        "dynamic-zone.team-members",
-        "dynamic-zone.related-products",
-        "dynamic-zone.related-articles",
+        "dynamic-zone.cons",
         "dynamic-zone.promised-land",
-        "dynamic-zone.project-pictures",
+        "dynamic-zone.guide",
         "dynamic-zone.plans",
+        "dynamic-zone.project-pictures",
         "dynamic-zone.contact",
-        "dynamic-zone.cons"
+        "dynamic-zone.team-members",
+        "dynamic-zone.hero-picture"
       ]
     }
   }
