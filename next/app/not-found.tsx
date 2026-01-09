@@ -12,8 +12,6 @@ export const metadata: Metadata = {
 
 export default function RootNotFound() {
   return (
-    <NextIntlClientProvider locale="en" messages={enMessages}>
       <NotFound />
-    </NextIntlClientProvider>
   );
 }

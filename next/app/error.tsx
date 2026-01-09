@@ -21,8 +21,8 @@ export default function RootError({
   reset: () => void;
 }) {
   const pathname = usePathname();
-  const locale = (pathname?.split('/')[1] as keyof typeof messages) || 'en';
-  const currentMessages = messages[locale] || messages['en'];
+  const locale = (pathname?.split('/')[1] as keyof typeof messages) || 'fa';
+  const currentMessages = messages[locale] || messages['fa'];
 
   return (
     <NextIntlClientProvider locale={locale} messages={currentMessages}>

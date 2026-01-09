@@ -1,0 +1,1 @@
+The project is multilinugal and it use intl so when you write sentences in project you need to use intl and add all the languages which available in project.

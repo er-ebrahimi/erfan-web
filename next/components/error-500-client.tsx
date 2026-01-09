@@ -1,21 +1,27 @@
 'use client';
 
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/elements/button';
 import { Heading } from '@/components/elements/heading';
 import { Subheading } from '@/components/elements/subheading';
+import { useLocaleConfig } from '@/hooks/use-locale-config';
+import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 interface Error500ClientProps {
   onRetry?: () => void;
 }
 
 export function Error500Client({ onRetry }: Error500ClientProps) {
-  const t = useTranslations('serverError');
+  const locale = useLocale();
 
+  const t = useTranslations('serverError');
+  const localeConfig = useLocaleConfig();
+  const theme = useTheme();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className={cn("min-h-screen flex items-center justify-center bg-background",localeConfig.rtlClasses, localeConfig.fontClass)}>
       <div className="text-center max-w-md mx-auto px-4">
         <div className="mb-8">
           <Heading as="h1" className="text-6xl font-bold text-primary mb-4">

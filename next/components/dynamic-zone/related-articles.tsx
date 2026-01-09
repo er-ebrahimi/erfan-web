@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
+import { BlogCardVertical } from '../blog/blog-card';
 
-import { BlogCardVertical } from '../blog-card';
+
 
 export const RelatedArticles = ({
   heading,

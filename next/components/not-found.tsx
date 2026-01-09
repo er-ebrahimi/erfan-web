@@ -10,7 +10,6 @@ import { Subheading } from '@/components/elements/subheading';
 export function NotFound() {
   const locale = useLocale();
   const t = useTranslations('notFound');
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center max-w-md mx-auto px-4">

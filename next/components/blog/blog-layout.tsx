@@ -3,8 +3,8 @@ import { format } from 'date-fns';
 import { getTranslations } from 'next-intl/server';
 import { Link } from 'next-view-transitions';
 
-import { Container } from './container';
-import DynamicZoneManager from './dynamic-zone/manager';
+import { Container } from '../container';
+import DynamicZoneManager from '../dynamic-zone/manager';
 import { StrapiImage } from '@/components/ui/strapi-image';
 import { Article } from '@/types/types';
 

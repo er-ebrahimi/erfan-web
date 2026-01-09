@@ -3,8 +3,8 @@ import { type Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import ClientSlugHandler from '../ClientSlugHandler';
-import { BlogCard } from '@/components/blog-card';
-import { BlogPostRows } from '@/components/blog-post-rows';
+import { BlogCard } from '@/components/blog/blog-card';
+import { BlogPostRows } from '@/components/blog/blog-post-rows';
 import { Container } from '@/components/container';
 import { AmbientColor } from '@/components/decorations/ambient-color';
 import { FeatureIconContainer } from '@/components/dynamic-zone/features/feature-icon-container';
