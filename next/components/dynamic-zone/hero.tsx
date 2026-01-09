@@ -10,27 +10,48 @@ import StarBackground from '../decorations/star-background';
 import { Button } from '../elements/button';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
+import { StrapiImage } from '../ui/strapi-image';
 
 export const Hero = ({
   heading,
   sub_heading,
   CTAs,
   locale,
+  Background,
 }: {
   heading: string;
   sub_heading: string;
   CTAs: any[];
   locale: string;
+  Background?: any[];
 }) => {
+  const backgroundImage = Background?.[0];
+
   return (
-    <div className="h-screen overflow-hidden bg-background relative flex flex-col items-center justify-center ">
+    <div className="h-[calc(100vh-2rem)] m-4 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center ">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
+        className="absolute inset-0"
       >
-        <StarBackground />
-        <ShootingStars />
+        {backgroundImage ? (
+          <>
+            <StrapiImage
+              src={backgroundImage.url}
+              alt={backgroundImage.alternativeText || 'Hero Background'}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-background/50" />
+          </>
+        ) : (
+          <>
+            <StarBackground />
+            <ShootingStars />
+          </>
+        )}
       </motion.div>
       <Heading
         as="h1"
@@ -39,7 +60,7 @@ export const Hero = ({
         {heading.substring(0, heading.lastIndexOf(' '))}{' '}
         <Cover>{heading.split(' ').pop()}</Cover>
       </Heading>
-      <Subheading className="text-center mt-2 text-muted-foreground md:mt-6  md:text-xl  max-w-3xl mx-auto relative z-10">
+      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-2xl max-w-3xl mx-auto relative z-10">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
@@ -55,7 +76,7 @@ export const Hero = ({
             </Button>
           ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-background to-transparent hidden dark:block" />
     </div>
   );
 };

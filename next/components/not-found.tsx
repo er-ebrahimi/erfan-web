@@ -1,13 +1,15 @@
-import { getLocale, getTranslations } from 'next-intl/server';
+'use client';
+
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 import { Button } from '@/components/elements/button';
 import { Heading } from '@/components/elements/heading';
 import { Subheading } from '@/components/elements/subheading';
 
-export async function NotFound() {
-  const locale = await getLocale();
-  const t = await getTranslations('notFound');
+export function NotFound() {
+  const locale = useLocale();
+  const t = useTranslations('notFound');
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">

@@ -29,7 +29,7 @@ export function getTextAlignClass(locale: string): string {
  * Get font class for a locale
  */
 export function getFontClass(locale: string): string {
-  return isRTL(locale) ? 'font-iran-sans font-persian' : '';
+  return isRTL(locale) ? 'font-iran-sans' : 'font-sans';
 }
 
 /**

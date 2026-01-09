@@ -18,11 +18,17 @@ export const BlogCard = ({
   locale: string;
 }) => {
   return (
-    <Link
-      className="shadow-derek grid grid-cols-1 md:grid-cols-2 rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50 overflow-hidden hover:scale-[1.02] transition duration-200"
-      href={`/${locale}/blog/${article.slug}`}
+    <div
+      className="shadow-derek grid grid-cols-1 md:grid-cols-2 rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50 overflow-hidden hover:scale-[1.02] transition duration-200 relative"
     >
-      <div className="">
+      <Link
+        href={`/${locale}/blog/${article.slug}`}
+        className="absolute inset-0 z-0"
+      >
+         <span className="sr-only">Read more about {article.title}</span>
+      </Link>
+
+      <div className="pointer-events-none z-10 h-full">
         {article.image ? (
           <BlurImage
             src={strapiImage(article.image.url)}
@@ -37,16 +43,17 @@ export const BlogCard = ({
           </div>
         )}
       </div>
-      <div className="p-4 md:p-8 group-hover:bg-card/50 flex flex-col justify-between">
+      <div className="p-4 md:p-8 group-hover:bg-card/50 flex flex-col justify-between pointer-events-none z-10 relative">
         <div>
-          <div className="flex gap-4 flex-wrap mb-4">
+          <div className="flex gap-4 flex-wrap mb-4 pointer-events-auto">
             {article.categories?.map((category, idx) => (
-              <p
+              <Link
                 key={`category-${idx}`}
-                className="text-xs font-bold text-primary-foreground px-4 py-2 rounded-full bg-primary capitalize"
+                href={`/category/${category.slug || category.name}`}
+                className="text-xs font-bold text-primary-foreground px-4 py-2 rounded-full bg-primary capitalize hover:opacity-80 transition-opacity relative z-20"
               >
                 {category.name}
-              </p>
+              </Link>
             ))}
           </div>
           <p className="text-lg md:text-4xl font-bold mb-4 text-foreground">
@@ -71,7 +78,7 @@ export const BlogCard = ({
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
@@ -83,11 +90,16 @@ export const BlogCardVertical = ({
   locale: string;
 }) => {
   return (
-    <Link
-      className="shadow-derek   rounded-3xl group border border-transparent hover:border-border w-full hover:bg-neutral-900  overflow-hidden  hover:scale-[1.02] transition duration-200"
-      href={`/${locale}/blog/${article.slug}`}
+    <div
+      className="shadow-derek   rounded-3xl group border border-transparent hover:border-border w-full hover:bg-neutral-900  overflow-hidden  hover:scale-[1.02] transition duration-200 relative"
     >
-      <div className="">
+      <Link
+        href={`/${locale}/blog/${article.slug}`}
+        className="absolute inset-0 z-0"
+      >
+        <span className="sr-only">Read more about {article.title}</span>
+      </Link>
+      <div className="pointer-events-none z-10">
         {article.image ? (
           <BlurImage
             src={strapiImage(article.image.url || '')}
@@ -102,16 +114,17 @@ export const BlogCardVertical = ({
           </div>
         )}
       </div>
-      <div className="p-4 md:p-8 group-hover:bg-card/50 flex flex-col justify-between">
+      <div className="p-4 md:p-8 group-hover:bg-card/50 flex flex-col justify-between pointer-events-none z-10 relative">
         <div>
-          <div className="flex gap-4 flex-wrap mb-4">
+          <div className="flex gap-4 flex-wrap mb-4 pointer-events-auto">
             {article.categories?.map((category, idx) => (
-              <p
+              <Link
                 key={`category-${idx}`}
-                className="text-xs font-bold text-primary-foreground px-4 py-2 rounded-full bg-primary capitalize"
+                href={`/category/${category.slug || category.name}`}
+                className="text-xs font-bold text-primary-foreground px-4 py-2 rounded-full bg-primary capitalize hover:opacity-80 transition-opacity relative z-20"
               >
                 {category.name}
-              </p>
+              </Link>
             ))}
           </div>
           <p className="text-lg md:text-xl font-bold mb-4">
@@ -136,6 +149,6 @@ export const BlogCardVertical = ({
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

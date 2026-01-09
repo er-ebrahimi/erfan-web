@@ -102,7 +102,7 @@ export default async function LocaleLayout(props: {
             <CartProvider>
               <div
                 className={cn(
-                  font?.className || 'font-sans',
+                  font?.className,
                   fontClass,
                   'bg-background text-foreground antialiased h-full w-full'
                 )}

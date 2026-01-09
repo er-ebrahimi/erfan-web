@@ -32,6 +32,9 @@
     "logout": "Déconnexion",
     "profile": "Profil",
     "settings": "Paramètres",
+    "menu": "Menu",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
     "language": "Langue",
     "theme": "Thème",
     "welcome": "Bienvenue",
@@ -108,5 +111,21 @@
       "sendFailed": "Erreur lors de l'envoi du message. Veuillez réessayer.",
       "processError": "Erreur lors du traitement de la demande. Veuillez réessayer."
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page non trouvée",
+    "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez. Elle a peut-être été déplacée, supprimée ou n'existe pas.",
+    "goHome": "Retour à l'accueil",
+    "browseBlog": "Parcourir le blog",
+    "supportMessage": "Si vous pensez qu'il s'agit d'une erreur, veuillez contacter notre équipe de support."
+  },
+  "serverError": {
+    "title": "500",
+    "heading": "Erreur interne du serveur",
+    "description": "Quelque chose s'est mal passé de notre côté. Nous travaillons à résoudre ce problème. Veuillez réessayer plus tard.",
+    "goHome": "Retour à l'accueil",
+    "tryAgain": "Réessayer",
+    "supportMessage": "Si ce problème persiste, veuillez contacter notre équipe de support."
   }
 }

@@ -20,6 +20,11 @@
         "_parent",
         "_top"
       ]
+    },
+    "children": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": true
     }
   }
 }

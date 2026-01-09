@@ -2,7 +2,7 @@ import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import ClientSlugHandler from '../ClientSlugHandler';
+import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog-card';
 import { BlogPostRows } from '@/components/blog-post-rows';
 import { Container } from '@/components/container';
@@ -12,20 +12,20 @@ import { Heading } from '@/components/elements/heading';
 import { Subheading } from '@/components/elements/subheading';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import { Article, Category } from '@/types/types';
+import { Article } from '@/types/types';
 
 export async function generateMetadata(props: {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ locale: string; slug: string[] }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  
+  const slugString = Array.isArray(params.slug) ? params.slug.join('/') : params.slug;
+
   // Fetch category to get name for title
   const categoriesData = await fetchContentType(
     'categories',
     {
       filters: { 
-        slug: params.slug,
-        // locale: params.locale // Categories might not be localized or handled differently, but let's try
+        slug: slugString,
       },
     },
     false
@@ -48,18 +48,19 @@ export async function generateMetadata(props: {
   return metadata;
 }
 
-export default async function CategoryPage(props: {
-  params: Promise<{ locale: string; slug: string }>;
+export default async function SingleCategoryPage(props: {
+  params: Promise<{ locale: string; slug: string[] }>;
 }) {
   const params = await props.params;
   const { locale, slug } = params;
+  const slugString = Array.isArray(slug) ? slug.join('/') : slug;
 
   // Fetch category details
   const categoriesData = await fetchContentType(
     'categories',
     {
       filters: { 
-        slug: slug,
+        slug: slugString,
       },
     },
     false
@@ -79,7 +80,7 @@ export default async function CategoryPage(props: {
         locale: locale,
         categories: {
           slug: {
-            $eq: slug
+            $eq: slugString
           }
         }
       },
@@ -87,9 +88,7 @@ export default async function CategoryPage(props: {
     false
   );
 
-  // We can't easily determine localized slugs for a category unless we fetch all localizations of the category
-  // For now, we'll just map the current locale
-  const localizedSlugs = { [locale]: `blog/category/${slug}` };
+  const localizedSlugs = { [locale]: `category/${slugString}` };
 
   return (
     <div className="relative overflow-hidden py-20 md:py-0">

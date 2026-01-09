@@ -1,4 +1,12 @@
+import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
+
+// English/French font configuration
+export const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 // Persian font configuration
 export const iranSans = localFont({
@@ -25,7 +33,7 @@ export const getFontForLocale = (locale: string) => {
     case 'fa':
       return iranSans;
     default:
-      return null; // Use system fonts for English and French
+      return inter; // Use Inter for English and French
   }
 };
 
