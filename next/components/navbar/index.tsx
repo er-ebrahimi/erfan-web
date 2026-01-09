@@ -29,7 +29,7 @@ export function Navbar({
     //   languages={languages || []}
     // />
     <div className={cn(
-      "fixed z-50 bg-background w-fit max-w-[95vw] overflow-x-auto md:overflow-visible no-scrollbar transition-all duration-300",
+      "fixed z-50 bg-background w-fit max-w-[95vw] overflow-x-auto md:overflow-visible no-scrollbar transition-all duration-300 border border-solid",
       // Mobile: Top Right
       "top-4 right-4 m-0 left-auto p-2 rounded-full shadow-md",
       // Desktop: Top Center

@@ -7,6 +7,10 @@ import React from 'react';
 import { Container } from '../container';
 import { AmbientColor } from '../decorations/ambient-color';
 import { Button } from '../elements/button';
+import { useLocaleConfig } from '@/hooks/use-locale-config';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { StrapiImage } from '../ui/strapi-image';
 
 export const CTA = ({
   heading,
@@ -19,10 +23,11 @@ export const CTA = ({
   CTAs: any[];
   locale: string;
 }) => {
+  let localeConfig = useLocaleConfig();
   return (
-    <div className="relative py-40">
+    <div className="relative py-10" >
       <AmbientColor />
-      <Container className="flex flex-col md:flex-row justify-between items-center w-full px-8">
+      <Container className={cn("flex flex-col justify-between items-center w-full px-8", localeConfig.isRTL? "md:flex-row-reverse": "md:flex-row")}>
         <div className="flex flex-col">
           <motion.h2 className="text-foreground text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl ">
             {heading}
@@ -39,8 +44,9 @@ export const CTA = ({
                 key={index}
                 href={`/${locale}${cta.URL}`}
                 variant={cta.variant}
-                className="py-3"
+                className="flex flex-row gap-1"
               >
+                <StrapiImage src={cta.image?.url} alt={cta.image?.alternativeText} width={30} height={30}></StrapiImage>
                 {cta.text}
               </Button>
             ))}

@@ -513,6 +513,7 @@ export interface SharedButton extends Struct.ComponentSchema {
     icon: 'cursor';
   };
   attributes: {
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;

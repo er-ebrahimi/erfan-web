@@ -24,13 +24,23 @@
     },
     "variant": {
       "type": "enumeration",
+      "default": "primary",
       "enum": [
         "simple",
         "outline",
         "primary",
         "muted"
-      ],
-      "default": "primary"
+      ]
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

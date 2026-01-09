@@ -28,7 +28,7 @@ export const Hero = ({
   const backgroundImage = Background?.[0];
 
   return (
-    <div className="h-[calc(100vh-2rem)] m-4 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center ">
+    <div className="h-[calc(100vh-1rem)] m-2 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center ">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -55,12 +55,12 @@ export const Hero = ({
       </motion.div>
       <Heading
         as="h1"
-        className="text-4xl md:text-4xl lg:text-8xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
+        className="text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
       >
         {heading.substring(0, heading.lastIndexOf(' '))}{' '}
         <Cover>{heading.split(' ').pop()}</Cover>
       </Heading>
-      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-2xl max-w-3xl mx-auto relative z-10">
+      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
