@@ -25,8 +25,8 @@ export const CTA = ({
 }) => {
   let localeConfig = useLocaleConfig();
   return (
-    <div className="relative py-10" >
-      <AmbientColor />
+    <div className="relative py-5" >
+      {/* <AmbientColor /> */}
       <Container className={cn("flex flex-col justify-between items-center w-full px-8", localeConfig.isRTL? "md:flex-row-reverse": "md:flex-row")}>
         <div className="flex flex-col">
           <motion.h2 className="text-foreground text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl ">

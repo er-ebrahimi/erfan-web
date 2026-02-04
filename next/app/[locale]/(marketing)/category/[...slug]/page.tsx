@@ -44,7 +44,7 @@ export default async function SingleArticlePage(props: {
   return (
     <BlogLayout article={article} locale={locale}>
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
-      <BlocksRenderer content={article.content} />
+      {/* <BlocksRenderer content={article.content} /> */}
     </BlogLayout>
   );
 }

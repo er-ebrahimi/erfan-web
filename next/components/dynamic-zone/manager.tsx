@@ -104,6 +104,14 @@ const componentMapping: { [key: string]: any } = {
       ssr: true,
     }
   ),
+  'shared.content': dynamic(
+    () => import('./content').then((mod) => mod.Content),
+    { ssr: true }
+  ),
+  'dynamic-zone.content': dynamic(
+    () => import('./content').then((mod) => mod.Content),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

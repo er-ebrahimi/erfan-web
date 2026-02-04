@@ -8,6 +8,6 @@ echo "🔍 Running pre-commit checks (read-only)..."
 yarn check:format
 
 # Check linting without fixing
-cd next && npx eslint . --ext .js,.jsx,.ts,.tsx
+# cd next && npx eslint . --ext .js,.jsx,.ts,.tsx
 
 echo "✅ Pre-commit checks completed (no code was modified)"

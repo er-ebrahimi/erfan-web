@@ -538,6 +538,17 @@ export interface SharedCons extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedContent extends Struct.ComponentSchema {
+  collectionName: 'components_shared_contents';
+  info: {
+    displayName: 'content';
+    icon: 'apps';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+  };
+}
+
 export interface SharedForm extends Struct.ComponentSchema {
   collectionName: 'components_shared_forms';
   info: {
@@ -784,6 +795,7 @@ declare module '@strapi/strapi' {
       'items.text': ItemsText;
       'shared.button': SharedButton;
       'shared.cons': SharedCons;
+      'shared.content': SharedContent;
       'shared.form': SharedForm;
       'shared.launches': SharedLaunches;
       'shared.link': SharedLink;

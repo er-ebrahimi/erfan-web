@@ -68,16 +68,6 @@ export async function BlogLayout({
             </div>
             <div className="flex space-x-2 items-center pt-12 border-t border-border mt-12">
               <div className="flex space-x-2 items-center ">
-                {/* <StrapiImage
-                  src={article.authorAvatar}
-                  alt={article.author}
-                  width={20}
-                  height={20}
-                  className="rounded-full h-5 w-5"
-                />
-                <p className="text-sm font-normal text-muted">
-                  {article.author}
-                </p> */}
               </div>
               <div className="h-5 rounded-lg w-0.5 bg-border" />
               <time
@@ -98,6 +88,18 @@ export async function BlogLayout({
           locale={locale}
         />
       )}
+
+      <div className="flex space-x-2 items-center pt-12 border-t border-border mt-12 p-10">
+        <div className="h-5 rounded-lg w-0.5 bg-border m-1" />
+        <time
+          dateTime={article.publishedAt}
+          className="flex items-center text-base "
+        >
+          <span className="text-muted-foreground text-sm">
+            {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
+          </span>
+        </time>
+      </div>
     </Container>
   );
 }
