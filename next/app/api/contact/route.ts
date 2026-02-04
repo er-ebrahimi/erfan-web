@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiMessage } from '@/lib/intl-api';
 
 export async function POST(request: NextRequest) {
-  let locale = 'en'; // Default locale
+  let locale = 'fa'; // Default locale
 
   try {
     const body = await request.json();
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
       contact,
       message,
       turnstileToken,
-      locale: requestLocale = 'en',
+      locale: requestLocale = 'fa',
     } = body;
     locale = requestLocale;
 

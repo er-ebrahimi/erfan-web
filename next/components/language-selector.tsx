@@ -23,7 +23,7 @@ export function LanguageSelector() {
   const segments = pathname?.split('/') || [];
 
   // Available locales
-  const availableLocales = ['en', 'fr', 'fa'];
+  const availableLocales = ['fa'];
 
   // Generate localized path for each locale
   const generateLocalizedPath = (locale: string): string => {

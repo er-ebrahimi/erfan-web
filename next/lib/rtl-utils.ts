@@ -2,7 +2,7 @@
  * RTL (Right-to-Left) utility functions for Persian language support
  */
 
-export type Locale = 'en' | 'fr' | 'fa';
+export type Locale = 'fa';
 
 /**
  * Check if a locale is RTL

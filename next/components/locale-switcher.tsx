@@ -21,7 +21,7 @@ export function LocaleSwitcher() {
   const availableLocales =
     Object.keys(localizedSlugs).length > 0
       ? Object.keys(localizedSlugs)
-      : ['en', 'fr', 'fa']; // Use locales
+      : ['fa']; // Use locales
 
   // Generate localized path for each locale
   const generateLocalizedPath = (loc: string): string => {
