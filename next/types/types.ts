@@ -6,6 +6,8 @@ export interface Category {
 export interface Image {
   url: string;
   alternativeText: string;
+  width?: number;
+  height?: number;
 }
 
 export interface DynamicZoneComponent {

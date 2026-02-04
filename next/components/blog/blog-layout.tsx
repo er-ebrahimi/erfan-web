@@ -40,7 +40,7 @@ export async function BlogLayout({
             alt={article.title}
           />
         ) : (
-          <div className="h-40 md:h-96 w-full aspect-squace rounded-3xl shadow-derek bg-card flex items-center justify-center">
+          <div className="h-40 md:h-96 w-full aspect-square rounded-3xl shadow-derek bg-card flex items-center justify-center">
             {/* <Logo /> */}
           </div>
         )}
@@ -65,19 +65,6 @@ export async function BlogLayout({
             </header>
             <div className="mt-8 prose prose-sm dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-a:text-primary hover:prose-a:text-primary/80">
               {children}
-            </div>
-            <div className="flex space-x-2 items-center pt-12 border-t border-border mt-12">
-              <div className="flex space-x-2 items-center ">
-              </div>
-              <div className="h-5 rounded-lg w-0.5 bg-border" />
-              <time
-                dateTime={article.publishedAt}
-                className="flex items-center text-base "
-              >
-                <span className="text-muted-foreground text-sm">
-                  {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
-                </span>
-              </time>
             </div>
           </article>
         </div>

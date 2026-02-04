@@ -14,9 +14,9 @@ export const Logo = ({ image, locale }: { image?: Image; locale?: string }) => {
         <BlurImage
           src={strapiImage(image?.url)}
           alt={image.alternativeText}
-          width={200}
-          height={200}
-          className="h-10 w-10 rounded-xl mr-2"
+          width={image.width || 200}
+          height={image.height || 200}
+          className="h-10 w-auto rounded-xl mr-2 object-contain"
         />
 
         <span className="text-white font-bold">Painfools</span>
