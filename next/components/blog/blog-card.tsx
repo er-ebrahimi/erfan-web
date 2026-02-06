@@ -4,7 +4,6 @@ import Image from 'next/image';
 import React from 'react';
 import Balancer from 'react-wrap-balancer';
 
-import { Logo } from './logo';
 import { BlurImage } from '@/components/blur-image';
 import { strapiImage } from '@/lib/strapi/strapiImage';
 import { truncate } from '@/lib/utils';

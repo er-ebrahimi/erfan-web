@@ -1,24 +1,14 @@
-import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 import { NotFound } from '@/components/not-found';
 
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
-}) {
-  const params = await props.params;
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: 'notFound',
-  });
-  return {
-    title: `${t('heading')} | ErfanWeb`,
-    description: t('description'),
-  };
-}
+export const metadata: Metadata = {
+  title: 'Page Not Found',
+  description:
+    "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or doesn't exist.",
+};
 
 export default function RootNotFound() {
   return (
-    <>
       <NotFound />
-    </>
   );
 }
