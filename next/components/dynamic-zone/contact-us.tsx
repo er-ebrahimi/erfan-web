@@ -19,10 +19,11 @@ const ContactUs = ({
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
-  const [turnstileToken, setTurnstileToken] = useState<string>('');
+
+  // ❌ Turnstile disabled
+  // const [turnstileToken, setTurnstileToken] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  // Use next-intl for translations
   const t = useTranslations('contact');
   const locale = useLocale();
 
@@ -36,22 +37,22 @@ const ContactUs = ({
     }));
   };
 
-  // Cloudflare Turnstile callback
+  // ❌ Turnstile callback disabled
+  /*
   const handleTurnstileCallback = (token: string) => {
     setTurnstileToken(token);
   };
+  */
 
-  // Check for dark mode
+  // Dark mode detection (kept because UI may need it)
   useEffect(() => {
     const checkDarkMode = () => {
       const isDark = document.documentElement.classList.contains('dark');
       setIsDarkMode(isDark);
     };
 
-    // Check initial state
     checkDarkMode();
 
-    // Watch for theme changes
     const observer = new MutationObserver(checkDarkMode);
     observer.observe(document.documentElement, {
       attributes: true,
@@ -61,7 +62,8 @@ const ContactUs = ({
     return () => observer.disconnect();
   }, []);
 
-  // Load Turnstile script
+  // ❌ Turnstile script loading removed
+  /*
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
@@ -69,25 +71,22 @@ const ContactUs = ({
     script.defer = true;
     document.head.appendChild(script);
 
-    // Add global callback function
     (window as any).handleTurnstileCallback = handleTurnstileCallback;
 
     return () => {
       const existingScript = document.querySelector(
         'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]'
       );
-      if (existingScript) {
-        existingScript.remove();
-      }
-      // Clean up global callback
+      if (existingScript) existingScript.remove();
       delete (window as any).handleTurnstileCallback;
     };
   }, []);
+  */
 
   const sendContactForm = async (
     contact: string,
-    message: string,
-    token: string
+    message: string
+    // ❌ token removed
   ) => {
     try {
       const response = await fetch('/api/contact', {
@@ -98,8 +97,8 @@ const ContactUs = ({
         body: JSON.stringify({
           contact,
           message,
-          turnstileToken: token,
-          locale, // Pass current locale to API
+          // ❌ turnstileToken removed
+          locale,
         }),
       });
 
@@ -132,13 +131,7 @@ const ContactUs = ({
       return;
     }
 
-    if (!turnstileToken) {
-      setSubmitStatus({
-        type: 'error',
-        message: t('captchaError'),
-      });
-      return;
-    }
+    // ❌ Turnstile validation removed
 
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
@@ -146,8 +139,7 @@ const ContactUs = ({
     try {
       const result = await sendContactForm(
         formData.contact,
-        formData.message,
-        turnstileToken
+        formData.message
       );
 
       if (result.success) {
@@ -156,7 +148,7 @@ const ContactUs = ({
           message: result.message,
         });
         setFormData({ contact: '', message: '' });
-        setTurnstileToken('');
+        // ❌ setTurnstileToken removed
       } else {
         setSubmitStatus({
           type: 'error',
@@ -218,6 +210,7 @@ const ContactUs = ({
               className="rounded-lg p-3 bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition"
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor="message"
@@ -237,8 +230,8 @@ const ContactUs = ({
             />
           </div>
 
-          {/* Cloudflare Turnstile Widget */}
-
+          {/* ❌ Turnstile Widget Disabled */}
+          {/*
           <div className="flex justify-center">
             <div
               className="cf-turnstile"
@@ -248,10 +241,11 @@ const ContactUs = ({
               data-language="en"
             ></div>
           </div>
+          */}
 
           <button
             type="submit"
-            disabled={isSubmitting || !turnstileToken}
+            disabled={isSubmitting} // ✅ Only depends on submitting state now
             className="mt-4 w-full py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? t('submittingButton') : t('submitButton')}
