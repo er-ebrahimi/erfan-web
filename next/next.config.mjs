@@ -15,12 +15,23 @@ const nextConfig = {
     process.env.DOMAIN
   ],
   images: {
-    remotePatterns: [
-      { hostname: (process.env.IMAGE_HOSTNAME || 'localhost').split(':')[0] },
-      { hostname: '127.0.0.1' },
-      { hostname: 'localhost' },
-    ],
-  },
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: process.env.DOMAIN,
+      port: process.env.BACK_PORT,
+      pathname: '/uploads/**',
+    },
+    {
+      protocol: 'http',
+      hostname: 'localhost',
+    },
+    {
+      protocol: 'http',
+      hostname: '127.0.0.1',
+    },
+  ],
+},
   pageExtensions: ['ts', 'tsx'],
   async redirects() {
     let redirections = [];
