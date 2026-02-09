@@ -11,7 +11,8 @@ const nextConfig = {
    allowedDevOrigins: [
     'http://localhost:3000',
     process.env.NEXT_PUBLIC_API_URL,
-    process.env.IMAGE_HOSTNAME
+    process.env.IMAGE_HOSTNAME,
+    process.env.DOMAIN
   ],
   images: {
     remotePatterns: [
