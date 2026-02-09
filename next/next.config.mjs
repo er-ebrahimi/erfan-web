@@ -8,6 +8,11 @@ const nextConfig = {
   turbopack: {
     root: process.cwd().replace('/next', ''),
   },
+   allowedDevOrigins: [
+    'http://localhost:3000',
+    process.env.NEXT_PUBLIC_API_URL,
+    process.env.IMAGE_HOSTNAME
+  ],
   images: {
     remotePatterns: [
       { hostname: (process.env.IMAGE_HOSTNAME || 'localhost').split(':')[0] },
