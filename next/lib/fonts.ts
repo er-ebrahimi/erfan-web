@@ -1,12 +1,4 @@
-import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
-
-// English/French font configuration
-export const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
 
 // Persian font configuration
 export const iranSans = localFont({
@@ -27,19 +19,25 @@ export const iranSans = localFont({
   ],
 });
 
+
+export const systemFont = {
+  className: 'font-sans',
+  variable: '--font-system',
+};
+
 // Font configuration for different locales
 export const getFontForLocale = (locale: string) => {
   switch (locale) {
     case 'fa':
       return iranSans;
     default:
-      return inter; // Use Inter for English and French
+      return systemFont;
   }
 };
 
 // RTL language detection
 export const isRTLLocale = (locale: string): boolean => {
-  const rtlLocales = ['fa', 'ar', 'he', 'ur']; // Add more RTL languages as needed
+  const rtlLocales = ['fa', 'ar', 'he', 'ur'];
   return rtlLocales.includes(locale);
 };
 
@@ -63,10 +61,8 @@ export const getLocaleConfig = (locale: string) => {
     direction: getDirectionForLocale(locale),
     textAlign: getTextAlignForLocale(locale),
     isRTL,
-    fontClass: font?.className || 'font-sans',
-    // Additional utility classes
+    fontClass: font.className,
     rtlClasses: isRTL ? 'rtl text-right' : 'ltr text-left',
-    // Spacing utilities for RTL
     spacingPrefix: isRTL ? 'mr' : 'ml',
     paddingPrefix: isRTL ? 'pr' : 'pl',
   };
