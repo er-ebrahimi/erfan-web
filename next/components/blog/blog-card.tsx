@@ -21,10 +21,10 @@ export const BlogCard = ({
       className="shadow-derek grid grid-cols-1 md:grid-cols-2 rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50 overflow-hidden hover:scale-[1.02] transition duration-200 relative"
     >
       <Link
-        href={`/${locale}/blog/${article.slug}`}
+        href={`/${locale}/category/${article.slug}`}
         className="absolute inset-0 z-0"
       >
-         <span className="sr-only">Read more about {article.title}</span>
+        <span className="sr-only">Read more about {article.title}</span>
       </Link>
 
       <div className="pointer-events-none z-10 h-full">
@@ -93,7 +93,7 @@ export const BlogCardVertical = ({
       className="shadow-derek   rounded-3xl group border border-transparent hover:border-border w-full hover:bg-neutral-900  overflow-hidden  hover:scale-[1.02] transition duration-200 relative"
     >
       <Link
-        href={`/${locale}/blog/${article.slug}`}
+        href={`/${locale}/category/${article.slug}`}
         className="absolute inset-0 z-0"
       >
         <span className="sr-only">Read more about {article.title}</span>

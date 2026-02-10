@@ -10,6 +10,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { truncate } from '@/lib/utils';
 import { Article } from '@/types/types';
 
+
 export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -93,13 +94,14 @@ export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
 };
 
 export const BlogPostRow = ({ article }: { article: Article }) => {
+  const locale = useLocale();
   return (
     <div
       className="flex md:flex-row flex-col items-start justify-between md:items-center group py-4 relative"
     >
       {/* Main link for the whole card */}
       <Link
-        href={`/blog/${article.slug}`}
+        href={`/${locale}/category/${article.slug}`}
         className="absolute inset-0 z-0"
       >
         <span className="sr-only">Read more about {article.title}</span>
@@ -108,9 +110,9 @@ export const BlogPostRow = ({ article }: { article: Article }) => {
       <div className="pointer-events-none z-10 w-full flex md:flex-row flex-col items-start justify-between md:items-center">
         <div>
           <p className="text-foreground text-lg font-medium group-hover:text-primary transition duration-200 pointer-events-auto">
-             <Link href={`/blog/${article.slug}`}>
-                {article.title}
-             </Link>
+            <Link href={`/${locale}/category/${article.slug}`}>
+              {article.title}
+            </Link>
           </p>
           <p className="text-muted-foreground text-sm mt-2 max-w-xl group-hover:text-foreground transition duration-200">
             {truncate(article.description, 80)}
@@ -125,7 +127,7 @@ export const BlogPostRow = ({ article }: { article: Article }) => {
               {article.categories?.map((category, idx) => (
                 <Link
                   key={`category-${idx}`}
-                  href={`/category/${category.slug || category.name}`}
+                  href={`/${locale}/category/${category.slug || category.name}`}
                   className="text-xs font-bold text-primary-foreground px-2 py-1 rounded-full bg-primary capitalize hover:opacity-80 transition-opacity relative z-20"
                 >
                   {category.name}

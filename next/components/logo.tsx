@@ -19,7 +19,7 @@ export const Logo = ({ image, locale }: { image?: Image; locale?: string }) => {
           className="h-10 w-auto rounded-xl mr-2 object-contain"
         />
 
-        <span className="text-white font-bold">Painfools</span>
+        <span className="text-white font-bold"></span>
       </Link>
     );
   }
