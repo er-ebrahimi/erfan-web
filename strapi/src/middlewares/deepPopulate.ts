@@ -19,7 +19,7 @@ const extractPathSegment = (url: string) =>
   url.match(/\/([^/?]+)(?:\?|$)/)?.[1] || '';
 
 const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
-  const model = strapi.getModel(uid);
+  const model = strapi.getModel(uid as any);
   const attributes = Object.entries(model.attributes);
 
   return attributes.reduce((acc: any, [attributeName, attribute]) => {
