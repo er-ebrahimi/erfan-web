@@ -32,8 +32,7 @@ export const CTA = ({
           <div className="mx-auto max-w-2xl">
             <div
               className={cn(
-                'flex flex-col justify-between items-center w-full pb-2',
-                'md:flex-row'
+                'flex flex-col justify-between items-center w-full pb-2'
               )}
             >
               <div className="flex flex-col">
@@ -50,9 +49,10 @@ export const CTA = ({
                     <Button
                       as={Link}
                       key={index}
-                      href={`/${locale}${cta.URL}`}
+                      href={cta.URL?.startsWith('http') ? cta.URL : `/${locale}${cta.URL}`}
                       variant={cta.variant}
                       className="flex flex-row gap-1"
+                      target={cta.target}
                     >
                       <StrapiImage
                         src={cta.image?.url}

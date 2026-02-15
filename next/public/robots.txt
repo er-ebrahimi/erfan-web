@@ -1,10 +1,9 @@
-# Allow all crawlers
+# *
 User-agent: *
 Allow: /
 
-# Disallow private areas if needed (uncomment as needed)
-# Disallow: /admin
-# Disallow: /private
+# Host
+Host: studioarman.com
 
-# Sitemap location
-Sitemap: https://studioarman.com/sitemap.xml
+# Sitemaps
+Sitemap: studioarman.com/sitemap.xml

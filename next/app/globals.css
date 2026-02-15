@@ -92,3 +92,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.prose img {
+  border-radius: 1rem;
+}
