@@ -12,7 +12,7 @@ export const EnamadLogo = () => {
       target="_blank"
       href="https://trustseal.enamad.ir/?id=690945&Code=rgk8cRpwyv7qi7lWVM6noaAn9SiQzaP9"
     >
-      <Image
+      <img
         referrerPolicy="origin"
         src="https://trustseal.enamad.ir/logo.aspx?id=690945&Code=rgk8cRpwyv7qi7lWVM6noaAn9SiQzaP9"
         alt="enamad-logo"
