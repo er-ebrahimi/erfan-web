@@ -1,7 +1,7 @@
 import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
 
-import ClientSlugHandler from '../ClientSlugHandler';
+import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog/blog-card';
 import { BlogPostRows } from '@/components/blog/blog-post-rows';
 import { Container } from '@/components/container';
@@ -75,15 +75,15 @@ export default async function Blog(props: {
           </Subheading>
         </div>
 
-        {articles.data.slice(0, 1).map((article: Article) => (
-          <BlogCard
+        {articles.data.slice(0, 1).map((article: Article) => {
+          return <BlogCard
             article={article}
             locale={params.locale}
             key={article.title}
-          />
-        ))}
+          />;
+        })}
 
-        <BlogPostRows articles={articles.data} />
+        <BlogPostRows articles={articles.data.filter((article: Article) => article.slug.includes('blog')).map((article: Article) => article)} />
       </Container>
     </div>
   );
