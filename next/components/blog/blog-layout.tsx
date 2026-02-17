@@ -7,6 +7,7 @@ import { Container } from '../container';
 import DynamicZoneManager from '../dynamic-zone/manager';
 import { StrapiImage } from '@/components/ui/strapi-image';
 import { Article } from '@/types/types';
+import { cn } from '@/lib/utils';
 
 export async function BlogLayout({
   article,
@@ -59,7 +60,7 @@ export async function BlogLayout({
               ))}
             </div>
             <header className="flex flex-col">
-              <h1 className="mt-8 text-4xl font-bold tracking-tight text-foreground sm:text-5xl ">
+              <h1 className={cn("mt-8 text-4xl font-bold tracking-tight text-foreground sm:text-5xl", "!leading-relaxed")}>
                 {article.title}
               </h1>
             </header>
