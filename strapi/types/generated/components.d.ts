@@ -255,6 +255,20 @@ export interface DynamicZoneLaunches extends Struct.ComponentSchema {
   };
 }
 
+export interface DynamicZoneMedia extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_media';
+  info: {
+    displayName: 'Media';
+    icon: 'television';
+  };
+  attributes: {
+    media: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+  };
+}
+
 export interface DynamicZonePlans extends Struct.ComponentSchema {
   collectionName: 'components_dynamic_zone_plans';
   info: {
@@ -593,6 +607,20 @@ export interface SharedLink extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedMedia extends Struct.ComponentSchema {
+  collectionName: 'components_shared_media';
+  info: {
+    displayName: 'Media';
+    icon: 'television';
+  };
+  attributes: {
+    Media: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+  };
+}
+
 export interface SharedPerks extends Struct.ComponentSchema {
   collectionName: 'components_shared_perks';
   info: {
@@ -777,6 +805,7 @@ declare module '@strapi/strapi' {
       'dynamic-zone.hero-picture': DynamicZoneHeroPicture;
       'dynamic-zone.how-it-works': DynamicZoneHowItWorks;
       'dynamic-zone.launches': DynamicZoneLaunches;
+      'dynamic-zone.media': DynamicZoneMedia;
       'dynamic-zone.plans': DynamicZonePlans;
       'dynamic-zone.pricing': DynamicZonePricing;
       'dynamic-zone.project-pictures': DynamicZoneProjectPictures;
@@ -799,6 +828,7 @@ declare module '@strapi/strapi' {
       'shared.form': SharedForm;
       'shared.launches': SharedLaunches;
       'shared.link': SharedLink;
+      'shared.media': SharedMedia;
       'shared.perks': SharedPerks;
       'shared.plan': SharedPlan;
       'shared.porject-picture': SharedPorjectPicture;

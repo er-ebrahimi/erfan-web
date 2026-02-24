@@ -462,7 +462,12 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
         };
       }>;
     dynamic_zone: Schema.Attribute.DynamicZone<
-      ['dynamic-zone.related-articles', 'dynamic-zone.cta', 'shared.content']
+      [
+        'dynamic-zone.related-articles',
+        'dynamic-zone.cta',
+        'shared.content',
+        'dynamic-zone.media',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

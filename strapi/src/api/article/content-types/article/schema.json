@@ -58,7 +58,8 @@
       "components": [
         "dynamic-zone.related-articles",
         "dynamic-zone.cta",
-        "shared.content"
+        "shared.content",
+        "dynamic-zone.media"
       ]
     },
     "image": {

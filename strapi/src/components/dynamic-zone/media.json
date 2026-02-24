@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_dynamic_zone_media",
+  "info": {
+    "displayName": "Media",
+    "icon": "television"
+  },
+  "options": {},
+  "attributes": {
+    "media": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  },
+  "config": {}
+}
