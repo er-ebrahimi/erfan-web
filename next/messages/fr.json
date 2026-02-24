@@ -41,7 +41,8 @@
     "direction": "Direction",
     "isRTL": "Est RTL",
     "fontClass": "Classe de police",
-    "spacingExample": "Exemple d'espacement"
+    "spacingExample": "Exemple d'espacement",
+    "videoFallback": "Votre navigateur ne prend pas en charge la balise vidéo."
   },
   "navigation": {
     "home": "Accueil",

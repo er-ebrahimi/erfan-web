@@ -262,8 +262,6 @@ export interface DynamicZoneMedia extends Struct.ComponentSchema {
     icon: 'television';
   };
   attributes: {
-    autoplay: Schema.Attribute.String;
-    controls: Schema.Attribute.String;
     media: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
   };
 }

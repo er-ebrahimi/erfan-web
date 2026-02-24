@@ -42,7 +42,8 @@
     "direction": "Direction",
     "isRTL": "Is RTL",
     "fontClass": "Font Class",
-    "spacingExample": "Spacing Example"
+    "spacingExample": "Spacing Example",
+    "videoFallback": "Your browser does not support the video tag."
   },
   "navigation": {
     "home": "Home",

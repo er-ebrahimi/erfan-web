@@ -15,12 +15,6 @@
         "videos",
         "audios"
       ]
-    },
-    "autoplay": {
-      "type": "string"
-    },
-    "controls": {
-      "type": "string"
     }
   },
   "config": {}

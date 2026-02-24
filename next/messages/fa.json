@@ -42,7 +42,8 @@
     "direction": "جهت",
     "isRTL": "راست به چپ",
     "fontClass": "کلاس فونت",
-    "spacingExample": "نمونه فاصله‌گذاری"
+    "spacingExample": "نمونه فاصله‌گذاری",
+    "videoFallback": "مرورگر شما از ویدیو پشتیبانی نمی‌کند."
   },
   "navigation": {
     "home": "خانه",

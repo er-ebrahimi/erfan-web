@@ -112,6 +112,10 @@ const componentMapping: { [key: string]: any } = {
     () => import('./content').then((mod) => mod.Content),
     { ssr: true }
   ),
+  'dynamic-zone.media': dynamic(
+    () => import('./media').then((mod) => mod.Media),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
