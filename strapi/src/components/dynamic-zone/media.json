@@ -8,13 +8,19 @@
   "attributes": {
     "media": {
       "type": "media",
-      "multiple": true,
+      "multiple": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
       ]
+    },
+    "autoplay": {
+      "type": "string"
+    },
+    "controls": {
+      "type": "string"
     }
   },
   "config": {}
