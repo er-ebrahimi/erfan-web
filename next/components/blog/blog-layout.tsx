@@ -19,7 +19,6 @@ export async function BlogLayout({
   children: React.ReactNode;
 }) {
   const t = await getTranslations({ locale, namespace: 'blog' });
-
   return (
     <Container className="mt-16 lg:mt-32">
       <div className="flex justify-between items-center px-2 py-8">

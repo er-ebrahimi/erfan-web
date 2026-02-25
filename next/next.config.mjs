@@ -16,7 +16,8 @@ const nextConfig = {
     process.env.BACKEND_URL
   ],
   images: {
-  remotePatterns: [
+    unoptimized: process.env.NODE_ENV === 'development',
+    remotePatterns: [
     {
       protocol: 'https',
       hostname: process.env.DOMAIN,
@@ -24,19 +25,29 @@ const nextConfig = {
       pathname: '/uploads/**',
     },
     {
+      protocol: 'https',
+      hostname: 'studioarman.com',
+      port: '2087',
+      pathname: '/uploads/**',
+    },
+    {
       protocol: 'http',
       hostname: 'localhost',
+      port: '1337',
+      pathname: '/uploads/**',
     },
     {
       protocol: 'http',
       hostname: '127.0.0.1',
+      port: '1337',
+      pathname: '/uploads/**',
     },
     {
       protocol: "https",
       hostname: 'trustseal.enamad.ir'
     }
-  ],
-},
+    ],
+  },
   pageExtensions: ['ts', 'tsx'],
   async redirects() {
     let redirections = [];
