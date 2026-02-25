@@ -210,28 +210,27 @@ const ShaderMaterial = ({
     timeLocation.value = timestamp;
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getUniforms = () => {
-    const preparedUniforms: any = {};
+  const preparedUniforms = useMemo(() => {
+    const result: any = {};
 
     for (const uniformName in uniforms) {
       const uniform: any = uniforms[uniformName];
 
       switch (uniform.type) {
         case 'uniform1f':
-          preparedUniforms[uniformName] = { value: uniform.value, type: '1f' };
+          result[uniformName] = { value: uniform.value, type: '1f' };
           break;
         case 'uniform3f':
-          preparedUniforms[uniformName] = {
+          result[uniformName] = {
             value: new THREE.Vector3().fromArray(uniform.value),
             type: '3f',
           };
           break;
         case 'uniform1fv':
-          preparedUniforms[uniformName] = { value: uniform.value, type: '1fv' };
+          result[uniformName] = { value: uniform.value, type: '1fv' };
           break;
         case 'uniform3fv':
-          preparedUniforms[uniformName] = {
+          result[uniformName] = {
             value: uniform.value.map((v: number[]) =>
               new THREE.Vector3().fromArray(v)
             ),
@@ -239,7 +238,7 @@ const ShaderMaterial = ({
           };
           break;
         case 'uniform2f':
-          preparedUniforms[uniformName] = {
+          result[uniformName] = {
             value: new THREE.Vector2().fromArray(uniform.value),
             type: '2f',
           };
@@ -250,12 +249,12 @@ const ShaderMaterial = ({
       }
     }
 
-    preparedUniforms['u_time'] = { value: 0, type: '1f' };
-    preparedUniforms['u_resolution'] = {
+    result['u_time'] = { value: 0, type: '1f' };
+    result['u_resolution'] = {
       value: new THREE.Vector2(size.width * 2, size.height * 2),
-    }; // Initialize u_resolution
-    return preparedUniforms;
-  };
+    };
+    return result;
+  }, [uniforms, size.height, size.width]);
 
   // Shader material
   const material = useMemo(() => {
@@ -274,7 +273,7 @@ const ShaderMaterial = ({
       }
       `,
       fragmentShader: source,
-      uniforms: getUniforms(),
+      uniforms: preparedUniforms,
       glslVersion: THREE.GLSL3,
       blending: THREE.CustomBlending,
       blendSrc: THREE.SrcAlphaFactor,
@@ -282,7 +281,7 @@ const ShaderMaterial = ({
     });
 
     return materialObject;
-  }, [source, getUniforms]);
+  }, [source, preparedUniforms]);
 
   return (
     <mesh ref={ref as any}>

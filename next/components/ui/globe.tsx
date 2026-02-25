@@ -1,37 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, extend, useThree } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from 'three';
 import ThreeGlobe from 'three-globe';
 
 import countries from './data/globe.json';
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable react-hooks/exhaustive-deps */
 
 extend({ ThreeGlobe });
 
@@ -99,35 +74,31 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   const globeRef = useRef<ThreeGlobe | null>(null);
 
-  const defaultProps = {
-    pointSize: 1,
-    atmosphereColor: '#ffffff',
-    showAtmosphere: true,
-    atmosphereAltitude: 0.1,
-    polygonColor: 'rgba(255,255,255,0.7)',
-    globeColor: '#1d072e',
-    emissive: '#000000',
-    emissiveIntensity: 0.1,
-    shininess: 0.9,
-    arcTime: 2000,
-    arcLength: 0.9,
-    rings: 1,
-    maxRings: 3,
-    ...globeConfig,
-  };
+  const defaultProps = useMemo(
+    () => ({
+      pointSize: 1,
+      atmosphereColor: '#ffffff',
+      showAtmosphere: true,
+      atmosphereAltitude: 0.1,
+      polygonColor: 'rgba(255,255,255,0.7)',
+      globeColor: '#1d072e',
+      emissive: '#000000',
+      emissiveIntensity: 0.1,
+      shininess: 0.9,
+      arcTime: 2000,
+      arcLength: 0.9,
+      rings: 1,
+      maxRings: 3,
+      ...globeConfig,
+    }),
+    [globeConfig]
+  );
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (globeRef.current && isMounted) {
-      _buildData();
-      _buildMaterial();
-    }
-  }, [globeRef.current, isMounted]);
-
-  const _buildMaterial = () => {
+  const buildMaterial = useCallback(() => {
     if (!globeRef.current) return;
 
     const globeMaterial = globeRef.current.globeMaterial() as unknown as {
@@ -136,13 +107,13 @@ export function Globe({ globeConfig, data }: WorldProps) {
       emissiveIntensity: number;
       shininess: number;
     };
-    globeMaterial.color = new Color(globeConfig.globeColor);
-    globeMaterial.emissive = new Color(globeConfig.emissive);
-    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
-    globeMaterial.shininess = globeConfig.shininess || 0.9;
-  };
+    globeMaterial.color = new Color(defaultProps.globeColor);
+    globeMaterial.emissive = new Color(defaultProps.emissive);
+    globeMaterial.emissiveIntensity = defaultProps.emissiveIntensity || 0.1;
+    globeMaterial.shininess = defaultProps.shininess || 0.9;
+  }, [defaultProps]);
 
-  const _buildData = () => {
+  const buildData = useCallback(() => {
     const arcs = data;
     let points = [];
 
@@ -208,50 +179,16 @@ export function Globe({ globeConfig, data }: WorldProps) {
     );
 
     setGlobeData(filteredPoints);
-  };
+  }, [data, defaultProps.pointSize]);
 
   useEffect(() => {
-    if (
-      globeRef.current &&
-      globeData &&
-      globeData.length > 0 &&
-      !isAnimationStarted
-    ) {
-      // Validate countries data
-      const validCountries = countries.features.filter((feature) => {
-        if (!feature.geometry || !feature.geometry.coordinates) return false;
-        return true;
-      });
-
-      // Initialize globe with empty data first to prevent NaN issues
-      globeRef.current
-        .hexPolygonsData([])
-        .arcsData([])
-        .pointsData([])
-        .ringsData([]);
-
-      // Then set the actual data
-      globeRef.current
-        .hexPolygonsData(validCountries)
-        .hexPolygonResolution(3)
-        .hexPolygonMargin(0.7)
-        .showAtmosphere(defaultProps.showAtmosphere)
-        .atmosphereColor(defaultProps.atmosphereColor)
-        .atmosphereAltitude(defaultProps.atmosphereAltitude)
-        .hexPolygonColor((e) => {
-          return defaultProps.polygonColor;
-        });
-
-      setIsAnimationStarted(true);
-      // Small delay to ensure initialization is complete
-      setTimeout(() => {
-        startAnimation();
-      }, 100);
+    if (globeRef.current && isMounted) {
+      buildData();
+      buildMaterial();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [globeData, isAnimationStarted]);
+  }, [buildData, buildMaterial, isMounted]);
 
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
     if (!globeRef.current || !globeData) {
       return;
     }
@@ -328,7 +265,43 @@ export function Globe({ globeConfig, data }: WorldProps) {
     } catch (error) {
       console.error('Error in startAnimation:', error);
     }
-  };
+  }, [data, defaultProps, globeData]);
+
+  useEffect(() => {
+    if (
+      globeRef.current &&
+      globeData &&
+      globeData.length > 0 &&
+      !isAnimationStarted
+    ) {
+      const validCountries = countries.features.filter((feature) => {
+        if (!feature.geometry || !feature.geometry.coordinates) return false;
+        return true;
+      });
+
+      globeRef.current
+        .hexPolygonsData([])
+        .arcsData([])
+        .pointsData([])
+        .ringsData([]);
+
+      globeRef.current
+        .hexPolygonsData(validCountries)
+        .hexPolygonResolution(3)
+        .hexPolygonMargin(0.7)
+        .showAtmosphere(defaultProps.showAtmosphere)
+        .atmosphereColor(defaultProps.atmosphereColor)
+        .atmosphereAltitude(defaultProps.atmosphereAltitude)
+        .hexPolygonColor((e) => {
+          return defaultProps.polygonColor;
+        });
+
+      setIsAnimationStarted(true);
+      setTimeout(() => {
+        startAnimation();
+      }, 100);
+    }
+  }, [defaultProps, globeData, isAnimationStarted, startAnimation]);
 
   useEffect(() => {
     if (!globeRef.current || !globeData) return;
@@ -364,8 +337,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     return () => {
       clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [globeRef.current, globeData]);
+  }, [data.length, globeData]);
 
   // Prevent hydration mismatch by only rendering on client
   if (!isMounted) {
@@ -386,7 +358,7 @@ export function WebGLRendererConfig() {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
-  }, []);
+  }, [gl, size.height, size.width]);
 
   return null;
 }

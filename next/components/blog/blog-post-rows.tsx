@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import FuzzySearch from 'fuzzy-search';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from 'next-view-transitions';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 import { truncate } from '@/lib/utils';
@@ -18,17 +18,20 @@ export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
   const t = useTranslations('blog');
   const locale = useLocale();
 
-  const searcher = new FuzzySearch(articles, ['title'], {
-    caseSensitive: false,
-  });
+  const searcher = useMemo(
+    () =>
+      new FuzzySearch(articles, ['title'], {
+        caseSensitive: false,
+      }),
+    [articles]
+  );
 
   const [results, setResults] = useState(articles);
   useEffect(() => {
     const results = searcher.search(search);
     setResults(results);
     setPage(1); // Reset to first page on search
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [search, searcher]);
 
   const totalPages = Math.ceil(results.length / itemsPerPage);
   const paginatedResults = results.slice((page - 1) * itemsPerPage, page * itemsPerPage);
