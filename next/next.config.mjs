@@ -26,7 +26,7 @@ const nextConfig = {
     },
     {
       protocol: 'https',
-      hostname: 'studioarman.com',
+      hostname: 'painfoolsstudio.com',
       port: '2087',
       pathname: '/uploads/**',
     },

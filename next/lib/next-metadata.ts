@@ -1,11 +1,11 @@
 const seoData = {
   title:
-    'StudioArman - Your content delivery partner for large scale applications',
+    'Painfools - Your content delivery partner for large scale applications',
   description: `A platform integrating Aceternity with Strapi for seamless content management.`,
   image: '',
   openGraph: {
     type: 'website',
-    title: `StudioArman - Your content delivery partner for large scale applications`,
+    title: `Painfools - Your content delivery partner for large scale applications`,
     url: '', // TODO: Fix this
     description: `A platform integrating Aceternity with Strapi for seamless content management.`,
     locale: 'en_EN',
@@ -17,7 +17,7 @@ const seoData = {
         url: ``, // TODO: Fix this
       },
     ],
-    site_name: 'StudioArman',
+    site_name: 'Painfools',
   },
   twitter: {
     handle: '@mannupaaji',
