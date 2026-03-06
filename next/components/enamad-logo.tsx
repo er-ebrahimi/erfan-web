@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-
+import enamadLogo from "@/public/enamad.webp"
 export const EnamadLogo = () => {
   return (
     <a
@@ -11,7 +11,7 @@ export const EnamadLogo = () => {
     >
       <Image
         referrerPolicy="origin"
-        src="https://trustseal.enamad.ir/logo.aspx?id=690945&Code=rgk8cRpwyv7qi7lWVM6noaAn9SiQzaP9"
+        src={enamadLogo}
         alt="enamad-logo"
         width={100}
         height={100}
