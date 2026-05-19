@@ -81,7 +81,11 @@ if [ -n "$PREBUILT_IMAGE" ]; then
     docker tag "${PREBUILT_IMAGE}" "armanstudio-blog-i:${NEW}"
 else
     echo -e "${BLUE}📦 Building new image...${NC}"
-    docker build -t "armanstudio-blog-i:${NEW}" .
+    # shellcheck disable=SC1091
+    [ -f .env.local ] && source .env.local
+    docker build \
+      --build-arg "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-}" \
+      -t "armanstudio-blog-i:${NEW}" .
 fi
 
 # 2. Start new container

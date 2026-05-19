@@ -11,10 +11,11 @@ RUN npm install -g npm@11.6.2 \
 
 # Rebuild the source code only when needed
 FROM node:22-alpine AS builder
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
-COPY .env.local .env.local
 RUN npm run build
 
 FROM node:22-alpine AS runner
@@ -28,9 +29,6 @@ COPY --from=builder /usr/src/app/.next/standalone ./
 # static assets
 COPY --from=builder /usr/src/app/.next/static ./.next/static
 COPY --from=builder /usr/src/app/public ./public
-
-# **new**: copy your .env.local so Next.js will see NEXTAUTH_*
-COPY --from=builder /usr/src/app/.env.local ./.env.local
 
 EXPOSE 4000
 CMD ["node", "server.js"]
