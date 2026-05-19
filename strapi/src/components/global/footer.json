@@ -13,7 +13,7 @@
       "target": "api::logo.logo"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "copyright": {
       "type": "string"

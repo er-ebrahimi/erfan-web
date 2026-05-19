@@ -18,35 +18,52 @@
   "attributes": {
     "seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false
     },
     "navbar": {
-      "displayName": "Navbar",
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "global.navbar"
+      "component": "global.navbar",
+      "repeatable": false
     },
     "footer": {
-      "displayName": "Footer",
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "global.footer"
+      "component": "global.footer",
+      "repeatable": false
+    },
+    "languages": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "global.local",
+      "repeatable": true
+    },
+    "Cash": {
+      "type": "integer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": 60
     }
   }
 }

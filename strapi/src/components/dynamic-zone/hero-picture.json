@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_dynamic_zone_hero_pictures",
+  "info": {
+    "displayName": "Hero Picture",
+    "icon": "picture"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "sub_heading": {
+      "type": "string"
+    },
+    "CTAs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.button"
+    },
+    "background": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_global_locals",
+  "info": {
+    "displayName": "Local",
+    "icon": "bold"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

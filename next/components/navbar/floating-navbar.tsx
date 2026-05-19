@@ -15,12 +15,9 @@ import {
   IconUser,
 } from '@tabler/icons-react';
 import { useTheme } from 'next-themes';
-import { Link } from 'next-view-transitions';
 import { useEffect, useState } from 'react';
 
-import { LanguageSelector } from '../language-selector';
-import { Button } from '@/components/elements/button';
-import { Logo } from '@/components/logo';
+import { BackendLanguageSelector } from '../backend-language-selector';
 import { FloatingDock } from '@/components/ui/floating-dock';
 
 type Props = {
@@ -38,6 +35,13 @@ type Props = {
   }[];
   logo: any;
   locale: string;
+  showTheme?: boolean;
+  showLanguage?: boolean;
+  languages?: {
+    id: number;
+    code: string;
+    name: string;
+  }[];
 };
 
 // Icon mapping for Strapi icon field or text-based fallback
@@ -101,6 +105,9 @@ export const FloatingNavbar = ({
   rightNavbarItems,
   logo,
   locale,
+  showTheme = false,
+  showLanguage = false,
+  languages = [],
 }: Props) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -120,25 +127,33 @@ export const FloatingNavbar = ({
       icon: getIconForNavItem(item.text || '', item.icon),
       href: `/${locale}${item.URL || '/'}`,
     })),
-    {
-      title: 'Toggle Theme',
-      icon:
-        theme === 'dark' ? (
-          <IconSun className="h-full w-full" />
-        ) : (
-          <IconMoon className="h-full w-full" />
-        ),
-      href: '#',
-      onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
-    },
-    {
-      title: 'Change Language',
-      icon: <IconLanguage className="h-full w-full" />,
-      href: '#',
-      onClick: () => {
-        setShowLanguageSelector(!showLanguageSelector);
-      },
-    },
+    ...(showTheme
+      ? [
+          {
+            title: 'Toggle Theme',
+            icon:
+              theme === 'dark' ? (
+                <IconSun className="h-full w-full" />
+              ) : (
+                <IconMoon className="h-full w-full" />
+              ),
+            href: '#',
+            onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
+          },
+        ]
+      : []),
+    ...(showLanguage
+      ? [
+          {
+            title: 'Change Language',
+            icon: <IconLanguage className="h-full w-full" />,
+            href: '#',
+            onClick: () => {
+              setShowLanguageSelector(!showLanguageSelector);
+            },
+          },
+        ]
+      : []),
     ...(rightNavbarItems && Array.isArray(rightNavbarItems)
       ? rightNavbarItems
       : []
@@ -169,7 +184,10 @@ export const FloatingNavbar = ({
       {showLanguageSelector && (
         <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-card/90 backdrop-blur-md border border-border rounded-lg p-2 shadow-lg bg-muted dark:bg-primary/20">
-            <LanguageSelector />
+            <BackendLanguageSelector
+              languages={languages}
+              onClose={() => setShowLanguageSelector(false)}
+            />
           </div>
         </div>
       )}

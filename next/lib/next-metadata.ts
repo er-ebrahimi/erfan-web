@@ -1,12 +1,12 @@
 const seoData = {
   title:
-    'LaunchPad - Your content delivery partner for large scale applications',
+    'StudioArman - Your content delivery partner for large scale applications',
   description: `A platform integrating Aceternity with Strapi for seamless content management.`,
-  image: 'https://ui.aceternity.com/banner.png',
+  image: '',
   openGraph: {
     type: 'website',
-    title: `LaunchPad - Your content delivery partner for large scale applications`,
-    url: 'https://ui.aceternity.com', // TODO: Fix this
+    title: `StudioArman - Your content delivery partner for large scale applications`,
+    url: '', // TODO: Fix this
     description: `A platform integrating Aceternity with Strapi for seamless content management.`,
     locale: 'en_EN',
     keywords: 'content, delivery, web, hosting',
@@ -14,10 +14,10 @@ const seoData = {
       {
         width: 1200,
         height: 630,
-        url: `https://ui.aceternity.com/banner.png`, // TODO: Fix this
+        url: ``, // TODO: Fix this
       },
     ],
-    site_name: 'launchpad',
+    site_name: 'StudioArman',
   },
   twitter: {
     handle: '@mannupaaji',

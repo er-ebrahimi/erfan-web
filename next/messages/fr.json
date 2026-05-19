@@ -32,13 +32,17 @@
     "logout": "Déconnexion",
     "profile": "Profil",
     "settings": "Paramètres",
+    "menu": "Menu",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
     "language": "Langue",
     "theme": "Thème",
     "welcome": "Bienvenue",
     "direction": "Direction",
     "isRTL": "Est RTL",
     "fontClass": "Classe de police",
-    "spacingExample": "Exemple d'espacement"
+    "spacingExample": "Exemple d'espacement",
+    "videoFallback": "Votre navigateur ne prend pas en charge la balise vidéo."
   },
   "navigation": {
     "home": "Accueil",
@@ -90,5 +94,39 @@
     "price": "Prix",
     "inStock": "En stock",
     "outOfStock": "Rupture de stock"
+  },
+  "contact": {
+    "contactLabel": "Contact ou Email",
+    "contactPlaceholder": "Entrez votre contact ou email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Écrivez votre message",
+    "submitButton": "Envoyer le message",
+    "submittingButton": "Envoi en cours...",
+    "fillFieldsError": "Veuillez remplir tous les champs.",
+    "captchaError": "Veuillez vérifier que vous n'êtes pas un robot.",
+    "sendError": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+    "apiErrors": {
+      "requiredFields": "Tous les champs sont requis.",
+      "securityFailed": "La vérification de sécurité a échoué. Veuillez réessayer.",
+      "sendSuccess": "Votre message a été envoyé avec succès !",
+      "sendFailed": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+      "processError": "Erreur lors du traitement de la demande. Veuillez réessayer."
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page non trouvée",
+    "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez. Elle a peut-être été déplacée, supprimée ou n'existe pas.",
+    "goHome": "Retour à l'accueil",
+    "browseBlog": "Parcourir le blog",
+    "supportMessage": "Si vous pensez qu'il s'agit d'une erreur, veuillez contacter notre équipe de support."
+  },
+  "serverError": {
+    "title": "500",
+    "heading": "Erreur interne du serveur",
+    "description": "Quelque chose s'est mal passé de notre côté. Nous travaillons à résoudre ce problème. Veuillez réessayer plus tard.",
+    "goHome": "Retour à l'accueil",
+    "tryAgain": "Réessayer",
+    "supportMessage": "Si ce problème persiste, veuillez contacter notre équipe de support."
   }
 }

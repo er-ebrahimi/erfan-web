@@ -14,9 +14,6 @@ export function getStrapiMedia(url: string | null) {
   if (url.startsWith('data:')) return url;
   if (url.startsWith('http') || url.startsWith('//')) return url;
   if (url.startsWith('/')) {
-    if (!strapiURL && document?.location.host.endsWith('.strapidemo.com')) {
-      return `https://${document.location.host.replace('client-', 'api-')}${url}`;
-    }
     return strapiURL + url;
   }
   return `${strapiURL}${url}`;

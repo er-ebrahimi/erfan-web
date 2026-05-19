@@ -1,6 +1,6 @@
 import { Link } from 'next-view-transitions';
-import React from 'react';
 
+import { EnamadLogo } from '@/components/enamad-logo';
 import { Logo } from '@/components/logo';
 
 export const Footer = async ({
@@ -20,58 +20,9 @@ export const Footer = async ({
             </div>
             <div className="max-w-xs">{data?.description}</div>
             <div className="mt-4">{data?.copyright}</div>
-            <div className="mt-10">
-              Designed and Developed by{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://aceternity.com"
-              >
-                Aceternity
-              </a>{' '}
-              &{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://strapi.io"
-              >
-                Strapi
-              </a>
-            </div>
-            <div className="mt-2">
-              built with{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://strapi.io"
-              >
-                Strapi
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://nextjs.org"
-              >
-                Next.js
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://tailwindcss.com"
-              >
-                Tailwind CSS
-              </a>
-              ,{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://framer.com/motion"
-              >
-                Motion Animation Lib
-              </a>
-              , and{' '}
-              <a
-                className="text-foreground underline hover:text-primary transition-colors"
-                href="https://ui.aceternity.com"
-              >
-                Aceternity UI
-              </a>
+            <div className="mt-4 bg-white rounded-lg p-2 inline-block h-28 w-28">
+              {/* @ts-ignore */}
+              <EnamadLogo />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-10 items-start mt-10 md:mt-0">
@@ -93,7 +44,7 @@ const LinkSection = ({
   locale: string;
 }) => (
   <div className="flex justify-center space-y-4 flex-col mt-4">
-    {links.map((link) => (
+    {links?.map((link) => (
       <Link
         key={link.text}
         className="transition-colors hover:text-foreground/80 text-muted-foreground text-xs sm:text-sm"

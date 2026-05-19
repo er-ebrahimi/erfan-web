@@ -7,15 +7,9 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { useSlugContext } from '@/app/context/SlugContext';
+import { languageLabels } from '@/lib/constants';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-
-// Language labels for display
-const languageLabels: Record<string, { label: string; flag: string }> = {
-  en: { label: 'English', flag: '🇺🇸' },
-  fr: { label: 'Français', flag: '🇫🇷' },
-  fa: { label: 'فارسی', flag: '🇮🇷' },
-};
 
 export function LanguageSelector() {
   const { state } = useSlugContext();
@@ -29,7 +23,7 @@ export function LanguageSelector() {
   const segments = pathname?.split('/') || [];
 
   // Available locales
-  const availableLocales = ['en', 'fr', 'fa'];
+  const availableLocales = ['fa'];
 
   // Generate localized path for each locale
   const generateLocalizedPath = (locale: string): string => {

@@ -3,17 +3,11 @@
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
 
 import { useSlugContext } from '@/app/context/SlugContext';
+import { getLanguageLabel } from '@/lib/constants';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-
-// Language labels for display
-const languageLabels: Record<string, string> = {
-  en: 'EN',
-  fa: 'فا',
-};
 
 export function LocaleSwitcher() {
   const { state } = useSlugContext();
@@ -27,7 +21,7 @@ export function LocaleSwitcher() {
   const availableLocales =
     Object.keys(localizedSlugs).length > 0
       ? Object.keys(localizedSlugs)
-      : ['en', 'fr', 'fa']; // Use locales
+      : ['fa']; // Use locales
 
   // Generate localized path for each locale
   const generateLocalizedPath = (loc: string): string => {
@@ -66,9 +60,9 @@ export function LocaleSwitcher() {
                   : 'hover:border hover:border-border/50',
                 getLocaleConfig(loc).fontClass
               )}
-              title={`Switch to ${languageLabels[loc] || loc.toUpperCase()}`}
+              title={`Switch to ${getLanguageLabel(loc)}`}
             >
-              {languageLabels[loc] || loc.toUpperCase()}
+              {getLanguageLabel(loc)}
             </div>
           </Link>
         ))}

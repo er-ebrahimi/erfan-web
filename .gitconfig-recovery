@@ -1,0 +1,29 @@
+# Git Configuration for Better Code Recovery
+# Copy these settings to your global git config
+
+[core]
+# Enable auto-stashing
+autostash = true
+
+[stash]
+# Show more details in stash
+showPatch = true
+
+[push]
+# Auto-setup remote tracking
+autoSetupRemote = true
+
+[alias]
+# Quick recovery aliases
+recover = "!f() { git reflog --oneline -20; }; f"
+stashes = "stash list --oneline"
+backup = "!f() { git add .; git commit -m \"Auto-backup: $(date)\"; }; f"
+safepush = "!f() { git add .; git commit -m \"WIP: $(date)\"; git push origin $(git branch --show-current); }; f"
+
+[merge]
+# Keep backup files during merge conflicts
+keepBackup = true
+
+[rerere]
+# Enable rerere for better conflict resolution
+enabled = true

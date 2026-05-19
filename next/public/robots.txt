@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: studioarman.com
+
+# Sitemaps
+Sitemap: studioarman.com/sitemap.xml

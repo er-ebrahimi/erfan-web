@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_items_texts",
+  "info": {
+    "displayName": "Text",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "Position": {
+      "type": "string"
+    }
+  }
+}

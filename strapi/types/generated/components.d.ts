@@ -30,6 +30,21 @@ export interface CardsGraphCard extends Struct.ComponentSchema {
   };
 }
 
+export interface CardsMember extends Struct.ComponentSchema {
+  collectionName: 'components_cards_members';
+  info: {
+    description: '';
+    displayName: 'Member';
+    icon: 'user';
+  };
+  attributes: {
+    Description: Schema.Attribute.Text;
+    Positions: Schema.Attribute.Component<'items.text', true>;
+    Profile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    Title: Schema.Attribute.String;
+  };
+}
+
 export interface CardsRayCard extends Struct.ComponentSchema {
   collectionName: 'components_cards_ray_cards';
   info: {
@@ -110,8 +125,6 @@ export interface DynamicZoneCta extends Struct.ComponentSchema {
   };
   attributes: {
     CTAs: Schema.Attribute.Component<'shared.button', true>;
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
   };
 }
 
@@ -171,9 +184,10 @@ export interface DynamicZoneGuide extends Struct.ComponentSchema {
   collectionName: 'components_dynamic_zone_guides';
   info: {
     displayName: 'Guide';
+    icon: 'heart';
   };
   attributes: {
-    Description: Schema.Attribute.Text;
+    Description: Schema.Attribute.String;
     Profile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     Title: Schema.Attribute.String;
   };
@@ -187,6 +201,26 @@ export interface DynamicZoneHero extends Struct.ComponentSchema {
     icon: 'layout';
   };
   attributes: {
+    Background: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    CTAs: Schema.Attribute.Component<'shared.button', true>;
+    heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.String;
+  };
+}
+
+export interface DynamicZoneHeroPicture extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_hero_pictures';
+  info: {
+    displayName: 'Hero Picture';
+    icon: 'picture';
+  };
+  attributes: {
+    background: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
     CTAs: Schema.Attribute.Component<'shared.button', true>;
     heading: Schema.Attribute.String;
     sub_heading: Schema.Attribute.String;
@@ -218,6 +252,17 @@ export interface DynamicZoneLaunches extends Struct.ComponentSchema {
     heading: Schema.Attribute.String;
     launches: Schema.Attribute.Component<'shared.launches', true>;
     sub_heading: Schema.Attribute.String;
+  };
+}
+
+export interface DynamicZoneMedia extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_media';
+  info: {
+    displayName: 'Media';
+    icon: 'television';
+  };
+  attributes: {
+    media: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
   };
 }
 
@@ -304,6 +349,20 @@ export interface DynamicZoneRelatedProducts extends Struct.ComponentSchema {
   };
 }
 
+export interface DynamicZoneTeamMembers extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_team_members';
+  info: {
+    description: '';
+    displayName: 'Team Members';
+    icon: 'gate';
+  };
+  attributes: {
+    Description: Schema.Attribute.Text;
+    Member: Schema.Attribute.Component<'cards.member', true>;
+    Title: Schema.Attribute.String;
+  };
+}
+
 export interface DynamicZoneTestimonials extends Struct.ComponentSchema {
   collectionName: 'components_dynamic_zone_testimonials';
   info: {
@@ -331,12 +390,24 @@ export interface GlobalFooter extends Struct.ComponentSchema {
   attributes: {
     built_with: Schema.Attribute.String;
     copyright: Schema.Attribute.String;
-    description: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     designed_developed_by: Schema.Attribute.String;
     internal_links: Schema.Attribute.Component<'shared.link', true>;
     logo: Schema.Attribute.Relation<'oneToOne', 'api::logo.logo'>;
     policy_links: Schema.Attribute.Component<'shared.link', true>;
     social_media_links: Schema.Attribute.Component<'shared.link', true>;
+  };
+}
+
+export interface GlobalLocal extends Struct.ComponentSchema {
+  collectionName: 'components_global_locals';
+  info: {
+    displayName: 'Local';
+    icon: 'bold';
+  };
+  attributes: {
+    code: Schema.Attribute.String;
+    name: Schema.Attribute.String;
   };
 }
 
@@ -347,9 +418,11 @@ export interface GlobalNavbar extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
+    language: Schema.Attribute.Boolean;
     left_navbar_items: Schema.Attribute.Component<'shared.link', true>;
     logo: Schema.Attribute.Relation<'oneToOne', 'api::logo.logo'>;
     right_navbar_items: Schema.Attribute.Component<'shared.link', true>;
+    theme: Schema.Attribute.Boolean;
   };
 }
 
@@ -432,6 +505,17 @@ export interface ItemsRayItems extends Struct.ComponentSchema {
   };
 }
 
+export interface ItemsText extends Struct.ComponentSchema {
+  collectionName: 'components_items_texts';
+  info: {
+    displayName: 'Text';
+    icon: 'file';
+  };
+  attributes: {
+    Position: Schema.Attribute.String;
+  };
+}
+
 export interface SharedButton extends Struct.ComponentSchema {
   collectionName: 'components_shared_buttons';
   info: {
@@ -440,6 +524,7 @@ export interface SharedButton extends Struct.ComponentSchema {
     icon: 'cursor';
   };
   attributes: {
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;
@@ -464,6 +549,17 @@ export interface SharedCons extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedContent extends Struct.ComponentSchema {
+  collectionName: 'components_shared_contents';
+  info: {
+    displayName: 'content';
+    icon: 'apps';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+  };
+}
+
 export interface SharedForm extends Struct.ComponentSchema {
   collectionName: 'components_shared_forms';
   info: {
@@ -484,7 +580,9 @@ export interface SharedLaunches extends Struct.ComponentSchema {
     icon: 'rocket';
   };
   attributes: {
+    Buttons: Schema.Attribute.Component<'shared.button', true>;
     description: Schema.Attribute.String;
+    Image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     mission_number: Schema.Attribute.String;
     title: Schema.Attribute.String;
   };
@@ -497,12 +595,26 @@ export interface SharedLink extends Struct.ComponentSchema {
     icon: 'link';
   };
   attributes: {
-    icon: Schema.Attribute.String;
+    children: Schema.Attribute.Component<'shared.button', true>;
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;
     text: Schema.Attribute.String;
     URL: Schema.Attribute.String;
+  };
+}
+
+export interface SharedMedia extends Struct.ComponentSchema {
+  collectionName: 'components_shared_media';
+  info: {
+    displayName: 'Media';
+    icon: 'television';
+  };
+  attributes: {
+    Media: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
   };
 }
 
@@ -521,12 +633,13 @@ export interface SharedPerks extends Struct.ComponentSchema {
 export interface SharedPlan extends Struct.ComponentSchema {
   collectionName: 'components_shared_plans';
   info: {
+    description: '';
     displayName: 'Plan';
     icon: 'connector';
   };
   attributes: {
     Description: Schema.Attribute.Text;
-    Pictrue: Schema.Attribute.Media<
+    Pictures: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
@@ -674,6 +787,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'cards.globe-card': CardsGlobeCard;
       'cards.graph-card': CardsGraphCard;
+      'cards.member': CardsMember;
       'cards.ray-card': CardsRayCard;
       'cards.social-media-card': CardsSocialMediaCard;
       'dynamic-zone.brands': DynamicZoneBrands;
@@ -685,26 +799,33 @@ declare module '@strapi/strapi' {
       'dynamic-zone.form-next-to-section': DynamicZoneFormNextToSection;
       'dynamic-zone.guide': DynamicZoneGuide;
       'dynamic-zone.hero': DynamicZoneHero;
+      'dynamic-zone.hero-picture': DynamicZoneHeroPicture;
       'dynamic-zone.how-it-works': DynamicZoneHowItWorks;
       'dynamic-zone.launches': DynamicZoneLaunches;
+      'dynamic-zone.media': DynamicZoneMedia;
       'dynamic-zone.plans': DynamicZonePlans;
       'dynamic-zone.pricing': DynamicZonePricing;
       'dynamic-zone.project-pictures': DynamicZoneProjectPictures;
       'dynamic-zone.promised-land': DynamicZonePromisedLand;
       'dynamic-zone.related-articles': DynamicZoneRelatedArticles;
       'dynamic-zone.related-products': DynamicZoneRelatedProducts;
+      'dynamic-zone.team-members': DynamicZoneTeamMembers;
       'dynamic-zone.testimonials': DynamicZoneTestimonials;
       'global.footer': GlobalFooter;
+      'global.local': GlobalLocal;
       'global.navbar': GlobalNavbar;
       'items.graph-card-top-items': ItemsGraphCardTopItems;
       'items.input': ItemsInput;
       'items.left-navbar-items': ItemsLeftNavbarItems;
       'items.ray-items': ItemsRayItems;
+      'items.text': ItemsText;
       'shared.button': SharedButton;
       'shared.cons': SharedCons;
+      'shared.content': SharedContent;
       'shared.form': SharedForm;
       'shared.launches': SharedLaunches;
       'shared.link': SharedLink;
+      'shared.media': SharedMedia;
       'shared.perks': SharedPerks;
       'shared.plan': SharedPlan;
       'shared.porject-picture': SharedPorjectPicture;

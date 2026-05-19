@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_contents",
+  "info": {
+    "displayName": "content",
+    "icon": "apps"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "blocks"
+    }
+  },
+  "config": {}
+}

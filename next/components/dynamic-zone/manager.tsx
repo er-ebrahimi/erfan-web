@@ -3,12 +3,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-interface DynamicZoneComponent {
-  __component: string;
-  id: number;
-  documentId?: string;
-  [key: string]: unknown;
-}
+import { DynamicZoneComponent } from '@/types/types';
 
 interface Props {
   dynamicZone: DynamicZoneComponent[];
@@ -19,6 +14,12 @@ const componentMapping: { [key: string]: any } = {
   'dynamic-zone.hero': dynamic(() => import('./hero').then((mod) => mod.Hero), {
     ssr: true,
   }),
+  'dynamic-zone.hero-picture': dynamic(
+    () => import('./hero-picture').then((mod) => mod.HeroPicture),
+    {
+      ssr: true,
+    }
+  ),
   'dynamic-zone.features': dynamic(
     () => import('./features').then((mod) => mod.Features),
     { ssr: true }
@@ -40,7 +41,7 @@ const componentMapping: { [key: string]: any } = {
     { ssr: true }
   ),
   'dynamic-zone.launches': dynamic(
-    () => import('./launches').then((mod) => mod.Launches),
+    () => import('./launches-card').then((mod) => mod.LaunchesCard),
     { ssr: true }
   ),
   'dynamic-zone.cta': dynamic(() => import('./cta').then((mod) => mod.CTA), {
@@ -68,41 +69,59 @@ const componentMapping: { [key: string]: any } = {
     }
   ),
   'dynamic-zone.promised-land': dynamic(
-    () => import('./PromisedLand').then((mod) => mod.default),
+    () => import('./promised-land').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.guide': dynamic(
-    () => import('./Guide').then((mod) => mod.default),
+    () => import('./guide').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.plans': dynamic(
-    () => import('./Plans').then((mod) => mod.default),
+    () => import('./plans').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.project-pictures': dynamic(
-    () => import('./ProjectPictures').then((mod) => mod.default),
+    () => import('./project-pictures').then((mod) => mod.default),
     {
       ssr: true,
     }
   ),
   'dynamic-zone.contact': dynamic(
-    () => import('./Contactus').then((mod) => mod.default),
+    () => import('./contact-us').then((mod) => mod.default),
     {
       ssr: true,
     }
+  ),
+  'dynamic-zone.team-members': dynamic(
+    () => import('./team-members').then((mod) => mod.default),
+    {
+      ssr: true,
+    }
+  ),
+  'shared.content': dynamic(
+    () => import('./content').then((mod) => mod.Content),
+    { ssr: true }
+  ),
+  'dynamic-zone.content': dynamic(
+    () => import('./content').then((mod) => mod.Content),
+    { ssr: true }
+  ),
+  'dynamic-zone.media': dynamic(
+    () => import('./media').then((mod) => mod.Media),
+    { ssr: true }
   ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
   return (
     <div>
-      {dynamicZone.map((componentData) => {
+      {dynamicZone.map((componentData, index) => {
         const Component = componentMapping[componentData.__component];
         if (!Component) {
           console.warn(`No component found for: ${componentData.__component}`);
@@ -110,7 +129,7 @@ const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
         }
         return (
           <Component
-            key={componentData.id}
+            key={`${componentData.__component}-${componentData.id}-${index}`}
             {...componentData}
             locale={locale}
           />
