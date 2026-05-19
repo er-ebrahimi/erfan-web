@@ -6,6 +6,21 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+PREBUILT_IMAGE=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --image)
+            PREBUILT_IMAGE="$2"
+            shift 2
+            ;;
+        *)
+            echo "Usage: $0 [--image <docker-image-tag>]"
+            exit 1
+            ;;
+    esac
+done
+
 # Function to check if nginx proxy is running
 ensure_nginx_running() {
     if ! docker ps --format '{{.Names}}' | grep -q "armanstudio-proxy"; then
@@ -34,7 +49,10 @@ get_active_color() {
     fi
 }
 
-# Ensure upstream.conf exists
+# Ensure upstream.conf exists (remove directory if it somehow exists)
+if [ -d "./upstream.conf" ]; then
+    rm -rf ./upstream.conf
+fi
 if [ ! -f "./upstream.conf" ]; then
     echo -e "${BLUE}📄 Creating upstream.conf...${NC}"
     echo "server app-blue:4000;" > ./upstream.conf
@@ -56,9 +74,15 @@ fi
 echo -e "${BLUE}🚀 Starting deployment...${NC}"
 echo -e "Currently active: ${ACTIVE} | New: ${NEW}"
 
-# 1. Build new image
-echo -e "${BLUE}📦 Building new image...${NC}"
-docker build -t armanstudio-blog-i:${NEW} .
+# 1. Pull pre-built image or build locally
+if [ -n "$PREBUILT_IMAGE" ]; then
+    echo -e "${BLUE}📦 Pulling pre-built image: ${PREBUILT_IMAGE}...${NC}"
+    docker pull "${PREBUILT_IMAGE}"
+    docker tag "${PREBUILT_IMAGE}" "armanstudio-blog-i:${NEW}"
+else
+    echo -e "${BLUE}📦 Building new image...${NC}"
+    docker build -t "armanstudio-blog-i:${NEW}" .
+fi
 
 # 2. Start new container
 echo -e "${BLUE}🔄 Starting ${NEW} container...${NC}"

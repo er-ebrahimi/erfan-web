@@ -1,32 +1,30 @@
-FROM node:20-alpine
-# Installing libvips-dev for sharp Compatibility
-RUN apk update && apk add --no-cache \
-    build-base \
+FROM node:20-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     gcc \
     autoconf \
     automake \
-    zlib-dev \
+    zlib1g-dev \
     libpng-dev \
     nasm \
     bash \
-    vips-dev \
-    git \
-    libc6-compat && \
-    rm -rf /var/cache/apk/*
+    libvips-dev \
+    git && \
+    rm -rf /var/lib/apt/lists/*
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
-COPY package.json ./
+COPY package.json yarn.lock ./
 COPY scripts ./scripts
-RUN npm install -g node-gyp
-RUN npm install
+RUN yarn install --frozen-lockfile
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/app
 COPY . .
+RUN mkdir -p /opt/app/.tmp && chmod 777 /opt/app/.tmp
 RUN chown -R node:node /opt/app
 USER node
-RUN ["npm", "run", "build"]
+RUN ["yarn", "build"]
 EXPOSE 1337
-CMD ["npm", "run", "develop"]
+CMD ["yarn", "develop"]
