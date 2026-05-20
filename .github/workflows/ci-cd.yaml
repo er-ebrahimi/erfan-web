@@ -77,6 +77,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u githubactions --password-stdin
             cd ${{ secrets.DEPLOY_PATH }}
             docker compose pull
             docker compose up -d --remove-orphans
