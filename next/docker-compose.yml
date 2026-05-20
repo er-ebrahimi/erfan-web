@@ -1,7 +1,7 @@
 services:
   app:
     container_name: armanstudio-blog
-    image: ghcr.io/er-ebrahimi/erfanweb:latest
+    image: ghcr.io/er-ebrahimi/erfan-web:latest
     ports:
       - "4000:4000"
     env_file:
