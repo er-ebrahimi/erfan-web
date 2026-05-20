@@ -1,0 +1,12 @@
+# docker compose -f .\docker-compose.dev.yml up --build
+
+services:
+  app:
+    container_name: armanstudio-blog
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env.local
