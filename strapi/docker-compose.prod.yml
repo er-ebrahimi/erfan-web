@@ -10,4 +10,5 @@ services:
     volumes:
       - ./public/uploads:/opt/app/public/uploads
       - ./.env:/opt/app/.env
+      - ./.tmp:/opt/app/.tmp
     command: npm run start
