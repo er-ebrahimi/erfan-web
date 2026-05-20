@@ -25,6 +25,7 @@ COPY . .
 RUN mkdir -p /opt/app/.tmp && chmod 777 /opt/app/.tmp
 RUN chown -R node:node /opt/app
 USER node
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN ["yarn", "build"]
 EXPOSE 1337
 CMD ["yarn", "develop"]
