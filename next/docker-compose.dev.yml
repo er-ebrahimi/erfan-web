@@ -1,12 +1,20 @@
 # docker compose -f .\docker-compose.dev.yml up --build
-
 services:
   app:
     container_name: armanstudio-blog
+    image: armanstudio-blog:latest
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://host.docker.internal:1337}
+        NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-http://localhost:1337}
     ports:
-      - "4000:4000"
+      - "3000:4000"
+    environment:
+      NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-http://localhost:1337}
+      STRAPI_INTERNAL_URL: ${STRAPI_INTERNAL_URL:-http://host.docker.internal:1337}
     env_file:
       - .env.local
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

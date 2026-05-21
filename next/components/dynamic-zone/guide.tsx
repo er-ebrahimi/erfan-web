@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 
 const getImageUrl = (profile: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
   if (profile && typeof profile.url === 'string') {
     return url + profile.url;
   }

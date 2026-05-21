@@ -4,7 +4,7 @@ import React from 'react';
 import { Timeline } from '@/components/ui/timeline';
 
 const getImageUrl = (pic: any) => {
-  const base = process.env.NEXT_PUBLIC_API_URL ?? '';
+  const base = process.env.NEXT_PUBLIC_STRAPI_URL || '';
   if (!pic) return '/next.svg';
 
   // Support multiple possible shapes returned by Strapi or other APIs:

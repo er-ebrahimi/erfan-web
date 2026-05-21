@@ -20,7 +20,7 @@ export const LaunchesCard = ({
   sub_heading: string;
   launches: any[];
 }) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
     icon: `${url}${entry.Image.formats.large.url}`,

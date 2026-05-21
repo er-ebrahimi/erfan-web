@@ -26,7 +26,7 @@ export const HeroPicture = ({
   locale: string;
   background?: StrapiImage;
 }) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   return (
     <div className="h-screen overflow-hidden relative flex flex-col items-center justify-center">

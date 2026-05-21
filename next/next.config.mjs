@@ -48,6 +48,12 @@ const nextConfig = {
       pathname: '/uploads/**',
     },
     {
+      protocol: 'http',
+      hostname: 'host.docker.internal',
+      port: '1337',
+      pathname: '/uploads/**',
+    },
+    {
       protocol: "https",
       hostname: 'trustseal.enamad.ir'
     }
@@ -57,8 +63,9 @@ const nextConfig = {
   async redirects() {
     let redirections = [];
     try {
+      const apiUrl = process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/redirections`
+        `${apiUrl}/api/redirections`
       );
       const result = await res.json();
       const redirectItems = result.data.map(({ source, destination }) => {

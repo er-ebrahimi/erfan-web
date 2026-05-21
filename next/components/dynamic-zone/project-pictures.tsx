@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/draggable-card';
 
 const getImageUrl = (img: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
   if (
     img &&
     img.formats &&

@@ -6,7 +6,7 @@ import { Carousel } from '@/components/ui/apple-cards-carousel';
 import { Card } from '@/components/ui/apple-cards-carousel';
 
 const getImageUrl = (pic: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
   if (
     pic &&
     pic.formats &&

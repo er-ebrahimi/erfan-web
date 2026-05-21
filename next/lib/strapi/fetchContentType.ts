@@ -42,18 +42,19 @@ export default async function fetchContentType(
     queryParams.status = 'draft';
   }
 
+  const apiUrl = process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
+
   try {
-    const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
+    const url = new URL(`api/${contentType}`, apiUrl);
 
     const response = await axios.get<StrapiResponse>(url.href, {
       params: queryParams,
       paramsSerializer: (params) => qs.stringify(params as any),
     });
     const jsonData: StrapiResponse = response.data;
-    // console.log(`fetchContentType success [${contentType}]:`, jsonData);
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const baseUrl = apiUrl;
     const fullUrl = `${baseUrl}/api/${contentType}`;
 
     const logData: Record<string, unknown> = {
