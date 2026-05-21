@@ -5,6 +5,11 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   turbopack: {
     root: process.cwd().replace('/next', ''),
   },
@@ -68,6 +73,10 @@ const nextConfig = {
 
       return redirections;
     } catch (error) {
+      console.error(
+        'Failed to fetch redirects from Strapi:',
+        error instanceof Error ? error.message : error
+      );
       return [];
     }
   },

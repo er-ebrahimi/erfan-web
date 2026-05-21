@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: studioarman.com
+Host: localhost
 
 # Sitemaps
-Sitemap: studioarman.com/sitemap.xml
+Sitemap: localhost/sitemap.xml

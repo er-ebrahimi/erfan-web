@@ -36,12 +36,13 @@ export default async function fetchContentType(
 ): Promise<any> {
   const { isEnabled } = await draftMode();
 
-  try {
-    const queryParams = { ...params };
+  const queryParams: Record<string, unknown> = { ...params };
 
-    if (isEnabled) {
-      queryParams.status = 'draft';
-    }
+  if (isEnabled) {
+    queryParams.status = 'draft';
+  }
+
+  try {
     const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
 
     const response = await axios.get<StrapiResponse>(url.href, {
@@ -49,10 +50,27 @@ export default async function fetchContentType(
       paramsSerializer: (params) => qs.stringify(params as any),
     });
     const jsonData: StrapiResponse = response.data;
+    // console.log(`fetchContentType success [${contentType}]:`, jsonData);
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
-    // Log any errors that occur during the fetch process
-    // Return appropriate fallback based on expected data structure
-    return spreadData ? null : { data: [] };
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const fullUrl = `${baseUrl}/api/${contentType}`;
+
+    const logData: Record<string, unknown> = {
+      url: fullUrl,
+      params: queryParams,
+    };
+
+    if (axios.isAxiosError(error)) {
+      logData.status = error.response?.status;
+      logData.statusText = error.response?.statusText;
+      logData.responseBody = error.response?.data;
+    }
+
+    console.error(
+      `fetchContentType error [${contentType}]:`,
+      JSON.stringify(logData, null, 2)
+    );
+    throw error;
   }
 }

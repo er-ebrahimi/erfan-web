@@ -604,20 +604,6 @@ export interface SharedLink extends Struct.ComponentSchema {
   };
 }
 
-export interface SharedMedia extends Struct.ComponentSchema {
-  collectionName: 'components_shared_media';
-  info: {
-    displayName: 'Media';
-    icon: 'television';
-  };
-  attributes: {
-    Media: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
-  };
-}
-
 export interface SharedPerks extends Struct.ComponentSchema {
   collectionName: 'components_shared_perks';
   info: {
@@ -825,7 +811,6 @@ declare module '@strapi/strapi' {
       'shared.form': SharedForm;
       'shared.launches': SharedLaunches;
       'shared.link': SharedLink;
-      'shared.media': SharedMedia;
       'shared.perks': SharedPerks;
       'shared.plan': SharedPlan;
       'shared.porject-picture': SharedPorjectPicture;
