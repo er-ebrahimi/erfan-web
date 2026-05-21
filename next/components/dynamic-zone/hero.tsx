@@ -41,10 +41,10 @@ export const Hero = ({
               src={backgroundImage.url}
               alt={backgroundImage.alternativeText || 'Hero Background'}
               fill
-              className="object-cover"
+              className="object-cover brightness-[0.6]"
               priority
             />
-            <div className="absolute inset-0 bg-background/50" />
+            <div className="absolute inset-0 bg-background/70" />
           </>
         ) : (
           <>
@@ -55,12 +55,12 @@ export const Hero = ({
       </motion.div>
       <Heading
         as="h1"
-        className="text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
+        className="text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6 text-white"
       >
         {heading.substring(0, heading.lastIndexOf(' '))}{' '}
         <Cover>{heading.split(' ').pop()}</Cover>
       </Heading>
-      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10">
+      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10 text-white">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
