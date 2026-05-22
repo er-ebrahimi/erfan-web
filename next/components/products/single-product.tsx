@@ -7,13 +7,13 @@ import React, { useState } from 'react';
 import AddToCartModal from '@/components/products/modal';
 import { StrapiImage } from '@/components/ui/strapi-image';
 import { useCart } from '@/context/cart-context';
-import { strapiImage } from '@/lib/strapi/strapiImage';
+import { clientStrapiImage } from '@/lib/strapi/clientStrapiImage';
 import { cn, formatNumber } from '@/lib/utils';
 import { Product } from '@/types/types';
 
 export const SingleProduct = ({ product }: { product: Product }) => {
   const [activeThumbnail, setActiveThumbnail] = useState(
-    strapiImage(product.images[0].url)
+    clientStrapiImage(product.images[0].url)
   );
   const { addToCart } = useCart();
 
@@ -48,18 +48,18 @@ export const SingleProduct = ({ product }: { product: Product }) => {
             {product.images &&
               product.images.map((image, index) => (
                 <button
-                  onClick={() => setActiveThumbnail(strapiImage(image.url))}
+                  onClick={() => setActiveThumbnail(clientStrapiImage(image.url))}
                   key={'product-image' + index}
                   title={`View product image ${index + 1}`}
                   aria-label={`View product image ${index + 1}`}
                   className={cn(
                     'h-20 w-20 rounded-xl',
-                    activeThumbnail === strapiImage(image.url)
+                    activeThumbnail === clientStrapiImage(image.url)
                       ? 'border-2 border-neutral-200'
                       : 'border-2 border-transparent'
                   )}
                   style={{
-                    backgroundImage: `url(${strapiImage(image.url)})`,
+                    backgroundImage: `url(${clientStrapiImage(image.url)})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',

@@ -158,7 +158,6 @@ DOMAIN=studioarman.site
 STRAPI_INTERNAL_URL=https://studioarman.site:2087
 NEXT_PUBLIC_API_URL=https://studioarman.site:2087
 NEXT_PUBLIC_STRAPI_URL=https://studioarman.site:2087
-BACKEND_URL=https://studioarman.site:2087
 PREVIEW_SECRET=tobemodified
 IMAGE_HOSTNAME=studioarman.site:2087
 ```

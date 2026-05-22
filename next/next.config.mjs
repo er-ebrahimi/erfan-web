@@ -18,7 +18,7 @@ const nextConfig = {
     process.env.NEXT_PUBLIC_API_URL,
     process.env.IMAGE_HOSTNAME,
     process.env.DOMAIN,
-    process.env.BACKEND_URL
+
   ],
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
@@ -32,6 +32,12 @@ const nextConfig = {
     {
       protocol: 'https',
       hostname: 'studioarman.com',
+      port: '2087',
+      pathname: '/uploads/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'studioarman.site',
       port: '2087',
       pathname: '/uploads/**',
     },

@@ -29,11 +29,11 @@ export function Navbar({
     //   languages={languages || []}
     // />
     <div className={cn(
-      "fixed z-50 bg-background w-fit max-w-[95vw] overflow-x-auto md:overflow-visible no-scrollbar transition-all duration-300 border border-solid",
+      "fixed z-50 bg-background w-fit max-w-[95vw] overflow-x-auto md:overflow-visible no-scrollbar transition-all duration-300 border border-solid border-black/20 dark:border-white/20",
       // Mobile: Top Right
       "top-4 right-4 m-0 left-auto p-2 rounded-full shadow-md",
       // Desktop: Top Center
-      "md:m-4 md:top-2 md:left-1/2 md:-translate-x-1/2 md:px-3 md:py-2 md:rounded-3xl md:shadow-none"
+      "md:m-4 md:top-2 md:left-1/2 md:-translate-x-1/2 md:px-3 md:py-2 md:rounded-3xl md:shadow-none "
     )}>
       <NavbarMenu
         locale={locale}

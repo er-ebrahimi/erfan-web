@@ -1,8 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import React from 'react';
 
 import { Cover } from '../decorations/cover';
 import ShootingStars from '../decorations/shooting-star';
@@ -28,13 +24,8 @@ export const Hero = ({
   const backgroundImage = Background?.[0];
 
   return (
-    <div className="h-[calc(100vh-1rem)] m-2 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center ">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="absolute inset-0"
-      >
+    <div className="h-[calc(100vh-1rem)] m-2 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center bg-black">
+      <div>
         {backgroundImage ? (
           <>
             <StrapiImage
@@ -52,7 +43,7 @@ export const Hero = ({
             <ShootingStars />
           </>
         )}
-      </motion.div>
+      </div>
       <Heading
         as="h1"
         className="text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6 text-white"

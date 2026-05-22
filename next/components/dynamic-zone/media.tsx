@@ -17,7 +17,7 @@ export const Media = ({ media }: MediaProps) => {
   if (!mediaItem?.url) return null;
 
   const url = mediaItem.url.startsWith('/')
-    ? (process.env.BACKEND_URL || '') + mediaItem.url
+    ? (process.env.NEXT_PUBLIC_STRAPI_URL || '') + mediaItem.url
     : mediaItem.url;
 
   return (

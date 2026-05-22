@@ -29,6 +29,37 @@ export function spreadStrapiData(data: StrapiResponse): StrapiData | null {
   return null;
 }
 
+async function fetchWithRetry(
+  url: string,
+  params: Record<string, unknown>,
+  retries = 3,
+  timeout = 10000
+): Promise<StrapiResponse> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const response = await axios.get<StrapiResponse>(url, {
+        params,
+        paramsSerializer: (params) => qs.stringify(params as any),
+        timeout,
+      });
+      return response.data;
+    } catch (error) {
+      if (attempt === retries) throw error;
+
+      const isTimeout =
+        axios.isAxiosError(error) &&
+        (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT');
+
+      if (!isTimeout) throw error;
+
+      console.warn(
+        `fetchContentType retry [${url}] attempt ${attempt}/${retries} failed`
+      );
+    }
+  }
+  throw new Error('unreachable');
+}
+
 export default async function fetchContentType(
   contentType: string,
   params: Record<string, unknown> = {},
@@ -46,12 +77,7 @@ export default async function fetchContentType(
 
   try {
     const url = new URL(`api/${contentType}`, apiUrl);
-
-    const response = await axios.get<StrapiResponse>(url.href, {
-      params: queryParams,
-      paramsSerializer: (params) => qs.stringify(params as any),
-    });
-    const jsonData: StrapiResponse = response.data;
+    const jsonData = await fetchWithRetry(url.href, queryParams);
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
     const baseUrl = apiUrl;

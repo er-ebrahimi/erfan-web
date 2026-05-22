@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { BlurImage } from '@/components/blur-image';
-import { strapiImage } from '@/lib/strapi/strapiImage';
+import { clientStrapiImage } from '@/lib/strapi/clientStrapiImage';
 import { StrapiImage } from '@/types/types';
 
 type Position = {
@@ -47,7 +47,7 @@ export const TeamMembers: React.FC<{
               {m.Profile && (
                 <div className="w-32 h-32 mb-2 rounded-full overflow-hidden">
                   <BlurImage
-                    src={strapiImage(m.Profile.url)}
+                    src={clientStrapiImage(m.Profile.url)}
                     width={128}
                     height={128}
                     alt={m.Title || 'Profile'}
