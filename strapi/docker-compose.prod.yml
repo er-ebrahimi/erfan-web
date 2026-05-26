@@ -1,14 +1,20 @@
 services:
   strapi:
-    image: docker.io/${DOCKER_USERNAME:-erfanweb}/strapi-erfanweb:latest
-    build: null
+    image: strapi-erfanweb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: strapi
+    restart: unless-stopped
+    env_file: .env
     environment:
       NODE_ENV: production
-      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:1337}
-      STRAPI_ADMIN_CLIENT_URL: ${STRAPI_ADMIN_CLIENT_URL}
-      STRAPI_ADMIN_CLIENT_PREVIEW_SECRET: ${STRAPI_ADMIN_CLIENT_PREVIEW_SECRET}
     volumes:
-      - ./public/uploads:/opt/app/public/uploads
-      - ./.env:/opt/app/.env
-      - ./.tmp:/opt/app/.tmp
-    command: npm run start
+      - strapi-data:/opt/app/.tmp
+      - strapi-uploads:/opt/app/public/uploads
+    ports:
+      - "1337:1337"
+
+volumes:
+  strapi-data:
+  strapi-uploads:

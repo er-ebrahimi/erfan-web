@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+*.tar
+.github
+docker-compose*.yml
+Dockerfile
+README.md
+docs
+DESIGN.md
+.eslintrc.json
+eslint.config.mjs
+.gitignore
+.env
+.env.example
+.next-env.d.ts
+tsconfig.tsbuildinfo

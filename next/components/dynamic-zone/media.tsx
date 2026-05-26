@@ -25,7 +25,7 @@ export const Media = ({ media }: MediaProps) => {
       <video
         controls
         playsInline
-        className="w-full max-w-2xl rounded-lg shadow-lg"
+        className="w-full max-w-2xl max-h-[80vh] rounded-lg shadow-lg object-contain"
         src={url}
         width={mediaItem.width || undefined}
         height={mediaItem.height || undefined}
