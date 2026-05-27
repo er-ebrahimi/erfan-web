@@ -1,7 +1,8 @@
-node_modules
-.git
-.tmp
-build
-dist
+.tmp/
+.cache/
+.git/
+build/
+node_modules/
 .env
-.cache
+data/
+backup/

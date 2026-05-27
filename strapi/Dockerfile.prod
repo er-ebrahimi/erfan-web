@@ -1,0 +1,64 @@
+# syntax=docker/dockerfile:1.4
+# ---- Stage 1: Install deps ----
+FROM node:22-alpine AS deps
+
+# ✅ Cache apk packages — won't redownload vips-dev on every build
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev
+
+WORKDIR /opt/app
+
+COPY package.json yarn.lock ./
+COPY scripts ./scripts  
+# ✅ Cache yarn modules — node_modules only rebuilds when yarn.lock changes
+RUN --mount=type=cache,target=/root/.yarn \
+    YARN_CACHE_FOLDER=/root/.yarn \
+    yarn install --frozen-lockfile
+
+# ---- Stage 2: Build ----
+FROM deps AS build
+
+WORKDIR /opt/app
+COPY --from=deps /opt/app/node_modules ./node_modules
+COPY . .
+RUN yarn build
+
+# ---- Stage 3: Prod deps (prune devDeps) ----
+FROM deps AS prod-deps
+
+WORKDIR /opt/app
+COPY package.json yarn.lock ./
+COPY --from=deps /opt/app/node_modules ./node_modules
+
+RUN --mount=type=cache,target=/root/.yarn \
+    YARN_CACHE_FOLDER=/root/.yarn \
+    yarn install --production --frozen-lockfile --ignore-scripts && \
+    yarn cache clean
+
+# ---- Stage 4: Production ----
+FROM node:22-alpine AS production
+
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache vips
+
+ENV NODE_ENV=production
+ENV PATH=/opt/app/node_modules/.bin:$PATH
+
+WORKDIR /opt/app
+
+COPY --from=prod-deps /opt/app/node_modules ./node_modules
+COPY --from=build /opt/app/dist ./dist
+COPY --from=build /opt/app/public ./public
+COPY --from=build /opt/app/config ./config
+COPY --from=build /opt/app/src ./src
+COPY --from=build /opt/app/package.json ./
+COPY --from=build /opt/app/tsconfig.json ./
+COPY .env.production ./.env
+RUN echo "DATABASE_HOST=strapiDB" >> ./.env
+
+RUN chown -R node:node /opt/app
+USER node
+
+EXPOSE 1337
+# ✅ Use node directly to run strapi start
+CMD ["node", "./node_modules/.bin/strapi", "start"]

@@ -25,6 +25,7 @@
     "@strapi/types": "5.36.1",
     "@swc/core": "^1.15.11",
     "better-sqlite3": "11.7.0",
+    "mysql": "^2.18.1",
     "mysql2": "^3.18.0",
     "patch-package": "^8.0.0",
     "pluralize": "^8.0.0",
