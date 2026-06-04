@@ -8,7 +8,7 @@
   "options": {},
   "attributes": {
     "Name": {
-      "type": "string"
+      "type": "text"
     },
     "Image": {
       "type": "media",
@@ -25,13 +25,13 @@
       "type": "text"
     },
     "Top": {
-      "type": "string"
+      "type": "text"
     },
     "Rotate": {
-      "type": "string"
+      "type": "text"
     },
     "Right": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

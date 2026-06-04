@@ -14,7 +14,7 @@
       "component": "shared.porject-picture"
     },
     "Title": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
       "type": "text"

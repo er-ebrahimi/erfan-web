@@ -465,7 +465,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.String &
+    description: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -502,7 +502,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    slug: Schema.Attribute.String &
+    slug: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
       Schema.Attribute.SetPluginOptions<{
@@ -510,7 +510,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    title: Schema.Attribute.String &
+    title: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -563,7 +563,7 @@ export interface ApiBlogPageBlogPage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
-    heading: Schema.Attribute.String &
+    heading: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -581,7 +581,7 @@ export interface ApiBlogPageBlogPage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
-    sub_heading: Schema.Attribute.String &
+    sub_heading: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -615,7 +615,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
       'api::category.category'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.Text;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -653,7 +653,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
     publishedAt: Schema.Attribute.DateTime;
-    question: Schema.Attribute.String &
+    question: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -737,7 +737,7 @@ export interface ApiLogoLogo extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    company: Schema.Attribute.String;
+    company: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -843,12 +843,12 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'> &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.Text;
     perks: Schema.Attribute.Component<'shared.perks', true>;
     price: Schema.Attribute.Integer;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    sub_text: Schema.Attribute.String;
+    sub_text: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -895,7 +895,7 @@ export interface ApiProductPageProductPage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
-    heading: Schema.Attribute.String &
+    heading: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -913,7 +913,7 @@ export interface ApiProductPageProductPage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
-    sub_heading: Schema.Attribute.String &
+    sub_heading: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -944,7 +944,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     dynamic_zone: Schema.Attribute.DynamicZone<
       ['dynamic-zone.related-products', 'dynamic-zone.cta']
     >;
@@ -956,7 +956,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::product.product'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.Text;
     perks: Schema.Attribute.Component<'shared.perks', true>;
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     price: Schema.Attribute.Integer;
@@ -982,7 +982,7 @@ export interface ApiRedirectionRedirection extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    destination: Schema.Attribute.String;
+    destination: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -990,7 +990,7 @@ export interface ApiRedirectionRedirection extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    source: Schema.Attribute.String;
+    source: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1023,7 +1023,7 @@ export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
       'api::testimonial.testimonial'
     >;
     publishedAt: Schema.Attribute.DateTime;
-    text: Schema.Attribute.String &
+    text: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

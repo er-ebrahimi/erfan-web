@@ -8,10 +8,10 @@
   "options": {},
   "attributes": {
     "text": {
-      "type": "string"
+      "type": "text"
     },
     "URL": {
-      "type": "string"
+      "type": "text"
     },
     "target": {
       "type": "enumeration",

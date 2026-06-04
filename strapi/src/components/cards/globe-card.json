@@ -8,10 +8,10 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "text"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "span": {
       "type": "enumeration",

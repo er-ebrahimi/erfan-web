@@ -8,13 +8,13 @@
   "options": {},
   "attributes": {
     "item_1": {
-      "type": "string"
+      "type": "text"
     },
     "item_2": {
-      "type": "string"
+      "type": "text"
     },
     "item_3": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

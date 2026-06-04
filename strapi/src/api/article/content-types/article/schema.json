@@ -27,7 +27,7 @@
       "repeatable": false
     },
     "title": {
-      "type": "string",
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -35,7 +35,7 @@
       }
     },
     "description": {
-      "type": "string",
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -84,7 +84,7 @@
       "target": "api::article.article"
     },
     "slug": {
-      "type": "string",
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true

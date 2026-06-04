@@ -8,13 +8,13 @@
   "options": {},
   "attributes": {
     "mission_number": {
-      "type": "string"
+      "type": "text"
     },
     "title": {
-      "type": "string"
+      "type": "text"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "Image": {
       "type": "media",

@@ -21,7 +21,7 @@
       ]
     },
     "company": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

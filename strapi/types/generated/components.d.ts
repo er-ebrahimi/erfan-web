@@ -8,9 +8,9 @@ export interface CardsGlobeCard extends Struct.ComponentSchema {
     icon: 'dashboard';
   };
   attributes: {
-    description: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     span: Schema.Attribute.Enumeration<['one', 'two', 'three']>;
-    title: Schema.Attribute.String;
+    title: Schema.Attribute.Text;
   };
 }
 
@@ -22,10 +22,10 @@ export interface CardsGraphCard extends Struct.ComponentSchema {
     icon: 'dashboard';
   };
   attributes: {
-    description: Schema.Attribute.String;
-    highlighted_text: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    highlighted_text: Schema.Attribute.Text;
     span: Schema.Attribute.Enumeration<['one', 'two', 'three']>;
-    title: Schema.Attribute.String;
+    title: Schema.Attribute.Text;
     top_items: Schema.Attribute.Component<'items.graph-card-top-items', true>;
   };
 }
@@ -41,7 +41,7 @@ export interface CardsMember extends Struct.ComponentSchema {
     Description: Schema.Attribute.Text;
     Positions: Schema.Attribute.Component<'items.text', true>;
     Profile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -55,9 +55,9 @@ export interface CardsRayCard extends Struct.ComponentSchema {
   attributes: {
     after_ray_items: Schema.Attribute.Component<'items.ray-items', false>;
     before_ray_items: Schema.Attribute.Component<'items.ray-items', false>;
-    description: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     span: Schema.Attribute.Enumeration<['one', 'two', 'three']>;
-    title: Schema.Attribute.String;
+    title: Schema.Attribute.Text;
   };
 }
 
@@ -69,10 +69,10 @@ export interface CardsSocialMediaCard extends Struct.ComponentSchema {
     icon: 'dashboard';
   };
   attributes: {
-    Description: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
     logos: Schema.Attribute.Relation<'oneToMany', 'api::logo.logo'>;
     span: Schema.Attribute.Enumeration<['one', 'two', 'three']>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -84,9 +84,9 @@ export interface DynamicZoneBrands extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     logos: Schema.Attribute.Relation<'oneToMany', 'api::logo.logo'>;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -99,8 +99,8 @@ export interface DynamicZoneCons extends Struct.ComponentSchema {
   };
   attributes: {
     Cons: Schema.Attribute.Component<'shared.cons', true>;
-    Description: Schema.Attribute.String;
-    Title: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -111,8 +111,8 @@ export interface DynamicZoneContact extends Struct.ComponentSchema {
     icon: 'command';
   };
   attributes: {
-    Description: Schema.Attribute.String;
-    Title: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -136,8 +136,8 @@ export interface DynamicZoneFaq extends Struct.ComponentSchema {
   };
   attributes: {
     faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -151,13 +151,13 @@ export interface DynamicZoneFeatures extends Struct.ComponentSchema {
   attributes: {
     globe_card: Schema.Attribute.Component<'cards.globe-card', false>;
     graph_card: Schema.Attribute.Component<'cards.graph-card', false>;
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     ray_card: Schema.Attribute.Component<'cards.ray-card', false>;
     social_media_card: Schema.Attribute.Component<
       'cards.social-media-card',
       false
     >;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -170,13 +170,13 @@ export interface DynamicZoneFormNextToSection extends Struct.ComponentSchema {
   };
   attributes: {
     form: Schema.Attribute.Component<'shared.form', false>;
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     section: Schema.Attribute.Component<'shared.section', false>;
     social_media_icon_links: Schema.Attribute.Component<
       'shared.social-media-icon-links',
       true
     >;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -187,9 +187,9 @@ export interface DynamicZoneGuide extends Struct.ComponentSchema {
     icon: 'heart';
   };
   attributes: {
-    Description: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
     Profile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -206,8 +206,8 @@ export interface DynamicZoneHero extends Struct.ComponentSchema {
       true
     >;
     CTAs: Schema.Attribute.Component<'shared.button', true>;
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -222,8 +222,8 @@ export interface DynamicZoneHeroPicture extends Struct.ComponentSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     CTAs: Schema.Attribute.Component<'shared.button', true>;
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -235,9 +235,9 @@ export interface DynamicZoneHowItWorks extends Struct.ComponentSchema {
     icon: 'question';
   };
   attributes: {
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     steps: Schema.Attribute.Component<'shared.steps', true>;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -249,9 +249,9 @@ export interface DynamicZoneLaunches extends Struct.ComponentSchema {
     icon: 'rocket';
   };
   attributes: {
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     launches: Schema.Attribute.Component<'shared.launches', true>;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -276,7 +276,7 @@ export interface DynamicZonePlans extends Struct.ComponentSchema {
   attributes: {
     Description: Schema.Attribute.Text;
     Plan: Schema.Attribute.Component<'shared.plan', true>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -288,9 +288,9 @@ export interface DynamicZonePricing extends Struct.ComponentSchema {
     icon: 'shoppingCart';
   };
   attributes: {
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -304,7 +304,7 @@ export interface DynamicZoneProjectPictures extends Struct.ComponentSchema {
   attributes: {
     Description: Schema.Attribute.Text;
     Pics: Schema.Attribute.Component<'shared.porject-picture', true>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -316,9 +316,9 @@ export interface DynamicZonePromisedLand extends Struct.ComponentSchema {
     icon: 'crown';
   };
   attributes: {
-    Description: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
     Promise: Schema.Attribute.Component<'shared.promise', true>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -331,8 +331,8 @@ export interface DynamicZoneRelatedArticles extends Struct.ComponentSchema {
   };
   attributes: {
     articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -343,9 +343,9 @@ export interface DynamicZoneRelatedProducts extends Struct.ComponentSchema {
     icon: 'stack';
   };
   attributes: {
-    heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
-    sub_heading: Schema.Attribute.String;
+    sub_heading: Schema.Attribute.Text;
   };
 }
 
@@ -359,7 +359,7 @@ export interface DynamicZoneTeamMembers extends Struct.ComponentSchema {
   attributes: {
     Description: Schema.Attribute.Text;
     Member: Schema.Attribute.Component<'cards.member', true>;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -371,8 +371,8 @@ export interface DynamicZoneTestimonials extends Struct.ComponentSchema {
     icon: 'emotionHappy';
   };
   attributes: {
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
     testimonials: Schema.Attribute.Relation<
       'oneToMany',
       'api::testimonial.testimonial'
@@ -388,10 +388,10 @@ export interface GlobalFooter extends Struct.ComponentSchema {
     icon: 'apps';
   };
   attributes: {
-    built_with: Schema.Attribute.String;
-    copyright: Schema.Attribute.String;
+    built_with: Schema.Attribute.Text;
+    copyright: Schema.Attribute.Text;
     description: Schema.Attribute.Text;
-    designed_developed_by: Schema.Attribute.String;
+    designed_developed_by: Schema.Attribute.Text;
     internal_links: Schema.Attribute.Component<'shared.link', true>;
     logo: Schema.Attribute.Relation<'oneToOne', 'api::logo.logo'>;
     policy_links: Schema.Attribute.Component<'shared.link', true>;
@@ -406,8 +406,8 @@ export interface GlobalLocal extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
-    code: Schema.Attribute.String;
-    name: Schema.Attribute.String;
+    code: Schema.Attribute.Text;
+    name: Schema.Attribute.Text;
   };
 }
 
@@ -433,8 +433,8 @@ export interface ItemsGraphCardTopItems extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    number: Schema.Attribute.String;
-    text: Schema.Attribute.String;
+    number: Schema.Attribute.Text;
+    text: Schema.Attribute.Text;
   };
 }
 
@@ -446,8 +446,8 @@ export interface ItemsInput extends Struct.ComponentSchema {
     icon: 'apps';
   };
   attributes: {
-    name: Schema.Attribute.String;
-    placeholder: Schema.Attribute.String;
+    name: Schema.Attribute.Text;
+    placeholder: Schema.Attribute.Text;
     type: Schema.Attribute.Enumeration<
       [
         'text',
@@ -486,8 +486,8 @@ export interface ItemsLeftNavbarItems extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    name: Schema.Attribute.String;
-    URL: Schema.Attribute.String;
+    name: Schema.Attribute.Text;
+    URL: Schema.Attribute.Text;
   };
 }
 
@@ -499,9 +499,9 @@ export interface ItemsRayItems extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    item_1: Schema.Attribute.String;
-    item_2: Schema.Attribute.String;
-    item_3: Schema.Attribute.String;
+    item_1: Schema.Attribute.Text;
+    item_2: Schema.Attribute.Text;
+    item_3: Schema.Attribute.Text;
   };
 }
 
@@ -512,7 +512,7 @@ export interface ItemsText extends Struct.ComponentSchema {
     icon: 'file';
   };
   attributes: {
-    Position: Schema.Attribute.String;
+    Position: Schema.Attribute.Text;
   };
 }
 
@@ -528,8 +528,8 @@ export interface SharedButton extends Struct.ComponentSchema {
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;
-    text: Schema.Attribute.String;
-    URL: Schema.Attribute.String;
+    text: Schema.Attribute.Text;
+    URL: Schema.Attribute.Text;
     variant: Schema.Attribute.Enumeration<
       ['simple', 'outline', 'primary', 'muted']
     > &
@@ -545,7 +545,7 @@ export interface SharedCons extends Struct.ComponentSchema {
   };
   attributes: {
     Description: Schema.Attribute.Text;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -581,10 +581,10 @@ export interface SharedLaunches extends Struct.ComponentSchema {
   };
   attributes: {
     Buttons: Schema.Attribute.Component<'shared.button', true>;
-    description: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     Image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    mission_number: Schema.Attribute.String;
-    title: Schema.Attribute.String;
+    mission_number: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
   };
 }
 
@@ -599,8 +599,8 @@ export interface SharedLink extends Struct.ComponentSchema {
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;
-    text: Schema.Attribute.String;
-    URL: Schema.Attribute.String;
+    text: Schema.Attribute.Text;
+    URL: Schema.Attribute.Text;
   };
 }
 
@@ -612,7 +612,7 @@ export interface SharedPerks extends Struct.ComponentSchema {
     icon: 'check';
   };
   attributes: {
-    text: Schema.Attribute.String;
+    text: Schema.Attribute.Text;
   };
 }
 
@@ -629,7 +629,7 @@ export interface SharedPlan extends Struct.ComponentSchema {
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    Title: Schema.Attribute.String;
+    Title: Schema.Attribute.Text;
   };
 }
 
@@ -646,10 +646,10 @@ export interface SharedPorjectPicture extends Struct.ComponentSchema {
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    Name: Schema.Attribute.String;
-    Right: Schema.Attribute.String;
-    Rotate: Schema.Attribute.String;
-    Top: Schema.Attribute.String;
+    Name: Schema.Attribute.Text;
+    Right: Schema.Attribute.Text;
+    Rotate: Schema.Attribute.Text;
+    Top: Schema.Attribute.Text;
   };
 }
 
@@ -660,15 +660,15 @@ export interface SharedProjectPictures extends Struct.ComponentSchema {
     icon: 'chartCircle';
   };
   attributes: {
-    ClassName: Schema.Attribute.String;
+    ClassName: Schema.Attribute.Text;
     Image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    Name: Schema.Attribute.String;
-    Right: Schema.Attribute.String;
-    Rotate: Schema.Attribute.String;
-    Top: Schema.Attribute.String;
+    Name: Schema.Attribute.Text;
+    Right: Schema.Attribute.Text;
+    Rotate: Schema.Attribute.Text;
+    Top: Schema.Attribute.Text;
   };
 }
 
@@ -681,10 +681,10 @@ export interface SharedPromise extends Struct.ComponentSchema {
   };
   attributes: {
     Description: Schema.Attribute.Text;
-    Link: Schema.Attribute.String;
+    Link: Schema.Attribute.Text;
     Pic: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    SubSubtile: Schema.Attribute.String;
-    Subtitle: Schema.Attribute.String;
+    SubSubtile: Schema.Attribute.Text;
+    Subtitle: Schema.Attribute.Text;
   };
 }
 
@@ -695,8 +695,8 @@ export interface SharedSection extends Struct.ComponentSchema {
     icon: 'cursor';
   };
   attributes: {
-    heading: Schema.Attribute.String;
-    sub_heading: Schema.Attribute.String;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
     users: Schema.Attribute.Component<'shared.user', true>;
   };
 }
@@ -708,21 +708,21 @@ export interface SharedSeo extends Struct.ComponentSchema {
     icon: 'search';
   };
   attributes: {
-    canonicalURL: Schema.Attribute.String;
+    canonicalURL: Schema.Attribute.Text;
     keywords: Schema.Attribute.Text;
-    metaDescription: Schema.Attribute.String &
+    metaDescription: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 50;
       }>;
     metaImage: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
-    metaRobots: Schema.Attribute.String;
-    metaTitle: Schema.Attribute.String &
+    metaRobots: Schema.Attribute.Text;
+    metaTitle: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
-    metaViewport: Schema.Attribute.String;
+    metaViewport: Schema.Attribute.Text;
     structuredData: Schema.Attribute.JSON;
   };
 }
@@ -748,8 +748,8 @@ export interface SharedSteps extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    description: Schema.Attribute.String;
-    title: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
   };
 }
 
@@ -761,10 +761,10 @@ export interface SharedUser extends Struct.ComponentSchema {
     icon: 'user';
   };
   attributes: {
-    firstname: Schema.Attribute.String;
+    firstname: Schema.Attribute.Text;
     image: Schema.Attribute.Media<'images'>;
-    job: Schema.Attribute.String;
-    lastname: Schema.Attribute.String;
+    job: Schema.Attribute.Text;
+    lastname: Schema.Attribute.Text;
   };
 }
 

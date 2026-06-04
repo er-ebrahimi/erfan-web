@@ -8,10 +8,10 @@
   "options": {},
   "attributes": {
     "Subtitle": {
-      "type": "string"
+      "type": "text"
     },
     "SubSubtile": {
-      "type": "string"
+      "type": "text"
     },
     "Pic": {
       "type": "media",
@@ -25,7 +25,7 @@
       ]
     },
     "Link": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
       "type": "text"

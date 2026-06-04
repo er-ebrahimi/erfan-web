@@ -7,10 +7,10 @@
   "options": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "text"
     },
     "code": {
-      "type": "string"
+      "type": "text"
     }
   },
   "config": {}

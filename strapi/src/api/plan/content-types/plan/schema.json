@@ -13,13 +13,13 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "text"
     },
     "price": {
       "type": "integer"
     },
     "sub_text": {
-      "type": "string"
+      "type": "text"
     },
     "featured": {
       "type": "boolean",

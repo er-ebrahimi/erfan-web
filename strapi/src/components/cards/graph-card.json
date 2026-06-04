@@ -8,10 +8,10 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "text"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "top_items": {
       "type": "component",
@@ -19,7 +19,7 @@
       "component": "items.graph-card-top-items"
     },
     "highlighted_text": {
-      "type": "string"
+      "type": "text"
     },
     "span": {
       "type": "enumeration",

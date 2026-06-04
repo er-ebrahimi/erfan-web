@@ -8,13 +8,13 @@
   "options": {},
   "attributes": {
     "firstname": {
-      "type": "string"
+      "type": "text"
     },
     "lastname": {
-      "type": "string"
+      "type": "text"
     },
     "job": {
-      "type": "string"
+      "type": "text"
     },
     "image": {
       "type": "media",
