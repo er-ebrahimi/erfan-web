@@ -32,7 +32,7 @@ export const TestimonialsSlider = ({ testimonials }: { testimonials: any }) => {
   useEffect(() => {
     heightFix();
 
-    const handleVisibilityChange = () => {
+    const handleVisibilityChange: EventListener = () => {
       if (document.visibilityState === 'visible') {
         heightFix();
       }

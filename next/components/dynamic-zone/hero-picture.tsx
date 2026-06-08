@@ -38,7 +38,7 @@ export const HeroPicture = ({
               alt="Hero background"
               fill
               className="object-cover"
-              priority
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-black/40" />
           </>

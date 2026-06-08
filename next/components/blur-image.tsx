@@ -22,7 +22,6 @@ export const BlurImage = (props: React.ComponentProps<typeof Image>) => {
       height={height}
       loading="lazy"
       decoding="async"
-      blurDataURL={src as string}
       layout={layout}
       alt={alt ? alt : 'Avatar'}
       {...rest}

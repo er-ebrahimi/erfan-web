@@ -35,24 +35,25 @@ export async function BlogLayout({
       )}
       <div className="flex justify-between items-center px-2 py-8">
         <Link
-          href={`/${locale}/category`}
+          href={`/${locale}/category/blog`}
           className="flex space-x-2 items-center hover:text-foreground transition-colors"
         >
           <IconArrowRight className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">{t('back')}</span>
         </Link>
       </div>
-      <div className="w-full mx-auto">
+      <div className="relative w-full mx-auto h-40 md:h-96 aspect-square rounded-3xl overflow-hidden">
         {article?.image ? (
           <StrapiImage
             src={article.image.url}
-            height={800}
-            width={800}
-            className="h-40 md:h-96 w-full aspect-square object-cover rounded-3xl dark:[mask-image:radial-gradient(circle,white,transparent)]"
             alt={article.title}
+            fill
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, 1287px"
+            className="object-cover dark:[mask-image:radial-gradient(circle,white,transparent)]"
           />
         ) : (
-          <div className="h-40 md:h-96 w-full aspect-square rounded-3xl shadow-derek bg-card flex items-center justify-center">
+          <div className="absolute inset-0 shadow-derek bg-card flex items-center justify-center">
             {/* <Logo /> */}
           </div>
         )}

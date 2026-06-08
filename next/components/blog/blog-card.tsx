@@ -1,8 +1,5 @@
 import { format } from 'date-fns';
 import { Link } from 'next-view-transitions';
-import Image from 'next/image';
-import React from 'react';
-import Balancer from 'react-wrap-balancer';
 
 import { BlurImage } from '@/components/blur-image';
 import { strapiImage } from '@/lib/strapi/strapiImage';
@@ -32,8 +29,8 @@ export const BlogCard = ({
           <BlurImage
             src={strapiImage(article.image.url)}
             alt={article.title}
-            height="1200"
-            width="1200"
+            height={1200}
+            width={1200}
             className="h-full object-cover object-top w-full rounded-3xl"
           />
         ) : (
@@ -56,7 +53,7 @@ export const BlogCard = ({
             ))}
           </div>
           <p className="text-lg md:text-4xl font-bold mb-4 text-foreground">
-            <Balancer>{article.title}</Balancer>
+            <span className="text-balance">{article.title}</span>
           </p>
           <p className="text-base md:text-xl mt-2 text-primary-foreground-foreground">
             {truncate(article.description, 500)}
@@ -103,8 +100,8 @@ export const BlogCardVertical = ({
           <BlurImage
             src={strapiImage(article.image.url || '')}
             alt={article.title}
-            height="800"
-            width="800"
+            height={800}
+            width={800}
             className=" h-64 md:h-96 object-cover object-top w-full rounded-3xl"
           />
         ) : (
@@ -127,7 +124,7 @@ export const BlogCardVertical = ({
             ))}
           </div>
           <p className="text-lg md:text-xl font-bold mb-4">
-            <Balancer>{article.title}</Balancer>
+            <span className="text-balance">{article.title}</span>
           </p>
           <p className="text-left text-sm md:text-base mt-2 text-muted-foreground">
             {truncate(article.description, 500)}

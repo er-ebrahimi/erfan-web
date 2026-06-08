@@ -33,7 +33,7 @@ export const Hero = ({
               alt={backgroundImage.alternativeText || 'Hero Background'}
               fill
               className="object-cover brightness-[0.6]"
-              priority
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-background/70" />
           </>

@@ -49,7 +49,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.scrollLeft = initialScroll;
-      checkScrollability();
+      requestAnimationFrame(checkScrollability);
     }
   }, [initialScroll]);
 

@@ -6,6 +6,7 @@ export const iranSans = localFont({
   variable: '--font-iran-sans',
   display: 'swap',
   preload: true,
+  adjustFontFallback: 'Arial',
   weight: '400 500 600 700 800 900',
   fallback: [
     'system-ui',

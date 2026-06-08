@@ -22,16 +22,21 @@ export const Media = ({ media }: MediaProps) => {
 
   return (
     <Container className="py-2 flex justify-center">
-      <video
-        controls
-        playsInline
-        className="w-full max-w-2xl max-h-[80vh] rounded-lg shadow-lg object-contain"
-        src={url}
-        width={mediaItem.width || undefined}
-        height={mediaItem.height || undefined}
+      <div
+        className="w-full max-w-2xl"
+        style={{ aspectRatio: mediaItem.width && mediaItem.height ? `${mediaItem.width}/${mediaItem.height}` : '16/9' }}
       >
-        {t('videoFallback')}
-      </video>
+        <video
+          controls
+          playsInline
+          className="w-full h-full rounded-lg shadow-lg object-contain"
+          src={url}
+          width={mediaItem.width || 1280}
+          height={mediaItem.height || 720}
+        >
+          {t('videoFallback')}
+        </video>
+      </div>
     </Container>
   );
 };
