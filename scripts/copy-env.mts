@@ -8,8 +8,6 @@ function copyEnvFile(targetDir: string): void {
   const examplePath: string = path.join(targetDir, '.env.example');
   const envPath: string = path.join(targetDir, '.env');
 
-  console.log('Attempting to copy from:', examplePath);
-  console.log('To:', envPath);
   // Check if .env.example exists
   fs.access(examplePath, fs.constants.F_OK, (err: Error | null) => {
     if (err) {

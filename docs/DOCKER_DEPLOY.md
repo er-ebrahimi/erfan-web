@@ -87,21 +87,21 @@ services:
       - strapi-data:/opt/app/.tmp        # SQLite database + session data
       - strapi-uploads:/opt/app/public/uploads  # uploaded media files
 
+services:
   app:
     image: armanstudio-blog:latest
     container_name: armanstudio-blog
-    restart: unless-stopped
     ports:
       - "3000:4000"
-    env_file: ./next.env
-    depends_on:
-      - strapi
+    env_file:
+      - .env
     dns:
       - 178.22.122.100
       - 185.51.200.2
       - 185.8.174.140
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "studioarman.site:185.239.3.14"
 
 volumes:
   strapi-data:

@@ -17,6 +17,17 @@ export interface DynamicZoneComponent {
   [key: string]: unknown;
 }
 
+export interface Seo {
+  metaTitle: string;
+  metaDescription: string;
+  keywords?: string;
+  metaRobots?: string;
+  structuredData?: Record<string, unknown>;
+  metaViewport?: string;
+  canonicalURL?: string;
+  metaImage?: Image;
+}
+
 export interface Article {
   title: string;
   description: string;
@@ -29,6 +40,7 @@ export interface Article {
   locale: string;
   image: Image;
   categories: Category[];
+  seo?: Seo;
 }
 
 export interface Perk {

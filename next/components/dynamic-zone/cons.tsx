@@ -25,7 +25,7 @@ const Cons: React.FC<ConsProps> = ({ Cons, Title, Description, locale }) => {
       className={`flex flex-col gap-12 ${isRTL ? 'text-right' : 'text-left'} justify-center items-center mx-4 md:mx-8 py-16 md:py-32 bg-background`}
     >
       <div className="flex flex-col gap-2 text-center max-w-3xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground">{Title}</h1>
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground">{Title}</h2>
         <p className="text-muted-foreground text-base md:text-lg">{Description}</p>
       </div>
       <div

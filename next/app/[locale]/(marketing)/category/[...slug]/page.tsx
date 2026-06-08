@@ -1,15 +1,34 @@
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import React from 'react';
-
 import 'next-intl';
-
 import { getTranslations } from 'next-intl/server';
-
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogLayout } from '@/components/blog/blog-layout';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import BlogNotFound from '@/components/blog/blog-not-found';
 import { NotFound } from '@/components/not-found';
+import { generateMetadataObject } from "@/lib/shared/metadata";
+import { type Metadata } from "next";
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const { slug, locale } = params;
+  const slugString = Array.isArray(slug) ? slug.join('/') : slug;
+  const article = await fetchContentType(
+    "articles",
+    {
+      filters: {
+        slug: slugString,
+        locale: locale,
+      },
+      populate: "seo",
+    },
+    true
+  );
+
+  const seo = article?.seo;
+  const metadata = generateMetadataObject(seo);
+  return metadata;
+}
 
 export default async function SingleArticlePage(props: {
   params: Promise<{ slug: string[]; locale: string }>;
@@ -30,7 +49,7 @@ export default async function SingleArticlePage(props: {
   );
 
   if (!article) {
-    return <NotFound/>;
+    return <NotFound />;
   }
 
   const localizedSlugs = article.localizations?.reduce(

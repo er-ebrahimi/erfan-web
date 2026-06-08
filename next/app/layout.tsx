@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { getLocale } from 'next-intl/server';
 
 import './globals.css';
 
@@ -27,13 +28,15 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+
   return (
-    <html suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <GlobalErrorBoundary>
           <SlugProvider>{children}</SlugProvider>

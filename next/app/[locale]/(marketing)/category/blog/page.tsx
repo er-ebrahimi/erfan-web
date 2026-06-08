@@ -1,6 +1,5 @@
 import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
-
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog/blog-card';
 import { BlogPostRows } from '@/components/blog/blog-post-rows';
@@ -17,6 +16,8 @@ export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
+
+
   const pageData = await fetchContentType(
     'blog-page',
     {
@@ -34,21 +35,41 @@ export async function generateMetadata(props: {
 export default async function Blog(props: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const params = await props.params;
-  const blogPage = await fetchContentType(
-    'blog-page',
-    {
-      filters: { locale: params.locale },
-    },
-    true
-  );
-  const articles = await fetchContentType(
-    'articles',
-    {
-      filters: { locale: params.locale },
-    },
-    false
-  );
+  let params;
+  try {
+    params = await props.params;
+  } catch (err) {
+    console.error(`[BlogPage] error resolving params:`, err);
+    throw err;
+  }
+
+  let blogPage;
+  try {
+    blogPage = await fetchContentType(
+      'blog-page',
+      {
+        filters: { locale: params.locale },
+      },
+      true
+    );
+  } catch (err) {
+    console.error(`[BlogPage] fetchContentType(blog-page) error:`, err);
+    throw err;
+  }
+
+  let articles;
+  try {
+    articles = await fetchContentType(
+      'articles',
+      {
+        filters: { locale: params.locale },
+      },
+      false
+    );
+  } catch (err) {
+    console.error(`[BlogPage] fetchContentType(articles) error:`, err);
+    throw err;
+  }
 
   const localizedSlugs = blogPage.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {

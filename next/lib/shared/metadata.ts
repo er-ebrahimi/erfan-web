@@ -2,8 +2,16 @@ import { strapiImage } from '../strapi/strapiImage';
 
 export function generateMetadataObject(seo: any) {
   return {
-    title: seo?.metaTitle || 'Default Title', // Fallback to 'Default Title' if title is not provided
-    description: seo?.metaDescription || 'Default Description', // Fallback to 'Default Description'
+    title: seo?.metaTitle || 'Default Title',
+    description: seo?.metaDescription || 'Default Description',
+    keywords: seo?.keywords || undefined,
+    robots: seo?.metaRobots || undefined,
+    other: {
+      ...(seo?.metaViewport ? { viewport: seo.metaViewport } : {}),
+    },
+    alternates: seo?.canonicalURL
+      ? { canonical: seo.canonicalURL }
+      : undefined,
     openGraph: {
       title: seo?.ogTitle || seo?.metaTitle || 'Default OG Title',
       description:
@@ -20,4 +28,9 @@ export function generateMetadataObject(seo: any) {
       images: seo?.twitterImage ? [{ url: seo.twitterImage }] : [],
     },
   };
+}
+
+export function generateStructuredData(seo: any): string | undefined {
+  if (!seo?.structuredData) return undefined;
+  return JSON.stringify(seo.structuredData);
 }

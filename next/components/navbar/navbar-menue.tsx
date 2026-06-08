@@ -163,7 +163,8 @@ export function NavbarMenu({
 }: Props) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   // Language logic
   const { state } = useSlugContext();
   const { localizedSlugs } = state;
@@ -208,11 +209,12 @@ export function NavbarMenu({
     <>
       {/* Mobile View: Inline Trigger inside Top Right Container */}
       <div className="md:hidden">
-        <Sheet>
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
-            <Button 
-              variant="simple" 
+            <Button
+              variant="simple"
               className="h-auto p-1 rounded-full z-1"
+              aria-label={t('menu')}
             >
               <IconMenu2 className="h-6 w-6" />
             </Button>
@@ -222,14 +224,17 @@ export function NavbarMenu({
               <SheetTitle className="sr-only">{t('menu')}</SheetTitle>
             </SheetHeader>
             <div className="flex flex-col gap-4 mt-6 pb-6">
-              {/* Left Navbar Items */}
-              {leftNavbarItems?.map((item, index) => (
-                <MobileNavItem key={`left-${index}`} item={item} locale={locale} />
-              ))}
+              {/* Left Navbar Items — Home first */}
+              {leftNavbarItems
+                ?.slice()
+                .sort((a, b) => (a.URL === "/" ? -1 : b.URL === "/" ? 1 : 0))
+                .map((item, index) => (
+                  <MobileNavItem key={`left-${index}`} item={item} locale={locale} onClose={() => setSheetOpen(false)} />
+                ))}
 
               {/* Right Navbar Items */}
               {rightNavbarItems?.map((item, index) => (
-                 <MobileNavItem key={`right-${index}`} item={item} locale={locale} />
+                <MobileNavItem key={`right-${index}`} item={item} locale={locale} onClose={() => setSheetOpen(false)} />
               ))}
 
               <div className="flex flex-col gap-4 mt-4 pt-4 border-t">
@@ -251,8 +256,8 @@ export function NavbarMenu({
                 {/* Language Selector */}
                 {showLanguage && languages && languages.length > 0 && (
                   <div className="flex flex-col gap-2">
-                     <div className="px-3 text-sm font-medium text-muted-foreground">{t('language')}</div>
-                     {languages.map((language) => {
+                    <div className="px-3 text-sm font-medium text-muted-foreground">{t('language')}</div>
+                    {languages.map((language) => {
                       const languageInfo = languageLabels[language.code] || {
                         label: language.name || language.code.toUpperCase(),
                         flag: '🌐',
@@ -264,6 +269,7 @@ export function NavbarMenu({
                         <Link
                           key={language.code}
                           href={generateLocalizedPath(language.code)}
+                          onClick={() => setSheetOpen(false)}
                           className={cn(
                             "flex items-center justify-between w-full rounded-md px-3 py-3 hover:bg-accent hover:text-accent-foreground",
                             isActive && "bg-accent text-accent-foreground"
@@ -334,18 +340,20 @@ export function NavbarMenu({
             {/* Theme Toggle */}
             {showTheme && (
               <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={cn(navigationMenuTriggerStyle(), "cursor-pointer px-2")}
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                >
-                  <div className="flex items-center gap-2">
-                    {theme === 'dark' ? (
-                      <IconSun className="h-4 w-4" />
-                    ) : (
-                      <IconMoon className="h-4 w-4" />
-                    )}
-                    <span className="sr-only">{t('theme')}</span>
-                  </div>
+                <NavigationMenuLink asChild>
+                  <button
+                    className={cn(navigationMenuTriggerStyle(), "cursor-pointer px-2")}
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  >
+                    <div className="flex items-center gap-2">
+                      {theme === 'dark' ? (
+                        <IconSun className="h-4 w-4" />
+                      ) : (
+                        <IconMoon className="h-4 w-4" />
+                      )}
+                      <span className="sr-only">{t('theme')}</span>
+                    </div>
+                  </button>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             )}
@@ -353,46 +361,46 @@ export function NavbarMenu({
             {/* Language Selector */}
             {showLanguage && languages && languages.length > 0 && (
               <NavigationMenuItem>
-                 <NavigationMenuTrigger className="px-2">
-                    <div className="flex items-center gap-2">
-                      <IconLanguage className="h-4 w-4" />
-                      <span className="sr-only">{t('language')}</span>
-                    </div>
-                 </NavigationMenuTrigger>
-                 <NavigationMenuContent>
-                    <ul className="grid gap-2 p-4">
-                      {languages.map((language) => {
-                        const languageInfo = languageLabels[language.code] || {
-                          label: language.name || language.code.toUpperCase(),
-                          flag: '🌐',
-                        };
-                        const isActive = language.code === currentLocale;
-                        const localeConfig = getLocaleConfig(language.code);
+                <NavigationMenuTrigger className="px-2">
+                  <div className="flex items-center gap-2">
+                    <IconLanguage className="h-4 w-4" />
+                    <span className="sr-only">{t('language')}</span>
+                  </div>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-2 p-4">
+                    {languages.map((language) => {
+                      const languageInfo = languageLabels[language.code] || {
+                        label: language.name || language.code.toUpperCase(),
+                        flag: '🌐',
+                      };
+                      const isActive = language.code === currentLocale;
+                      const localeConfig = getLocaleConfig(language.code);
 
-                        return (
-                          <li key={language.code}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                href={generateLocalizedPath(language.code)}
-                                className={cn(
-                                  "flex items-center justify-between w-full rounded-md p-2 hover:bg-accent hover:text-accent-foreground",
-                                  isActive && "bg-accent text-accent-foreground"
-                                )}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span>{languageInfo.flag}</span>
-                                  <span className={cn("text-sm", localeConfig.fontClass)}>
-                                    {languageInfo.label}
-                                  </span>
-                                </div>
-                                {isActive && <IconCheck className="h-4 w-4" />}
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                 </NavigationMenuContent>
+                      return (
+                        <li key={language.code}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={generateLocalizedPath(language.code)}
+                              className={cn(
+                                "flex items-center justify-between w-full rounded-md p-2 hover:bg-accent hover:text-accent-foreground",
+                                isActive && "bg-accent text-accent-foreground"
+                              )}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span>{languageInfo.flag}</span>
+                                <span className={cn("text-sm", localeConfig.fontClass)}>
+                                  {languageInfo.label}
+                                </span>
+                              </div>
+                              {isActive && <IconCheck className="h-4 w-4" />}
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </NavigationMenuContent>
               </NavigationMenuItem>
             )}
 
@@ -455,7 +463,7 @@ export function NavbarMenu({
   )
 }
 
-function MobileNavItem({ item, locale }: { item: NavbarItem, locale: string }) {
+function MobileNavItem({ item, locale, onClose }: { item: NavbarItem, locale: string, onClose?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
   const { isRTL } = getLocaleConfig(locale);
@@ -463,13 +471,13 @@ function MobileNavItem({ item, locale }: { item: NavbarItem, locale: string }) {
   if (hasChildren) {
     return (
       <div className="flex flex-col gap-2">
-        <div 
+        <div
           className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-accent cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex items-center gap-2 font-medium">
-             {getIconForNavItem(item.text || '', item.icon)}
-             <span>{item.text}</span>
+            {getIconForNavItem(item.text || '', item.icon)}
+            <span>{item.text}</span>
           </div>
           <IconChevronDown className={cn("h-4 w-4 transition-transform duration-300", isOpen && "rotate-180")} />
         </div>
@@ -487,12 +495,15 @@ function MobileNavItem({ item, locale }: { item: NavbarItem, locale: string }) {
                 isRTL ? "border-r mr-2 pr-4" : "border-l ml-2 pl-4"
               )}>
                 {item.children?.map((child, i) => (
-                  <Link 
+                  <Link
                     key={i}
                     href={`/${locale}/${(child.URL || '').replace(/^\//, '')}`}
-                    className="block px-3 py-3 text-sm hover:bg-accent rounded-md transition-colors"
+                    onClick={onClose}
+                    className="block px-3 py-3 text-sm hover:bg-accent rounded-md transition-colors text-right"
                   >
-                    {child.text}
+                    <span  style={{ unicodeBidi: "isolate",direction:"ltr" }}>
+                      {child.text}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -504,8 +515,9 @@ function MobileNavItem({ item, locale }: { item: NavbarItem, locale: string }) {
   }
 
   return (
-    <Link 
+    <Link
       href={`/${locale}/${(item.URL || '').replace(/^\//, '')}`}
+      onClick={onClose}
       className="flex items-center gap-2 px-3 py-3 rounded-md hover:bg-accent font-medium"
     >
       {getIconForNavItem(item.text || '', item.icon)}

@@ -1,0 +1,22 @@
+# docker compose -f .\docker-compose.dev.yml up --build
+services:
+  app:
+    container_name: armanstudio-blog
+    image: armanstudio-blog:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://studioarman.site:2087}
+        NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-https://studioarman.site:2087}
+        DOMAIN: ${DOMAIN:-localhost}
+        BACK_PORT: ${BACK_PORT:-1337}
+    ports:
+      - "3000:4000"
+    environment:
+      NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-https://studioarman.site:2087}
+      STRAPI_INTERNAL_URL: ${STRAPI_INTERNAL_URL:-https://studioarman.site:2087}
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -43,9 +43,8 @@ export default async function LocaleLayout(props: {
   const params = await props.params;
 
   const { locale } = params;
-
-  // Validate that the incoming `locale` parameter is valid
   if (!routing.locales.includes(locale as any)) {
+    console.error(`[LocaleLayout] Invalid locale "${locale}" - calling notFound()`);
     notFound();
   }
 
@@ -113,7 +112,9 @@ export default async function LocaleLayout(props: {
                   locale={locale}
                   languages={pageData.languages}
                 />
-                {children}
+                <main id="main-content">
+                  {children}
+                </main>
                 <Footer data={pageData.footer} locale={locale} />
               </div>
             </CartProvider>
