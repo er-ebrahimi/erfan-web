@@ -36,6 +36,7 @@ async function fetchWithRetry(
   timeout = 10000
 ): Promise<StrapiResponse> {
   for (let attempt = 1; attempt <= retries; attempt++) {
+    const start = Date.now();
     try {
       const response = await axios.get<StrapiResponse>(url, {
         params,
@@ -44,16 +45,28 @@ async function fetchWithRetry(
       });
       return response.data;
     } catch (error) {
-      if (attempt === retries) throw error;
+      const elapsed = Date.now() - start;
+
+      if (attempt === retries) {
+        console.error(
+          `[FETCH_STRAPI] All ${retries} attempts exhausted [${url}] after ${elapsed}ms`
+        );
+        throw error;
+      }
 
       const isTimeout =
         axios.isAxiosError(error) &&
         (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT');
 
-      if (!isTimeout) throw error;
+      if (!isTimeout) {
+        console.error(
+          `[FETCH_STRAPI] Non-timeout error on attempt ${attempt}/${retries} [${url}] after ${elapsed}ms — not retrying`
+        );
+        throw error;
+      }
 
       console.warn(
-        `fetchContentType retry [${url}] attempt ${attempt}/${retries} failed`
+        `[FETCH_STRAPI] Timeout on attempt ${attempt}/${retries} [${url}] after ${elapsed}ms — retrying...`
       );
     }
   }
@@ -73,31 +86,50 @@ export default async function fetchContentType(
     queryParams.status = 'draft';
   }
 
-  const apiUrl = process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl =
+    process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
+  const start = Date.now();
 
   try {
     const url = new URL(`api/${contentType}`, apiUrl);
     const jsonData = await fetchWithRetry(url.href, queryParams);
     return spreadData ? spreadStrapiData(jsonData) : jsonData;
   } catch (error) {
+    const elapsed = Date.now() - start;
     const baseUrl = apiUrl;
     const fullUrl = `${baseUrl}/api/${contentType}`;
 
     const logData: Record<string, unknown> = {
+      contentType,
       url: fullUrl,
+      method: 'GET',
       params: queryParams,
+      draftMode: isEnabled,
+      elapsedMs: elapsed,
     };
 
     if (axios.isAxiosError(error)) {
+      logData.errorCode = error.code;
+      logData.errorMessage = error.message;
       logData.status = error.response?.status;
       logData.statusText = error.response?.statusText;
       logData.responseBody = error.response?.data;
+      logData.responseHeaders = error.response?.headers;
+      logData.requestUrl = error.config?.url;
+    } else if (error instanceof Error) {
+      logData.errorMessage = error.message;
+      logData.stack = error.stack;
     }
 
     console.error(
-      `fetchContentType error [${contentType}]:`,
+      `[FETCH_STRAPI] Failed to fetch [${contentType}] after ${elapsed}ms`,
       JSON.stringify(logData, null, 2)
     );
-    throw error;
+
+    const wrapped = new Error(
+      `fetchContentType failed for "${contentType}": ${error instanceof Error ? error.message : String(error)}`
+    );
+    (wrapped as any).cause = error;
+    throw wrapped;
   }
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '../elements/button';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 import { StrapiImage } from '@/types/types';
 
 type CTA = {
@@ -26,23 +27,24 @@ export const HeroPicture = ({
   locale: string;
   background?: StrapiImage;
 }) => {
-  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const bg = background ? getBestFormat(background) : null;
 
   return (
     <div className="h-screen overflow-hidden relative flex flex-col items-center justify-center">
       <div className="h-full w-full absolute inset-0 z-0">
-        {background && background.formats && background.formats.large ? (
+        {bg && (
           <>
             <Image
-              src={url + background.formats.large.url}
+              src={getStrapiMedia(bg.url)!}
               alt="Hero background"
               fill
               className="object-cover"
               loading="lazy"
+              sizes="(max-width: 768px) 100vw, 1920px"
             />
             <div className="absolute inset-0 bg-black/40" />
           </>
-        ) : null}
+        )}
       </div>
       <Heading
         as="h1"

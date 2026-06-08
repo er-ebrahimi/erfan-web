@@ -17,24 +17,6 @@ import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
 
-// Default Global SEO for pages without them
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const params = await props.params;
-  const pageData = await fetchContentType(
-    'global',
-    {
-      filters: { locale: params.locale },
-      populate: 'seo.metaImage',
-    },
-    true
-  );
-
-  const seo = pageData?.seo;
-  const metadata = generateMetadataObject(seo);
-  return metadata;
-}
 
 export default async function LocaleLayout(props: {
   children: React.ReactNode;

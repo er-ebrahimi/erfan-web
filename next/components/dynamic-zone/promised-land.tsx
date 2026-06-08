@@ -4,19 +4,7 @@ import React from 'react';
 
 import { Carousel } from '@/components/ui/apple-cards-carousel';
 import { Card } from '@/components/ui/apple-cards-carousel';
-
-const getImageUrl = (pic: any) => {
-  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
-  if (
-    pic &&
-    pic.formats &&
-    pic.formats.large &&
-    typeof pic.formats.large.url === 'string'
-  ) {
-    return url + pic.formats.large.url;
-  }
-  return '/next.svg'; // fallback image
-};
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 
 interface PromiseItem {
   Subtitle: string;
@@ -37,19 +25,21 @@ const PromisedLand: React.FC<PromisedLandProps> = ({
   Description,
   Promise,
 }) => {
-  const cards = Promise.map((card, index) => (
+  const cards = Promise.map((card, index) => {
+    const best = card.Pic ? getBestFormat(card.Pic) : null;
+    return (
     <Card
       key={card.Link}
       card={{
         title: card.Subtitle,
-        src: getImageUrl(card.Pic),
+        src: best ? getStrapiMedia(best.url)! : '/next.svg',
         category: card.SubSubtitle,
         content: card.Description,
         link: card.Link,
       }}
       index={index}
     />
-  ));
+  )});
   return (
     <div
       className="w-full h-full my-32 flex justify-center flex-col items-center"

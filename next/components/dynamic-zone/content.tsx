@@ -6,25 +6,7 @@ import {
 import { notFound } from 'next/navigation';
 
 import { Container } from '@/components/container';
-
-function fixBlocksImageUrl(url: string): string {
-  if (url.startsWith('http')) {
-    const base = process.env.NEXT_PUBLIC_STRAPI_URL;
-    if (base) {
-      try {
-        const urlObj = new URL(url);
-        const baseObj = new URL(base);
-        if (urlObj.host !== baseObj.host) {
-          urlObj.host = baseObj.host;
-          return urlObj.toString();
-        }
-      } catch {
-        // invalid URL, return as-is
-      }
-    }
-  }
-  return url;
-}
+import { StrapiImage, getBestFormat } from '@/components/ui/strapi-image';
 
 export const Content = ({ content }: { content: BlocksContent }) => {
   if (!content) notFound();
@@ -38,12 +20,20 @@ export const Content = ({ content }: { content: BlocksContent }) => {
               <BlocksRenderer
                 content={content}
                 blocks={{
-                  image: ({ image }) => (
-                    <img
-                      src={fixBlocksImageUrl(image.url)}
-                      alt={image.alternativeText || ''}
-                    />
-                  ),
+                  image: ({ image }) => {
+                    const best = getBestFormat(image);
+                    return (
+                      <StrapiImage
+                        src={best.url}
+                        alt={image.alternativeText || ''}
+                        width={best.width}
+                        height={best.height}
+                        sizes="(max-width: 768px) 100vw, 672px"
+                        loading="lazy"
+                        className="w-full h-auto rounded-lg"
+                      />
+                    );
+                  },
                 }}
               />
             </div>

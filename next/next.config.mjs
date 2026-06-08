@@ -74,6 +74,9 @@ const nextConfig = {
         `${apiUrl}/api/redirections`
       );
       const result = await res.json();
+      if (!result?.data) {
+        return [];
+      }
       const redirectItems = result.data.map(({ source, destination }) => {
         return {
           source: `/:locale${source}`,

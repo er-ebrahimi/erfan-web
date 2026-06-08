@@ -8,19 +8,7 @@ import {
   DraggableCardBody,
   DraggableCardContainer,
 } from '@/components/ui/draggable-card';
-
-const getImageUrl = (img: any) => {
-  const url = process.env.NEXT_PUBLIC_STRAPI_URL;
-  if (
-    img &&
-    img.formats &&
-    img.formats.large &&
-    typeof img.formats.large.url === 'string'
-  ) {
-    return url + img.formats.large.url;
-  }
-  return '/next.svg'; // fallback image
-};
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 
 interface PicItem {
   Name: string;
@@ -53,29 +41,36 @@ const ProjectPictures: React.FC<ProjectPicturesProps> = ({
         <p className="absolute top-1/2 mx-auto max-w-sm -translate-y-3/4 text-center text-2xl font-bold text-muted-foreground md:text-4xl">
           {Description}
         </p>
-        {Pics.map((item) => (
-          <DraggableCardBody
-            key={item.Name}
-            // className={item.ClassName}
-            className={'absolute'}
-            style={{
-              rotate: item.Rotate + 'deg',
-              right: 50 - parseFloat(item.Right) + '%',
-              top: item.Top + 'rem',
-            }}
-          >
-            <Image
-              src={getImageUrl(item.Image.length > 0 ? item.Image[0] : null)}
-              alt={item.Name}
-              className="pointer-events-none relative z-10 h-80 w-80 object-cover"
-              width={320}
-              height={320}
-            />
-            <h3 className="mt-4 text-center text-2xl font-bold text-foreground">
-              {item.Name}
-            </h3>
-          </DraggableCardBody>
-        ))}
+          {Pics.map((item) => {
+          const img = item.Image?.[0];
+          const best = img ? getBestFormat(img) : null;
+          return (
+            <DraggableCardBody
+              key={item.Name}
+              className="absolute"
+              style={{
+                rotate: item.Rotate + 'deg',
+                right: 50 - parseFloat(item.Right) + '%',
+                top: item.Top + 'rem',
+              }}
+            >
+              {best && (
+                <Image
+                  src={getStrapiMedia(best.url)!}
+                  alt={item.Name}
+                  className="pointer-events-none relative z-10 h-80 w-80 object-cover"
+                  width={best.width}
+                  height={best.height}
+                  sizes="320px"
+                  loading="lazy"
+                />
+              )}
+              <h3 className="mt-4 text-center text-2xl font-bold text-foreground">
+                {item.Name}
+              </h3>
+            </DraggableCardBody>
+          );
+        })}
       </DraggableCardContainer>
     </section>
   );

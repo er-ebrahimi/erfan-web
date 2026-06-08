@@ -10,6 +10,7 @@ import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { FeatureIconContainer } from './features/feature-icon-container';
 import { ThreeDCard } from '@/components/ui/three-d-card';
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 
 export const LaunchesCard = ({
   heading,
@@ -23,7 +24,7 @@ export const LaunchesCard = ({
   const url = process.env.NEXT_PUBLIC_STRAPI_URL;
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
-    icon: `${url}${entry.Image.formats.large.url}`,
+    icon: getStrapiMedia(getBestFormat(entry.Image).url),
     // content: (
     //   <p className="text-4xl md:text-7xl font-bold text-neutral-800">
     //     {entry.mission_number}
