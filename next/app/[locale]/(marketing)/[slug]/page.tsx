@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { draftMode } from "next/headers";
+import { notFound } from "next/navigation";
 import PageContent from "@/lib/shared/PageContent";
 import fetchContentType from "@/lib/strapi/fetchContentType";
 import { generateMetadataObject } from "@/lib/shared/metadata";
@@ -44,6 +45,10 @@ export default async function Page(props: {
     true,
     { preview: isEnabled }
   );
+
+  if (!pageData) {
+    notFound();
+  }
 
   const localizedSlugs = pageData?.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {

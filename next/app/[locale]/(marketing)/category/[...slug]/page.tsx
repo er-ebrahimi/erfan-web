@@ -1,10 +1,9 @@
 import 'next-intl';
-import { getTranslations } from 'next-intl/server';
 import { draftMode } from 'next/headers';
+import { notFound } from 'next/navigation';
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogLayout } from '@/components/blog/blog-layout';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import { NotFound } from '@/components/not-found';
 import { generateMetadataObject } from "@/lib/shared/metadata";
 import { type Metadata } from "next";
 
@@ -36,7 +35,6 @@ export async function generateMetadata(props: {
 export default async function SingleArticlePage(props: {
   params: Promise<{ slug: string[]; locale: string }>;
 }) {
-  const t = await getTranslations('common');
   const params = await props.params;
   const { slug, locale } = params;
   const { isEnabled } = await draftMode();
@@ -54,7 +52,7 @@ export default async function SingleArticlePage(props: {
   );
 
   if (!article) {
-    return <NotFound />;
+    notFound();
   }
 
   const localizedSlugs = article.localizations?.reduce(

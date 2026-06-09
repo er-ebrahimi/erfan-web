@@ -1,0 +1,14 @@
+services:
+  strapi:
+    container_name: strapi
+    build:
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    environment:
+      DATABASE_CLIENT: sqlite
+      DATABASE_FILENAME: .tmp/data.db
+      NODE_ENV: production
+    expose:
+      - "1337"
+    networks:
+      - studio-net

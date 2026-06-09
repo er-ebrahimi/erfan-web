@@ -63,7 +63,7 @@ docker load -i strapi-erfanweb.tar
 docker load -i armanstudio-blog.tar
 
 # Start everything
-docker compose up -d
+docker compose up
 
 # Check logs
 docker compose logs -f

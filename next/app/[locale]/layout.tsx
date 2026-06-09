@@ -13,7 +13,6 @@ import { CartProvider } from '@/context/cart-context';
 import { routing } from '@/i18n/routing';
 import { getFontForLocale } from '@/lib/fonts';
 import { getLocaleClasses } from '@/lib/rtl-utils';
-import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
 
