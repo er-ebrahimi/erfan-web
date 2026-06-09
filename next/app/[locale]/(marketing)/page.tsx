@@ -1,9 +1,12 @@
 import { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 
 import ClientSlugHandler from './ClientSlugHandler';
 import PageContent from '@/lib/shared/PageContent';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
+
+export const revalidate = 60;
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -31,6 +34,7 @@ export default async function HomePage(props: {
   params: Promise<{ locale: string }>;
 }) {
   const params = await props.params;
+  const { isEnabled } = await draftMode();
 
   const pageData = await fetchContentType(
     'pages',
@@ -40,7 +44,8 @@ export default async function HomePage(props: {
         locale: params.locale,
       },
     },
-    true
+    true,
+    { preview: isEnabled }
   );
 
   const localizedSlugs = pageData?.localizations?.reduce(

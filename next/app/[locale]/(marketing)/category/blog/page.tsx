@@ -1,5 +1,6 @@
 import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog/blog-card';
 import { BlogPostRows } from '@/components/blog/blog-post-rows';
@@ -11,6 +12,8 @@ import { Subheading } from '@/components/elements/subheading';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { Article } from '@/types/types';
+
+export const revalidate = 60;
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -42,6 +45,7 @@ export default async function Blog(props: {
     console.error(`[BlogPage] error resolving params:`, err);
     throw err;
   }
+  const { isEnabled } = await draftMode();
 
   let blogPage;
   try {
@@ -50,7 +54,8 @@ export default async function Blog(props: {
       {
         filters: { locale: params.locale },
       },
-      true
+      true,
+      { preview: isEnabled }
     );
   } catch (err) {
     console.error(`[BlogPage] fetchContentType(blog-page) error:`, err);
@@ -64,7 +69,8 @@ export default async function Blog(props: {
       {
         filters: { locale: params.locale },
       },
-      false
+      false,
+      { preview: isEnabled }
     );
   } catch (err) {
     console.error(`[BlogPage] fetchContentType(articles) error:`, err);

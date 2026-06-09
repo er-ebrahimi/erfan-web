@@ -20,8 +20,7 @@ export const Footer = async ({
             </div>
             <div className="max-w-xs">{data?.description}</div>
             <div className="mt-4">{data?.copyright}</div>
-            <div className="mt-4 bg-white rounded-lg p-2 inline-block h-28 w-28">
-              {/* @ts-ignore */}
+            <div className="mt-4 bg-white rounded-lg p-2 h-28 w-28">
               <EnamadLogo />
             </div>
           </div>

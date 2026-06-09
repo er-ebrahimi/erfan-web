@@ -4,6 +4,7 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
   output: 'standalone',
   logging: {
     fetches: {
@@ -22,6 +23,8 @@ const nextConfig = {
   ],
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
+    deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
     {
       protocol: 'https',
@@ -66,6 +69,28 @@ const nextConfig = {
     ],
   },
   pageExtensions: ['ts', 'tsx'],
+  async headers() {
+    return [
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:path((?:favicon\\.ico|robots\\.txt|sitemap\\.xml))',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
+  },
   async redirects() {
     let redirections = [];
     try {

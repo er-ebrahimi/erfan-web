@@ -21,14 +21,14 @@ export const Content = ({ content }: { content: BlocksContent }) => {
                 content={content}
                 blocks={{
                   image: ({ image }) => {
-                    const best = getBestFormat(image);
+                    const best = getBestFormat(image, ['medium', 'small', 'large']);
                     return (
                       <StrapiImage
                         src={best.url}
                         alt={image.alternativeText || ''}
                         width={best.width}
                         height={best.height}
-                        sizes="(max-width: 768px) 100vw, 672px"
+                        sizes="(max-width: 768px) calc(100vw - 2rem), 672px"
                         loading="lazy"
                         className="w-full h-auto rounded-lg"
                       />

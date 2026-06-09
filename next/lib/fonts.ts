@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 export const iranSans = localFont({
   src: '../fonts/IRANSansWeb.ttf',
   variable: '--font-iran-sans',
-  display: 'swap',
+  display: 'optional',
   preload: true,
   adjustFontFallback: 'Arial',
   weight: '400 500 600 700 800 900',

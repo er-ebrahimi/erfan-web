@@ -1,11 +1,14 @@
 import 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { draftMode } from 'next/headers';
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogLayout } from '@/components/blog/blog-layout';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { NotFound } from '@/components/not-found';
 import { generateMetadataObject } from "@/lib/shared/metadata";
 import { type Metadata } from "next";
+
+export const revalidate = 60;
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string; locale: string }>;
@@ -36,6 +39,7 @@ export default async function SingleArticlePage(props: {
   const t = await getTranslations('common');
   const params = await props.params;
   const { slug, locale } = params;
+  const { isEnabled } = await draftMode();
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
   const article = await fetchContentType(
     'articles',
@@ -45,7 +49,8 @@ export default async function SingleArticlePage(props: {
         locale: locale,
       },
     },
-    true
+    true,
+    { preview: isEnabled }
   );
 
   if (!article) {
