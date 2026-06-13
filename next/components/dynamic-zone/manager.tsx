@@ -116,6 +116,14 @@ const componentMapping: { [key: string]: any } = {
     () => import('./media').then((mod) => mod.Media),
     { ssr: true }
   ),
+  'dynamic-zone.ai-hero': dynamic(
+    () => import('./ai-hero').then((mod) => mod.AiHero),
+    { ssr: true }
+  ),
+  'dynamic-zone.capabilities': dynamic(
+    () => import('./capabilities').then((mod) => mod.Capabilities),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {
