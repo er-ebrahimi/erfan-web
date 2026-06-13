@@ -297,8 +297,8 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
           'اتصال امن به مدل‌ها، پایگاه‌های داده و سرویس‌های شما.',
         integrations: [
           { title: 'OpenAI', iconName: 'IconBrandOpenai', href: '#' },
-          { title: 'Hugging Face', iconName: 'IconBrandHuggingFace', href: '#' },
-          { title: 'PostgreSQL', iconName: 'IconBrandPostgresql', href: '#' },
+          { title: 'Hugging Face', iconName: 'IconBrain', href: '#' },
+          { title: 'PostgreSQL', iconName: 'IconCloud', href: '#' },
           { title: 'Docker', iconName: 'IconBrandDocker', href: '#' },
           { title: 'Python', iconName: 'IconBrandPython', href: '#' },
           { title: 'Zapier', iconName: 'IconBrandZapier', href: '#' },

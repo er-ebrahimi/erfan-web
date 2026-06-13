@@ -75,7 +75,7 @@ export const AiHero = ({
               alt={backgroundImage.alternativeText || 'AI Hero Background'}
               fill
               className="object-cover brightness-[0.5]"
-              loading="lazy"
+              priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
           </>

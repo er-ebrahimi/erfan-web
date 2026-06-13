@@ -1,13 +1,20 @@
 import {
   IconBolt,
   IconBrain,
+  IconBrandDocker,
+  IconBrandOpenai,
+  IconBrandPython,
+  IconBrandZapier,
   IconBriefcase,
   IconChartBar,
   IconChartHistogram,
+  IconClock,
+  IconCloud,
   IconCode,
   IconDatabaseSearch,
   IconEye,
   IconMessageChatbot,
+  IconMoodSmile,
   IconPencil,
   IconPencilBolt,
   IconPlug,
@@ -16,6 +23,7 @@ import {
   IconRocket,
   IconSearch,
   IconSparkles,
+  IconTrendingDown,
 } from '@tabler/icons-react';
 import { Icon } from '@tabler/icons-react';
 
@@ -37,6 +45,14 @@ const iconMap: Record<string, Icon> = {
   IconChartBar,
   IconBolt,
   IconBrain,
+  IconClock,
+  IconCloud,
+  IconMoodSmile,
+  IconTrendingDown,
+  IconBrandDocker,
+  IconBrandOpenai,
+  IconBrandPython,
+  IconBrandZapier,
 };
 
 export function getTablerIcon(name?: string): Icon {
