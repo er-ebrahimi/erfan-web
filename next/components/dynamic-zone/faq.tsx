@@ -3,6 +3,7 @@ import { IconHelpHexagonFilled } from '@tabler/icons-react';
 import { FeatureIconContainer } from './features/feature-icon-container';
 import { Container } from '@/components/container';
 import { Heading } from '@/components/elements/heading';
+import { Subheading } from '@/components/elements/subheading';
 import { JsonLd } from '@/components/seo/json-ld';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
@@ -44,6 +45,9 @@ export const FAQ = ({
           <Heading as="h1" className="mt-4">
             {heading}
           </Heading>
+          {sub_heading && (
+            <Subheading className="mt-4">{sub_heading}</Subheading>
+          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-20">
           {faqs &&

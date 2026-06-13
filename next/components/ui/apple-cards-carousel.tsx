@@ -239,7 +239,7 @@ export const Card = ({
                 <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
               </button>
               <motion.p
-                layoutId={layout ? `category-${card.title}` : undefined}
+                layoutId={layout ? `category-${card.category}` : undefined}
                 className="text-base font-medium text-black dark:text-white"
               >
                 {card.category}

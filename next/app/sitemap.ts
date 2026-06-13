@@ -12,6 +12,7 @@ async function getPageRoutes(locale: string): Promise<MetadataRoute.Sitemap> {
       fields: ['slug', 'updatedAt'],
       pagination: { pageSize: 100 },
       locale,
+      status: 'published',
     });
     const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
     return items

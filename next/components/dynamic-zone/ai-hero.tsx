@@ -54,7 +54,7 @@ export const AiHero = ({
     : null;
 
   // Split heading: everything before the last word, and the last word itself
-  const words = heading.trim().split(/\s+/);
+  const words = (heading ?? '').trim().split(/\s+/);
   const lastWord = words.pop() ?? '';
   const beforeLastWord = words.join(' ');
 
