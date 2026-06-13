@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_use_cases",
+  "info": { "displayName": "Use Cases", "icon": "cards", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "use_cases": { "type": "component", "repeatable": true, "component": "shared.use-case" }
+  }
+}

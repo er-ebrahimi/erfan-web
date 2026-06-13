@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_use_cases",
+  "info": { "displayName": "Use Case", "icon": "cards", "description": "" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "text" },
+    "category": { "type": "text" },
+    "description": { "type": "text" },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images", "files", "videos"] }
+  }
+}

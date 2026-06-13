@@ -61,7 +61,13 @@
         "dynamic-zone.project-pictures",
         "dynamic-zone.contact",
         "dynamic-zone.team-members",
-        "dynamic-zone.hero-picture"
+        "dynamic-zone.hero-picture",
+        "dynamic-zone.ai-hero",
+        "dynamic-zone.capabilities",
+        "dynamic-zone.process",
+        "dynamic-zone.use-cases",
+        "dynamic-zone.metrics",
+        "dynamic-zone.integrations"
       ]
     }
   }

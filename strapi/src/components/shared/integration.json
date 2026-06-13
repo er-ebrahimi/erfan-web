@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_integrations",
+  "info": { "displayName": "Integration", "icon": "plugConnected", "description": "" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "text" },
+    "icon": { "type": "media", "multiple": false, "allowedTypes": ["images", "files"] },
+    "iconName": { "type": "text" },
+    "href": { "type": "text" }
+  }
+}

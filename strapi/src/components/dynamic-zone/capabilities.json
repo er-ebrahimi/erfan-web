@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_capabilities",
+  "info": { "displayName": "Capabilities", "icon": "layoutGrid", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "capabilities": { "type": "component", "repeatable": true, "component": "shared.capability" }
+  }
+}

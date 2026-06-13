@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_integrations",
+  "info": { "displayName": "Integrations", "icon": "plugConnected", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "integrations": { "type": "component", "repeatable": true, "component": "shared.integration" }
+  }
+}

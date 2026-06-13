@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_metrics",
+  "info": { "displayName": "Metrics", "icon": "chartBar", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "metrics": { "type": "component", "repeatable": true, "component": "shared.metric" }
+  }
+}

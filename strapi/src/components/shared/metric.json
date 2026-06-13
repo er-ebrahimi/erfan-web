@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_shared_metrics",
+  "info": { "displayName": "Metric", "icon": "chartBar", "description": "" },
+  "options": {},
+  "attributes": {
+    "value": { "type": "decimal" },
+    "prefix": { "type": "text" },
+    "suffix": { "type": "text" },
+    "label": { "type": "text" },
+    "icon": { "type": "text" }
+  }
+}

@@ -7,11 +7,8 @@
   },
   "options": {},
   "attributes": {
-    "title": {
-      "type": "text"
-    },
-    "description": {
-      "type": "text"
-    }
+    "title": { "type": "text" },
+    "description": { "type": "text" },
+    "icon": { "type": "text" }
   }
 }

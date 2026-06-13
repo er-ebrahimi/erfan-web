@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_shared_capabilities",
+  "info": { "displayName": "Capability", "icon": "grid", "description": "" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "text" },
+    "description": { "type": "text" },
+    "icon": { "type": "text" },
+    "span": { "type": "enumeration", "default": "one", "enum": ["one", "two"] },
+    "accent": { "type": "text" }
+  }
+}
