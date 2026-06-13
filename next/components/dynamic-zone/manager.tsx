@@ -132,6 +132,14 @@ const componentMapping: { [key: string]: any } = {
     () => import('./metrics').then((mod) => mod.Metrics),
     { ssr: true }
   ),
+  'dynamic-zone.use-cases': dynamic(
+    () => import('./use-cases').then((mod) => mod.UseCases),
+    { ssr: true }
+  ),
+  'dynamic-zone.integrations': dynamic(
+    () => import('./integrations').then((mod) => mod.Integrations),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

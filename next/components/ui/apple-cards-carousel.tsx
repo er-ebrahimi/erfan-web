@@ -22,6 +22,8 @@ import { cn } from '@/lib/utils';
 interface CarouselProps {
   items: React.ReactElement[];
   initialScroll?: number;
+  /** When true the modal overlay and card labels render RTL. Defaults to true to preserve existing behaviour. */
+  isRTL?: boolean;
 }
 
 type Card = {
@@ -35,12 +37,14 @@ type Card = {
 export const CarouselContext = createContext<{
   onCardClose: (index: number) => void;
   currentIndex: number;
+  isRTL: boolean;
 }>({
   onCardClose: () => {},
   currentIndex: 0,
+  isRTL: true,
 });
 
-export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
+export const Carousel = ({ items, initialScroll = 0, isRTL = true }: CarouselProps) => {
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
@@ -92,8 +96,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
   return (
     <CarouselContext.Provider
-      value={{ onCardClose: handleCardClose, currentIndex }}
-      // value={{ onCardClose: () => {}, currentIndex: 0 }}
+      value={{ onCardClose: handleCardClose, currentIndex, isRTL }}
     >
       <div className="relative w-full">
         <div
@@ -172,7 +175,7 @@ export const Card = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { onCardClose, currentIndex } = useContext(CarouselContext);
+  const { onCardClose, currentIndex, isRTL } = useContext(CarouselContext);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -212,7 +215,7 @@ export const Card = ({
     <>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-50 h-screen overflow-auto" dir="rtl">
+          <div className={cn('fixed inset-0 z-50 h-screen overflow-auto', isRTL ? 'dir-rtl' : 'dir-ltr')} dir={isRTL ? 'rtl' : 'ltr'}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -261,13 +264,13 @@ export const Card = ({
         <div className="relative z-40 p-8">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-right font-sans text-sm font-medium text-white md:text-base"
+            className={cn('font-sans text-sm font-medium text-white md:text-base', isRTL ? 'text-right' : 'text-left')}
           >
             {card.category}
           </motion.p>
           <motion.p
             layoutId={layout ? `title-${card.title}` : undefined}
-            className="mt-2 max-w-xs text-right font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl"
+            className={cn('mt-2 max-w-xs font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl', isRTL ? 'text-right' : 'text-left')}
           >
             {card.title}
           </motion.p>
