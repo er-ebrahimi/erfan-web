@@ -5,6 +5,29 @@ import fetchContentType from '@/lib/strapi/fetchContentType';
 
 const BASE_URL = 'https://studioarman.com';
 
+async function getPageRoutes(locale: string): Promise<MetadataRoute.Sitemap> {
+  try {
+    const res = await fetchContentType('pages', {
+      filters: {},
+      fields: ['slug', 'updatedAt'],
+      pagination: { pageSize: 100 },
+      locale,
+    });
+    const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+    return items
+      .map((p: any) => p?.slug)
+      .filter((slug: string) => slug && slug !== 'homepage')
+      .map((slug: string) => ({
+        url: `${BASE_URL}/${locale}/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
@@ -41,5 +64,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('[Sitemap] Failed to fetch articles:', err);
   }
 
-  return entries;
+  return [...entries, ...(await getPageRoutes('fa'))];
 }

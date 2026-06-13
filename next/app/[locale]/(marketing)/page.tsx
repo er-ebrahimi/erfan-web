@@ -4,6 +4,19 @@ import ClientSlugHandler from './ClientSlugHandler';
 import PageContent from '@/lib/shared/PageContent';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
+import { JsonLd } from '@/components/seo/json-ld';
+
+function parseStructuredData(value: unknown) {
+  if (!value) return null;
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+  return value;
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -52,6 +65,7 @@ export default async function HomePage(props: {
   );
   return (
     <>
+      <JsonLd data={parseStructuredData(pageData?.seo?.structuredData)} />
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
       <PageContent pageData={pageData} />
     </>
