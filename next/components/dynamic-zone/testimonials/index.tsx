@@ -9,18 +9,23 @@ import { Subheading } from '../../elements/subheading';
 import { FeatureIconContainer } from '../features/feature-icon-container';
 import { TestimonialsSlider } from './slider';
 import { TestimonialsMarquee } from './testimonials-marquee';
+import { getLocaleConfig } from '@/lib/fonts';
+import { cn } from '@/lib/utils';
 
 export const Testimonials = ({
   heading,
   sub_heading,
   testimonials,
+  locale,
 }: {
   heading: string;
   sub_heading: string;
   testimonials: object;
+  locale: string;
 }) => {
+  const { fontClass, direction } = getLocaleConfig(locale);
   return (
-    <div className="relative" dir="ltr">
+    <div className={cn('relative', fontClass)} dir={direction}>
       <AmbientColor />
       <div className="pb-20">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
