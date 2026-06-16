@@ -62,7 +62,15 @@ const nextConfig = {
     {
       protocol: "https",
       hostname: 'trustseal.enamad.ir'
-    }
+    },
+    {
+      protocol: 'https',
+      hostname: 'picsum.photos',
+    },
+    {
+      protocol: 'https',
+      hostname: 'images.unsplash.com',
+    },
     ],
   },
   pageExtensions: ['ts', 'tsx'],

@@ -56,18 +56,25 @@ export const Integrations = ({
     } else {
       // Fall back to tabler icon name, then 'IconPlug' as final default
       const IconComponent = getTablerIcon(integration.iconName ?? 'IconPlug');
-      iconNode = <IconComponent className="h-full w-full" />;
+      iconNode = <IconComponent className="h-6 w-6" />;
     }
+
+    // Integrations are display-only proof badges, not navigation. When there is
+    // no real destination, render them non-clickable instead of a dead '#' link
+    // (which would otherwise jump the visitor to the top of the page).
+    const hasRealLink = !!integration.href && integration.href !== '#';
 
     return {
       title: integration.title,
       href: integration.href ?? '#',
       icon: iconNode,
+      ...(hasRealLink ? {} : { onClick: () => {} }),
     };
   });
 
   return (
-    <section className={cn('py-20', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+    <section className={cn('py-20 relative overflow-hidden', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-neutral-400/30 to-transparent" />
       <Container>
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-12">
@@ -83,7 +90,7 @@ export const Integrations = ({
           <div className="flex justify-center">
             <FloatingDock
               items={dockItems}
-              desktopClassName="bg-neutral-900 border border-neutral-800"
+              desktopClassName="bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-neutral-700/60"
               mobileClassName="mx-auto"
             />
           </div>

@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_lead_forms",
+  "info": { "displayName": "Lead Form", "icon": "envelope", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "reassurance": { "type": "text" }
+  }
+}

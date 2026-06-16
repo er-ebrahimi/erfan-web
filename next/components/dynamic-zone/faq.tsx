@@ -35,27 +35,34 @@ export const FAQ = ({
       : null;
 
   return (
-    <div className={fontClass} dir={direction}>
+    <section className={cn('py-20 relative overflow-hidden', fontClass)} dir={direction}>
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-neutral-400/30 to-transparent" />
       <JsonLd data={faqLd} />
-      <Container className="flex flex-col items-center justify-between pb-20">
-        <div className="relative z-20 py-10 md:pt-40">
-          <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
+      <Container className="flex flex-col items-center justify-between">
+        <div className="relative z-20 py-10 flex flex-col items-center text-center">
+          <FeatureIconContainer className="flex justify-center items-center overflow-hidden mb-4">
             <IconHelpHexagonFilled className="h-6 w-6 text-primary-foreground" />
           </FeatureIconContainer>
-          <Heading as="h1" className="mt-4">
+          <Heading as="h2" className="mt-4">
             {heading}
           </Heading>
           {sub_heading && (
-            <Subheading className="mt-4">{sub_heading}</Subheading>
+            <Subheading className="mt-4 max-w-2xl mx-auto">{sub_heading}</Subheading>
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-20">
+        <div className="w-full max-w-4xl mx-auto divide-y divide-neutral-100 dark:divide-neutral-800 mt-4 mb-20">
           {faqs &&
             faqs.map((faq: { question: string; answer: string }) => (
-              <div key={faq.question}>
+              <div
+                key={faq.question}
+                className={cn(
+                  'py-7 flex flex-col gap-3',
+                  isRTL ? 'pr-4 border-r-2 border-indigo-500/30' : 'pl-4 border-l-2 border-indigo-500/30'
+                )}
+              >
                 <h4
                   className={cn(
-                    'text-lg font-bold text-foreground',
+                    'text-base font-semibold text-foreground',
                     isRTL && 'text-right font-iran-sans'
                   )}
                 >
@@ -63,7 +70,7 @@ export const FAQ = ({
                 </h4>
                 <p
                   className={cn(
-                    'mt-4 text-muted-foreground',
+                    'text-sm leading-relaxed text-muted-foreground',
                     isRTL && 'text-right font-iran-sans'
                   )}
                 >
@@ -73,6 +80,6 @@ export const FAQ = ({
             ))}
         </div>
       </Container>
-    </div>
+    </section>
   );
 };

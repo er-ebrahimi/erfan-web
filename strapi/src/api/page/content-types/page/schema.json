@@ -67,7 +67,9 @@
         "dynamic-zone.process",
         "dynamic-zone.use-cases",
         "dynamic-zone.metrics",
-        "dynamic-zone.integrations"
+        "dynamic-zone.integrations",
+        "dynamic-zone.case-studies",
+        "dynamic-zone.lead-form"
       ]
     }
   }

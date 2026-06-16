@@ -7,6 +7,7 @@
     "prefix": { "type": "text" },
     "suffix": { "type": "text" },
     "label": { "type": "text" },
-    "icon": { "type": "text" }
+    "icon": { "type": "text" },
+    "note": { "type": "text" }
   }
 }

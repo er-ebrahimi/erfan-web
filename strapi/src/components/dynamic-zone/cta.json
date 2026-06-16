@@ -12,6 +12,7 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.button"
-    }
+    },
+    "reassurance": { "type": "text" }
   }
 }

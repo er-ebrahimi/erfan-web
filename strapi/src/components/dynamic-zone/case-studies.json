@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_dynamic_zone_case_studies",
+  "info": { "displayName": "Case Studies", "icon": "briefcase", "description": "" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "text" },
+    "sub_heading": { "type": "text" },
+    "case_studies": { "type": "component", "repeatable": true, "component": "shared.case-study" }
+  }
+}

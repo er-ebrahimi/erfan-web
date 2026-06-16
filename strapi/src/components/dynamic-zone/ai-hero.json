@@ -6,6 +6,7 @@
     "heading": { "type": "text" },
     "sub_heading": { "type": "text" },
     "badge_text": { "type": "text" },
+    "reassurance": { "type": "text" },
     "CTAs": { "type": "component", "repeatable": true, "component": "shared.button" },
     "Background": { "type": "media", "multiple": false, "allowedTypes": ["images", "files", "videos"] }
   }

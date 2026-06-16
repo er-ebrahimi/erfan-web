@@ -93,7 +93,7 @@ const ProcessRail = ({
         className={cn(
           'absolute overflow-hidden w-[2px]',
           'bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))]',
-          'from-transparent from-[0%] via-neutral-700 to-transparent to-[99%]',
+          'from-transparent from-[0%] via-neutral-300 dark:via-neutral-700 to-transparent to-[99%]',
           '[mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]',
           'top-0',
           sideClass
@@ -105,6 +105,111 @@ const ProcessRail = ({
         />
       </div>
     </div>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Process visual panel — decorative workflow diagram
+// ---------------------------------------------------------------------------
+const ProcessVisual = ({
+  steps,
+  isRTL,
+}: {
+  steps: Step[];
+  isRTL: boolean;
+}) => {
+  return (
+    <motion.div
+      className="relative flex items-center justify-center"
+      initial={{ opacity: 0, x: isRTL ? -24 : 24 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Outer glow blob */}
+      <div className="absolute inset-0 bg-indigo-500/[0.06] dark:bg-indigo-500/[0.08] rounded-3xl blur-3xl pointer-events-none" />
+
+      {/* Card */}
+      <div className="relative w-full max-w-xs rounded-3xl border border-neutral-200/50 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/80 backdrop-blur-sm shadow-xl dark:shadow-[0_8px_48px_rgba(0,0,0,0.5)]">
+        {/* Top accent line */}
+        <div className="absolute top-0 inset-x-0 h-px rounded-t-3xl bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+
+        <div className="p-7">
+          {/* Title */}
+          <div className={cn('flex items-center gap-2 mb-6', isRTL ? 'flex-row-reverse' : 'flex-row')}>
+            <div className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+            <span className="text-xs font-semibold tracking-widest uppercase text-indigo-500 dark:text-indigo-400">
+              {isRTL ? 'گردش‌کار هوش مصنوعی' : 'AI Workflow'}
+            </span>
+          </div>
+
+          {/* Step nodes */}
+          <div className="flex flex-col">
+            {steps.map((step, i) => {
+              const IconComponent = getTablerIcon(step.icon);
+              const isLast = i === steps.length - 1;
+              return (
+                <div key={step.id ?? i}>
+                  {/* Node row */}
+                  <motion.div
+                    className={cn('flex items-center gap-4', isRTL ? 'flex-row-reverse' : 'flex-row')}
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                  >
+                    {/* Icon circle */}
+                    <div className="relative shrink-0 h-11 w-11 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-500/15 to-violet-500/15 border border-indigo-500/25 dark:border-indigo-500/30">
+                      <IconComponent className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                      <div className="absolute inset-0 rounded-full bg-indigo-400/10 blur-sm" />
+                    </div>
+
+                    {/* Text */}
+                    <div className={cn('flex-1', isRTL ? 'text-right' : 'text-left')}>
+                      <div className="text-[10px] font-mono text-neutral-400 dark:text-neutral-500 mb-0.5">
+                        {isRTL ? toPersianIndex(i + 1) : String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div className={cn('text-sm font-semibold text-neutral-800 dark:text-neutral-200', isRTL && 'font-iran-sans')}>
+                        {step.title}
+                      </div>
+                    </div>
+
+                    {/* Status dot */}
+                    <div className="shrink-0 h-2 w-2 rounded-full bg-indigo-500/40 border border-indigo-500/60" />
+                  </motion.div>
+
+                  {/* Connector */}
+                  {!isLast && (
+                    <div className={cn('flex my-1', isRTL ? 'justify-end pr-[18px]' : 'justify-start pl-[18px]')}>
+                      <div className="h-7 w-px bg-gradient-to-b from-indigo-500/40 to-indigo-500/10 rounded-full" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom bar */}
+          <div className="mt-6 pt-4 border-t border-neutral-200/50 dark:border-neutral-700/40">
+            <div className="flex items-center justify-between">
+              <span className={cn('text-[11px] text-neutral-500 dark:text-neutral-400', isRTL && 'font-iran-sans')}>
+                {isRTL ? 'گردش‌کار هوشمند' : 'Intelligent Process'}
+              </span>
+              <div className="flex gap-1">
+                {[0, 1, 2].map((j) => (
+                  <motion.div
+                    key={j}
+                    className="h-1.5 w-1.5 rounded-full bg-indigo-500"
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 1.4, repeat: Infinity, delay: j * 0.2 }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
@@ -143,7 +248,6 @@ const StepCard = ({
 
   const rawWidth = useTransform(scrollYProgress, [0, 0.2], [0, 160]);
   const connectorWidth = useSpring(rawWidth, { stiffness: 500, damping: 90 });
-  // In reduced-motion mode we skip the spring animation
   const displayWidth = reduced ? 160 : connectorWidth;
 
   const IconComponent = getTablerIcon(step.icon);
@@ -161,7 +265,7 @@ const StepCard = ({
         <div
           className={cn(
             'h-12 w-12 rounded-full flex items-center justify-center',
-            'border border-neutral-700 bg-neutral-900 text-neutral-300'
+            'border border-neutral-200 bg-neutral-100 text-neutral-600 dark:border-neutral-700/60 dark:bg-neutral-800 dark:text-neutral-300'
           )}
         >
           {step.icon ? (
@@ -183,7 +287,7 @@ const StepCard = ({
       <motion.div
         className={cn(
           'h-px self-center hidden sm:block',
-          'bg-gradient-to-r from-neutral-800 to-neutral-600 rounded-full',
+          'bg-gradient-to-r from-neutral-300 to-neutral-400 dark:from-neutral-800 dark:to-neutral-600 rounded-full',
           'relative overflow-hidden shrink-0'
         )}
         style={{ width: displayWidth }}
@@ -193,14 +297,15 @@ const StepCard = ({
       <div
         className={cn(
           'group flex-1 p-6 rounded-2xl relative overflow-hidden z-10',
-          'border border-[rgba(255,255,255,0.10)] bg-[rgba(40,40,40,0.30)]',
-          'shadow-[2px_4px_16px_0px_rgba(248,248,248,0.06)_inset]'
+          'border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900',
+          'shadow-md dark:shadow-[0_4px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)]',
+          'hover:border-blue-200 dark:hover:border-blue-900 transition-colors duration-200'
         )}
         onMouseMove={handleMouseMove}
       >
-        {/* Radial-mask CanvasRevealEffect on hover */}
+        {/* Canvas reveal — dark mode only */}
         <motion.div
-          className="pointer-events-none absolute z-10 -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-40"
+          className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-40"
           style={{
             maskImage: useMotionTemplate`radial-gradient(
               300px circle at ${mouseX}px ${mouseY}px,
@@ -224,7 +329,7 @@ const StepCard = ({
         <div className="relative z-20">
           <h3
             className={cn(
-              'text-lg font-semibold text-white mb-2',
+              'text-lg font-semibold text-neutral-900 dark:text-white mb-2',
               isRTL ? 'text-right' : 'text-left'
             )}
           >
@@ -232,7 +337,7 @@ const StepCard = ({
           </h3>
           <p
             className={cn(
-              'text-sm text-neutral-400 leading-relaxed',
+              'text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed',
               isRTL ? 'text-right' : 'text-left'
             )}
           >
@@ -258,7 +363,9 @@ export const Process = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className={cn('py-20', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+    <section className={cn('py-20 relative overflow-hidden', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[400px] h-[300px] bg-blue-600/[0.04] dark:bg-blue-500/[0.06] rounded-full blur-3xl pointer-events-none" />
       <Container>
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-16">
@@ -269,27 +376,33 @@ export const Process = ({
           <Subheading className="max-w-3xl mx-auto">{sub_heading}</Subheading>
         </div>
 
-        {/* Steps */}
+        {/* 2-col layout: steps + visual panel */}
         {steps && steps.length > 0 && (
-          <div
-            ref={containerRef}
-            className={cn(
-              'relative max-w-3xl',
-              isRTL ? 'mr-auto ml-4 pl-4 lg:pl-0 pr-12 lg:pr-16' : 'ml-auto mr-4 pr-4 lg:pr-0 pl-12 lg:pl-16'
-            )}
-          >
-            {/* Scroll-grown vertical rail */}
-            <ProcessRail isRTL={isRTL} containerRef={containerRef} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            {/* Step list */}
+            <div
+              ref={containerRef}
+              className={cn(
+                'relative',
+                isRTL ? 'pr-12 lg:pr-16' : 'pl-12 lg:pl-16'
+              )}
+            >
+              <ProcessRail isRTL={isRTL} containerRef={containerRef} />
+              {steps.map((step, idx) => (
+                <StepCard
+                  key={step.id ?? idx}
+                  step={step}
+                  index={idx + 1}
+                  isRTL={isRTL}
+                  reduced={reduced}
+                />
+              ))}
+            </div>
 
-            {steps.map((step, idx) => (
-              <StepCard
-                key={step.id ?? idx}
-                step={step}
-                index={idx + 1}
-                isRTL={isRTL}
-                reduced={reduced}
-              />
-            ))}
+            {/* Visual panel — hidden on mobile */}
+            <div className="hidden lg:block">
+              <ProcessVisual steps={steps} isRTL={isRTL} />
+            </div>
           </div>
         )}
       </Container>

@@ -140,6 +140,14 @@ const componentMapping: { [key: string]: any } = {
     () => import('./integrations').then((mod) => mod.Integrations),
     { ssr: true }
   ),
+  'dynamic-zone.case-studies': dynamic(
+    () => import('./case-studies').then((mod) => mod.CaseStudies),
+    { ssr: true }
+  ),
+  'dynamic-zone.lead-form': dynamic(
+    () => import('./lead-form').then((mod) => mod.LeadForm),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

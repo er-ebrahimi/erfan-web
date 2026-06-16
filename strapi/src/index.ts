@@ -122,13 +122,14 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
       // ── Section 1: AI Hero ──────────────────────────────────────────────
       {
         __component: 'dynamic-zone.ai-hero',
-        heading: 'راهکارهای هوش مصنوعی که کسب‌وکار شما را متحول می‌کند',
+        heading: 'هوش مصنوعی سفارشی برای کاهش هزینه و افزایش سرعت',
         sub_heading:
-          'از ایده تا استقرار؛ ما عاملان هوشمند، اتوماسیون و تحلیل داده را متناسب با فرایندهای شما طراحی و پیاده‌سازی می‌کنیم.',
+          'از نیازسنجی تا استقرار، عامل‌های هوشمند و اتوماسیون را متناسب با فرایندهای شما می‌سازیم؛ امن، یکپارچه و با نتایج قابل‌اندازه‌گیری.',
         badge_text: 'استودیو هوش مصنوعی',
+        reassurance: 'بدون تعهد؛ ظرف ۲۴ ساعت پاسخ می‌دهیم.',
         CTAs: [
-          { text: 'شروع پروژه', URL: '/contact', variant: 'primary' },
-          { text: 'مشاوره‌ی رایگان', URL: '/contact', variant: 'outline' },
+          { text: 'رزرو جلسه‌ی ۳۰ دقیقه‌ای رایگان', URL: '/contact', variant: 'primary' },
+          { text: 'نمونه‌کارها', URL: '/projects', variant: 'outline' },
         ],
       },
 
@@ -221,7 +222,7 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
       {
         __component: 'dynamic-zone.use-cases',
         heading: 'کاربردها در صنایع مختلف',
-        sub_heading: 'نمونه‌هایی از آنچه می‌توان ساخت.',
+        sub_heading: 'کاربردهایی که در صنایع مختلف پیاده‌سازی می‌کنیم.',
         use_cases: [
           {
             title: 'پشتیبانی مشتری هوشمند',
@@ -260,7 +261,7 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
       {
         __component: 'dynamic-zone.metrics',
         heading: 'نتایجی که می‌سازیم',
-        sub_heading: 'اعداد واقعی از پروژه‌های اجرا شده.',
+        sub_heading: 'نمونه‌ای از تأثیری که هوش مصنوعی می‌تواند بر شاخص‌های کلیدی بگذارد.',
         metrics: [
           {
             value: 40,
@@ -275,16 +276,18 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
             icon: 'IconBolt',
           },
           {
-            value: 2000,
-            suffix: '+',
-            label: 'ساعت صرفه‌جویی در سال',
-            icon: 'IconClock',
+            value: 95,
+            suffix: '٪',
+            label: 'دقت تشخیص نقص',
+            icon: 'IconEye',
+            note: 'منبع: پروژه‌ی بازرسی بصری',
           },
           {
-            value: 98,
+            value: 60,
             suffix: '٪',
-            label: 'رضایت کاربران',
-            icon: 'IconMoodSmile',
+            label: 'کاهش زمان بازرسی',
+            icon: 'IconClock',
+            note: 'منبع: پروژه‌ی بازرسی بصری',
           },
         ],
       },
@@ -315,12 +318,38 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
       },
 
       // ── Section 8: CTA closer ───────────────────────────────────────────
+      // ── Section 8: Case studies (real work) ─────────────────────────────
       {
-        __component: 'dynamic-zone.cta',
-        CTAs: [
-          { text: 'مشاوره رایگان', URL: '/contact', variant: 'primary' },
-          { text: 'نمونه کارها', URL: '/projects', variant: 'outline' },
+        __component: 'dynamic-zone.case-studies',
+        heading: 'نمونه‌کارها',
+        sub_heading: 'چند نمونه از پروژه‌هایی که اجرا کرده‌ایم.',
+        case_studies: [
+          {
+            title: 'بازرسی بصری هوشمند خط تولید',
+            category: 'تولید',
+            summary:
+              'در خط تولید، هر ثانیه مهم است. یک سامانه‌ی کنترل کیفیت بصری هوش مصنوعی به‌صورت درون‌سازمانی پیاده کردیم که لبه‌ها را تشخیص و سوراخ‌ها را در لحظه می‌شمارد، برچسب واضح PASS/FAIL می‌زند و فریم‌ها و ماسک‌ها را برای ممیزی ذخیره می‌کند. داشبورد React و گزارش‌های روزانه‌ی KPI، دقت و نرخ خطا را به تفکیک مدل دنبال می‌کنند.',
+            outcomes: ['~۹۵٪ دقت تشخیص', '~۶۰٪ کاهش زمان بازرسی', 'درون‌سازمانی و شیفت‌پایدار'],
+            tags: ['Computer Vision', 'OpenCV', 'Python', 'Object Detection'],
+          },
+          {
+            title: 'استخراج هوشمند اطلاعات از رسیدهای دست‌نویس فارسی',
+            category: 'مالی و حسابداری',
+            summary:
+              'افزونه‌ی مرورگر به‌همراه سرویس هوش مصنوعی که تصویر رسید را با OCR می‌خواند، فیلدهای کلیدی (نام کالا، مبلغ، جمع کل) را استخراج و فرم مقصد را به‌صورت خودکار تکمیل می‌کند؛ با امکان اصلاح دستی و ثبت KPI. قابل توسعه به انبارداری و لجستیک، سیستم‌های ERP و پردازش اسناد دست‌نویس فارسی.',
+            outcomes: ['تکمیل خودکار فرم', 'اصلاح دستی + پایش KPI', 'قابل‌توسعه به ERP/انبار'],
+            tags: ['OCR', 'NLP', 'Python', 'Document AI'],
+          },
         ],
+      },
+
+      // ── Section 9: Lead form (inline closer) ────────────────────────────
+      {
+        __component: 'dynamic-zone.lead-form',
+        heading: 'آماده‌اید هوش مصنوعی را وارد کسب‌وکار خود کنید؟',
+        sub_heading:
+          'یک پیام کوتاه بفرستید تا نیازتان را بررسی کنیم و مسیر شروع را پیشنهاد دهیم.',
+        reassurance: 'بدون تعهد؛ ظرف ۲۴ ساعت پاسخ می‌دهیم.',
       },
     ];
 

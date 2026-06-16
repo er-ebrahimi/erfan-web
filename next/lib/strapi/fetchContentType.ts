@@ -59,9 +59,12 @@ async function fetchWithRetry(
         (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT');
 
       if (!isTimeout) {
-        console.error(
-          `[FETCH_STRAPI] Non-timeout error on attempt ${attempt}/${retries} [${url}] after ${elapsed}ms — not retrying`
-        );
+        const isRefused = axios.isAxiosError(error) && error.code === 'ECONNREFUSED';
+        if (!isRefused) {
+          console.error(
+            `[FETCH_STRAPI] Non-timeout error on attempt ${attempt}/${retries} [${url}] after ${elapsed}ms — not retrying`
+          );
+        }
         throw error;
       }
 
@@ -121,7 +124,8 @@ export default async function fetchContentType(
       logData.stack = error.stack;
     }
 
-    console.error(
+    const isRefused = axios.isAxiosError(error) && error.code === 'ECONNREFUSED';
+    (isRefused ? console.warn : console.error)(
       `[FETCH_STRAPI] Failed to fetch [${contentType}] after ${elapsed}ms`,
       JSON.stringify(logData, null, 2)
     );

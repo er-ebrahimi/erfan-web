@@ -27,7 +27,8 @@ interface CarouselProps {
 }
 
 type Card = {
-  src: string;
+  src?: string;
+  visual?: React.ReactNode;
   title: string;
   category: string;
   content: React.ReactNode;
@@ -51,11 +52,19 @@ export const Carousel = ({ items, initialScroll = 0, isRTL = true }: CarouselPro
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollLeft = initialScroll;
-      requestAnimationFrame(checkScrollability);
-    }
-  }, [initialScroll]);
+    if (!carouselRef.current) return;
+    const el = carouselRef.current;
+    // Use rAF so scrollWidth is computed after first paint.
+    // dir="ltr" on the scroll container normalises scroll coords (0=left, max=right).
+    // For RTL carousels we start at max so the first card (rightmost) is visible.
+    // setTimeout(0) defers until after Framer Motion init and Strict Mode double-mount.
+    // Direct scrollLeft= fails in RTL parent contexts; scrollTo() works.
+    const id = setTimeout(() => {
+      el.scrollTo({ left: isRTL ? el.scrollWidth - el.clientWidth : initialScroll, behavior: 'instant' });
+      checkScrollability();
+    }, 0);
+    return () => clearTimeout(id);
+  }, [initialScroll, isRTL]);
 
   const checkScrollability = () => {
     if (carouselRef.current) {
@@ -103,18 +112,11 @@ export const Carousel = ({ items, initialScroll = 0, isRTL = true }: CarouselPro
           className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
           ref={carouselRef}
           onScroll={checkScrollability}
+          dir="ltr"
         >
           <div
-            className={cn(
-              'absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l'
-            )}
-          ></div>
-
-          <div
-            className={cn(
-              'flex flex-row justify-start gap-4 pl-4',
-              'mx-auto max-w-7xl' // remove max-w-4xl if you want the carousel to span the full width of its container
-            )}
+            className="flex flex-row gap-4 px-10"
+            dir={isRTL ? 'rtl' : 'ltr'}
           >
             {items.map((item, index) => (
               <motion.div
@@ -132,7 +134,7 @@ export const Carousel = ({ items, initialScroll = 0, isRTL = true }: CarouselPro
                   },
                 }}
                 key={'card' + index}
-                className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
+                className="rounded-3xl"
               >
                 {item}
               </motion.div>
@@ -141,22 +143,22 @@ export const Carousel = ({ items, initialScroll = 0, isRTL = true }: CarouselPro
         </div>
         <div className="flex justify-center gap-2">
           <button
-            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
+            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
             title="Scroll left"
           >
-            <IconArrowNarrowLeft className="h-6 w-6 text-gray-500" />
+            <IconArrowNarrowLeft className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />
           </button>
           <button
-            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
+            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
             aria-label="Scroll right"
             title="Scroll right"
           >
-            <IconArrowNarrowRight className="h-6 w-6 text-gray-500" />
+            <IconArrowNarrowRight className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />
           </button>
         </div>
       </div>
@@ -258,7 +260,7 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[40rem] md:w-96 dark:bg-neutral-900"
+        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-neutral-100 md:h-[40rem] md:w-96 dark:bg-neutral-900"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
         <div className="relative z-40 p-8">
@@ -275,12 +277,16 @@ export const Card = ({
             {card.title}
           </motion.p>
         </div>
-        <BlurImage
-          src={card.src}
-          alt={card.title}
-          fill
-          className="absolute inset-0 z-10 object-cover"
-        />
+        {card.visual ? (
+          <div className="absolute inset-0 z-10">{card.visual}</div>
+        ) : (
+          <BlurImage
+            src={card.src ?? ''}
+            alt={card.title}
+            fill
+            className="absolute inset-0 z-10 object-cover"
+          />
+        )}
       </motion.button>
     </>
   );
@@ -294,19 +300,13 @@ export const BlurImage = ({
   alt,
   ...rest
 }: ImageProps) => {
-  const [isLoading, setLoading] = useState(true);
   return (
     <Image
-      className={cn(
-        'h-full w-full transition duration-300',
-        isLoading ? 'blur-sm' : 'blur-0',
-        className
-      )}
-      onLoad={() => setLoading(false)}
+      className={cn('h-full w-full', className)}
       src={src as string}
       width={width}
       height={height}
-      loading="lazy"
+      loading="eager"
       decoding="async"
       alt={alt ? alt : 'Background of a beautiful view'}
       {...rest}

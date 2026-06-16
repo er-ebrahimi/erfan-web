@@ -90,15 +90,16 @@ const CapabilityCard = ({
       className={cn(
         colSpan,
         'group relative overflow-hidden rounded-3xl',
-        'border border-[rgba(255,255,255,0.10)] bg-[rgba(40,40,40,0.30)]',
-        'shadow-[2px_4px_16px_0px_rgba(248,248,248,0.06)_inset]',
+        'border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900',
+        'shadow-md dark:shadow-[0_4px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)]',
+        'hover:border-indigo-200 dark:hover:border-indigo-900 transition-colors duration-200',
         'p-8 min-h-[16rem] flex flex-col'
       )}
       onMouseMove={handleMouseMove}
     >
-      {/* Hover canvas reveal behind a radial cursor mask */}
+      {/* Canvas reveal — dark mode only; looks wrong on white cards */}
       <motion.div
-        className="pointer-events-none absolute z-10 -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-40"
+        className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-40"
         style={{
           maskImage: useMotionTemplate`radial-gradient(
             300px circle at ${mouseX}px ${mouseY}px,
@@ -130,7 +131,7 @@ const CapabilityCard = ({
 
         <h3
           className={cn(
-            'text-lg font-semibold text-white mt-2',
+            'text-lg font-semibold text-neutral-900 dark:text-white mt-2',
             isRTL ? 'text-right' : 'text-left'
           )}
         >
@@ -138,7 +139,7 @@ const CapabilityCard = ({
         </h3>
         <p
           className={cn(
-            'text-sm text-neutral-400 leading-relaxed',
+            'text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed',
             isRTL ? 'text-right' : 'text-left'
           )}
         >
@@ -159,9 +160,13 @@ export const Capabilities = ({
 
   return (
     <section
-      className={cn('py-20', fontClass)}
+      className={cn('py-20 relative overflow-hidden', fontClass)}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
+      {/* Top accent line */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+      {/* Radial glow */}
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-600/[0.05] dark:bg-indigo-500/[0.07] rounded-full blur-3xl pointer-events-none" />
       <Container>
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-12">
@@ -174,7 +179,7 @@ export const Capabilities = ({
 
         {/* Bento grid */}
         {capabilities && capabilities.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {capabilities.map((cap) => (
               <CapabilityCard
                 key={cap.id ?? cap.title}

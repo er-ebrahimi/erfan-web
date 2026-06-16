@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_case_studies",
+  "info": { "displayName": "Case Study", "icon": "briefcase", "description": "" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "text" },
+    "category": { "type": "text" },
+    "summary": { "type": "text" },
+    "outcomes": { "type": "json" },
+    "tags": { "type": "json" },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images", "files", "videos"] }
+  }
+}

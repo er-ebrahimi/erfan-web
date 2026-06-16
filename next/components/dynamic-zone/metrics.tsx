@@ -25,6 +25,7 @@ interface Metric {
   suffix?: string;
   label: string;
   icon?: string;
+  note?: string;
 }
 
 interface MetricsProps {
@@ -103,29 +104,36 @@ const MetricCard = ({
       ref={ref}
       className={cn(
         'flex flex-col items-center justify-center gap-3 p-6',
-        'rounded-3xl border border-[rgba(255,255,255,0.10)] bg-[rgba(40,40,40,0.30)]',
-        'shadow-[2px_4px_16px_0px_rgba(248,248,248,0.06)_inset]',
+        'rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900',
+        'shadow-md dark:shadow-[0_4px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)]',
         'text-center min-h-[10rem]'
       )}
     >
       {metric.icon && (
-        <div className="flex items-center justify-center h-10 w-10 rounded-full border border-neutral-700 bg-neutral-900 text-neutral-300 mb-1">
+        <div className="flex items-center justify-center h-10 w-10 rounded-full border border-neutral-200 bg-neutral-100 text-neutral-600 dark:border-neutral-700/60 dark:bg-neutral-800 dark:text-indigo-300 mb-1">
           <IconComponent className="h-5 w-5" />
         </div>
       )}
 
       <motion.span
         className={cn(
-          'text-4xl font-bold text-white tabular-nums',
+          'text-4xl font-bold tabular-nums',
+          'text-neutral-900 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-br dark:from-white dark:to-indigo-300',
           isRTL ? 'font-iran-sans' : ''
         )}
       >
         {displayText}
       </motion.span>
 
-      <span className={cn('text-sm text-neutral-400', isRTL ? 'font-iran-sans' : '')}>
+      <span className={cn('text-sm text-neutral-600 dark:text-neutral-400', isRTL ? 'font-iran-sans' : '')}>
         {metric.label}
       </span>
+
+      {metric.note && (
+        <span className={cn('text-[11px] text-neutral-400 dark:text-neutral-500', isRTL ? 'font-iran-sans' : '')}>
+          {metric.note}
+        </span>
+      )}
     </div>
   );
 };
@@ -142,7 +150,9 @@ export const Metrics = ({
   const { fontClass, isRTL } = getLocaleConfig(locale);
 
   return (
-    <section className={cn('py-20', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+    <section className={cn('py-20 relative overflow-hidden', fontClass)} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-violet-600/[0.04] dark:bg-violet-500/[0.07] rounded-full blur-3xl pointer-events-none" />
       <Container>
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-12">

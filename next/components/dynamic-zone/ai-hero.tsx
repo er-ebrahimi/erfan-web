@@ -29,6 +29,7 @@ interface AiHeroProps {
   heading: string;
   sub_heading: string;
   badge_text?: string;
+  reassurance?: string;
   CTAs?: CTA[];
   Background?: any;
   locale: string;
@@ -38,6 +39,7 @@ export const AiHero = ({
   heading,
   sub_heading,
   badge_text,
+  reassurance,
   CTAs,
   Background,
   locale,
@@ -99,52 +101,68 @@ export const AiHero = ({
         )}
       </div>
 
+      {/* Large glow bloom behind content */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-indigo-600/[0.12] rounded-full blur-[120px] pointer-events-none" />
+
       {/* Content */}
       <Container className="relative z-10 flex flex-col items-center text-center py-20">
         {/* Eyebrow pill */}
         {badge_text && (
           <div className="mb-6">
-            <span className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm text-neutral-300 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-950/50 px-4 py-1.5 text-sm text-indigo-300 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
               {badge_text}
             </span>
           </div>
         )}
 
-        {/* Heading */}
-        <Heading
-          as="h1"
-          size="xl"
-          className="text-white relative z-10 mt-2"
+        {/* Heading — gradient white→violet */}
+        <h1
+          className={cn(
+            'relative z-10 mt-2 font-bold leading-tight tracking-tight text-balance',
+            'text-4xl md:text-5xl lg:text-6xl',
+            'bg-gradient-to-br from-white via-white to-violet-300 bg-clip-text text-transparent',
+            isRTL ? 'font-iran-sans' : ''
+          )}
         >
           {beforeLastWord && <>{beforeLastWord} </>}
-          <Cover>{lastWord}</Cover>
-        </Heading>
+          <Cover className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-300 to-violet-400">{lastWord}</Cover>
+        </h1>
 
         {/* Subheading */}
-        <Subheading className="mt-4 text-neutral-300 max-w-2xl mx-auto relative z-10">
+        <Subheading className="mt-6 text-neutral-400 max-w-2xl mx-auto relative z-10">
           {sub_heading}
         </Subheading>
 
         {/* CTAs */}
         {CTAs && CTAs.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8 relative z-10">
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-10 relative z-10">
             {CTAs.map((cta) => {
               const href = cta.URL?.startsWith('http')
                 ? cta.URL
                 : `/${locale}${cta.URL}`;
+              const isPrimary = (cta.variant ?? 'primary') === 'primary';
               return (
-                <Button
-                  key={cta.id ?? cta.text}
-                  as={Link}
-                  href={href}
-                  variant={cta.variant ?? 'primary'}
-                  {...(cta.target ? { target: cta.target } : {})}
-                >
-                  {cta.text}
-                </Button>
+                <span key={cta.id ?? cta.text} className={isPrimary ? 'shadow-[0_0_32px_rgba(99,102,241,0.5)]' : ''}>
+                  <Button
+                    as={Link}
+                    href={href}
+                    variant={cta.variant ?? 'primary'}
+                    {...(cta.target ? { target: cta.target } : {})}
+                  >
+                    {cta.text}
+                  </Button>
+                </span>
               );
             })}
           </div>
+        )}
+
+        {/* Risk-reversal microcopy under the CTAs */}
+        {reassurance && (
+          <p className="mt-4 text-xs text-neutral-500 relative z-10">
+            {reassurance}
+          </p>
         )}
       </Container>
 
