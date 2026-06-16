@@ -196,7 +196,6 @@ export function NavbarMenu({
     return newSegments.join('/');
   };
 
-
   return (
     <>
       {/* Mobile View: Inline Trigger inside Top Right Container */}
@@ -218,8 +217,6 @@ export function NavbarMenu({
             <div className="flex flex-col gap-4 mt-6 pb-6">
               {/* Left Navbar Items — Home first */}
               {leftNavbarItems
-                ?.slice()
-                .sort((a, b) => (a.URL === "/" ? -1 : b.URL === "/" ? 1 : 0))
                 .map((item, index) => (
                   <MobileNavItem key={`left-${index}`} item={item} locale={locale} onClose={() => setSheetOpen(false)} />
                 ))}
@@ -237,20 +234,20 @@ export function NavbarMenu({
                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   >
                     <div className="relative h-4 w-4 mr-1">
-                    <IconSun
-                      className="
+                      <IconSun
+                        className="
       absolute
       rotate-0 scale-100
       dark:-rotate-90 dark:scale-0 h-4 w-4
     "
-                    />
-                    <IconMoon
-                      className="
+                      />
+                      <IconMoon
+                        className="
       absolute
       rotate-90 scale-0
       dark:rotate-0 dark:scale-100  h-4 w-4
     "
-                    />
+                      />
                     </div>
                     <span>{theme === 'dark' ? t('lightMode') : t('darkMode')}</span>
                   </div>
@@ -297,11 +294,11 @@ export function NavbarMenu({
       </div>
 
       {/* Desktop View: Traditional Navbar */}
-      <div className="hidden md:flex w-fit justify-center" dir={dir}>
+      <div className="hidden md:flex w-fit justify-center">
         <NavigationMenu viewport={false} delayDuration={200}>
-          <NavigationMenuList className="flex-nowrap gap-1 whitespace-nowrap">
+          <NavigationMenuList className="flex-nowrap gap-1 whitespace-nowrap rtl:flex-row-reverse">
             {/* Left Navbar Items */}
-            {leftNavbarItems?.map((item, index) => {
+            { leftNavbarItems?.map((item, index) => {
               if (item.children && item.children.length > 0) {
                 return (
                   <NavigationMenuItem key={`left-${index}`}>

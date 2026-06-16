@@ -19,7 +19,7 @@ export async function generateMetadata(props: {
         slug: params.slug,
         locale: params.locale,
       },
-      populate: "seo.metaImage",
+      populate: "seo",
     },
     true
   );

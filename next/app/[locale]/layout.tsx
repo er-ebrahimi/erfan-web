@@ -8,7 +8,6 @@ import React from 'react';
 import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
-import { AuthProvider } from '@/context/auth-context';
 import { CartProvider } from '@/context/cart-context';
 import { routing } from '@/i18n/routing';
 import { getFontForLocale } from '@/lib/fonts';
@@ -16,6 +15,7 @@ import { getLocaleClasses } from '@/lib/rtl-utils';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
 
+export const revalidate = 60;
 
 export default async function LocaleLayout(props: {
   children: React.ReactNode;
@@ -78,7 +78,6 @@ export default async function LocaleLayout(props: {
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
             <CartProvider>
               <div
                 className={cn(
@@ -99,7 +98,6 @@ export default async function LocaleLayout(props: {
                 <Footer data={pageData.footer} locale={locale} />
               </div>
             </CartProvider>
-          </AuthProvider>
         </ThemeProvider>
       </ViewTransitions>
     </NextIntlClientProvider>

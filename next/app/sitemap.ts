@@ -3,6 +3,8 @@ import { type MetadataRoute } from 'next';
 import { locales } from '@/config';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
+export const revalidate = 86400; // 24 hours
+
 const BASE_URL = 'https://studioarman.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -26,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    const res = await fetchContentType('articles', { populate: '' }, false);
+    const res = await fetchContentType('articles', { pagination: { pageSize: 1000 }, fields: ['slug', 'updatedAt', 'publishedAt'], populate: false, status: 'published' }, false);
     const articles: any[] = res?.data ?? [];
 
     for (const article of articles) {

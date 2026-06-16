@@ -4,6 +4,7 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: false,
   compress: true,
   output: 'standalone',
   logging: {
@@ -22,8 +23,8 @@ const nextConfig = {
 
   ],
   images: {
-    unoptimized: process.env.NODE_ENV === 'development',
-    deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    // unoptimized: process.env.NODE_ENV === 'development',
+    deviceSizes: [384, 640, 750, 828, 1080, 1200, 1248, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
@@ -61,17 +62,15 @@ const nextConfig = {
         hostname: 'host.docker.internal',
         port: '8080',
         pathname: '/uploads/**',
-      }, 
+      },
       {
         protocol: 'https',
         hostname: 'strapi.studioarman.com',
-        port: '443',
         pathname: '/uploads/**',
       },
-       {
+      {
         protocol: 'http',
         hostname: 'strapi.studioarman.com',
-        port: '80',
         pathname: '/uploads/**',
       },
       {
@@ -118,7 +117,7 @@ const nextConfig = {
         return {
           source: `/:locale${source}`,
           destination: `/:locale${destination}`,
-          permanent: false,
+          permanent: true,
         };
       });
 

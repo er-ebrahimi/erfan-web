@@ -48,8 +48,9 @@ export async function BlogLayout({
             src={article.image.url}
             alt={article.title}
             fill
+            quality={90}
             loading="lazy"
-            sizes="(max-width: 768px) calc(100vw - 2rem), 384px"
+            sizes="(max-width: 768px) calc(100vw - 2rem),1248px"
             className="object-cover dark:[mask-image:radial-gradient(circle,white,transparent)]"
           />
         ) : (
