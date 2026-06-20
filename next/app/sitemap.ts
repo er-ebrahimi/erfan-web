@@ -50,7 +50,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    const res = await fetchContentType('articles', { populate: '' }, false);
+    const res = await fetchContentType(
+      'articles',
+      { locale: 'fa', pagination: { pageSize: 100 } },
+      false
+    );
     const articles: any[] = res?.data ?? [];
 
     for (const article of articles) {

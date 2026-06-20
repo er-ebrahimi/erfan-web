@@ -104,7 +104,7 @@ export default async function Blog(props: {
           />;
         })}
 
-        <BlogPostRows articles={articles.data.filter((article: Article) => article.slug.includes('blog')).map((article: Article) => article)} />
+        <BlogPostRows articles={articles.data.slice(1)} />
       </Container>
     </div>
   );

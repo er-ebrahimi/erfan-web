@@ -574,6 +574,7 @@ async function seedGlobalFa(strapi: Core.Strapi): Promise<void> {
 
     const navMain = [
       { text: 'راهکارهای هوش مصنوعی', URL: '/ai-solutions' },
+      { text: 'وبلاگ', URL: '/category/blog' },
       { text: 'تماس با ما', URL: '/contact' },
     ];
 
@@ -591,6 +592,7 @@ async function seedGlobalFa(strapi: Core.Strapi): Promise<void> {
         internal_links: [
           { text: 'راهکارهای هوش مصنوعی', URL: '/ai-solutions' },
           { text: 'نمونه‌کارها', URL: '/ai-solutions' },
+          { text: 'وبلاگ', URL: '/category/blog' },
           { text: 'تماس با ما', URL: '/contact' },
         ],
         policy_links: [],
@@ -655,6 +657,193 @@ async function seedFaLocalizations(strapi: Core.Strapi): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Persian blog seed (SEO). The template ships a complete blog engine
+// (article / blog-page / category types + routes + sitemap) but zero fa
+// content. This creates a shared category, a localized blog landing page, and
+// SEO-scaffold articles: each has a real Persian title/slug/meta + BlogPosting
+// JSON-LD + an H2 section outline for the owner to fill in (chosen: scaffold,
+// owner writes the prose). Idempotent — skips if any fa article exists.
+// ---------------------------------------------------------------------------
+const SITE_URL = 'https://studioarman.com';
+
+// Build a Strapi "blocks" body: intro paragraph + an H2 per section, each with
+// a placeholder paragraph prompting the owner to write.
+function blogScaffoldBody(intro: string, sections: string[]): any[] {
+  return [
+    { type: 'paragraph', children: [{ type: 'text', text: intro }] },
+    ...sections.flatMap((h) => [
+      { type: 'heading', level: 2, children: [{ type: 'text', text: h }] },
+      { type: 'paragraph', children: [{ type: 'text', text: '(این بخش را بنویسید.)' }] },
+    ]),
+  ];
+}
+
+function blogPostingLd(title: string, description: string, slug: string): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    inLanguage: 'fa-IR',
+    author: { '@type': 'Organization', name: 'استودیو آرمان', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'استودیو آرمان', url: SITE_URL },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/fa/category/${slug}` },
+  };
+}
+
+const FA_BLOG_ARTICLES = [
+  {
+    title: 'اتوماسیون فرایندها با هوش مصنوعی: چگونه هزینه را کم و سرعت را زیاد کنیم',
+    slug: 'ai-process-automation-cost-speed',
+    description:
+      'چطور با اتوماسیون مبتنی بر هوش مصنوعی کارهای تکراری را حذف کنیم، هزینه‌ها را کاهش دهیم و سرعت عملیات را بالا ببریم.',
+    metaTitle: 'اتوماسیون فرایندها با هوش مصنوعی | استودیو آرمان',
+    metaDescription:
+      'راهنمای کاهش هزینه و افزایش سرعت کسب‌وکار با اتوماسیون هوشمند فرایندها؛ از انتخاب فرایند مناسب تا پیاده‌سازی و نتایج قابل‌اندازه‌گیری.',
+    intro:
+      'در این مقاله بررسی می‌کنیم اتوماسیون مبتنی بر هوش مصنوعی چطور می‌تواند هزینه‌های عملیاتی را کاهش و سرعت کار را افزایش دهد.',
+    sections: [
+      'کدام فرایندها برای اتوماسیون مناسب‌ترند؟',
+      'تفاوت اتوماسیون هوشمند با روش‌های سنتی',
+      'گام‌های پیاده‌سازی در کسب‌وکار شما',
+      'نمونه‌ی واقعی و نتایج قابل‌اندازه‌گیری',
+      'جمع‌بندی و گام بعدی',
+    ],
+  },
+  {
+    title: 'بازرسی کیفیت با بینایی ماشین: کنترل کیفیتِ دقیق‌تر و سریع‌تر',
+    slug: 'computer-vision-quality-inspection',
+    description:
+      'بینایی ماشین چگونه نقص‌ها را با دقت بالا تشخیص می‌دهد و زمان بازرسی کیفیت را به‌طور چشمگیری کوتاه می‌کند.',
+    metaTitle: 'بازرسی کیفیت با بینایی ماشین | استودیو آرمان',
+    metaDescription:
+      'کاربرد بینایی ماشین در کنترل کیفیت خط تولید؛ تشخیص دقیق نقص، کاهش زمان بازرسی و الزامات داده برای پیاده‌سازی.',
+    intro:
+      'بینایی ماشین به سامانه‌ها اجازه می‌دهد محصولات را با سرعت و دقتی فراتر از بازرسی دستی بررسی کنند. در این مقاله می‌بینیم چطور.',
+    sections: [
+      'بینایی ماشین چیست و چطور کار می‌کند؟',
+      'کاربردها در خط تولید',
+      'دقت تشخیص نقص و کاهش زمان بازرسی',
+      'الزامات داده و مراحل پیاده‌سازی',
+      'جمع‌بندی',
+    ],
+  },
+  {
+    title: 'OCR فارسی: دیجیتال‌سازی هوشمند اسناد و فاکتورها',
+    slug: 'persian-ocr-document-digitization',
+    description:
+      'تبدیل اسناد و فاکتورهای فارسی — حتی دست‌نویس — به داده‌ی ساختاریافته و قابل‌جست‌وجو با OCR مبتنی بر هوش مصنوعی.',
+    metaTitle: 'OCR فارسی برای دیجیتال‌سازی اسناد | استودیو آرمان',
+    metaDescription:
+      'چطور OCR فارسیِ مبتنی بر هوش مصنوعی، اسناد و فاکتورهای کاغذی را به داده‌ی ساختاریافته تبدیل می‌کند؛ چالش‌ها، کاربردها و ملاحظات امنیت داده.',
+    intro:
+      'پردازش متن فارسی، به‌ویژه دست‌نوشته‌ها، چالش‌های خاص خود را دارد. در این مقاله مسیر تبدیل تصویر به داده‌ی ساختاریافته را مرور می‌کنیم.',
+    sections: [
+      'چرا OCR فارسی دشوارتر است؟',
+      'از تصویر تا داده‌ی ساختاریافته',
+      'کاربرد در فاکتورها و اسناد مالی',
+      'دقت، اعتبارسنجی و امنیت داده',
+      'جمع‌بندی',
+    ],
+  },
+  {
+    title: 'هوش مصنوعی برای کسب‌وکارها: از کجا شروع کنیم؟',
+    slug: 'ai-for-business-getting-started',
+    description:
+      'راهنمای گام‌به‌گام شروع استفاده از هوش مصنوعی در کسب‌وکارهای کوچک و متوسط، بدون اتلاف بودجه و زمان.',
+    metaTitle: 'هوش مصنوعی برای کسب‌وکارها | استودیو آرمان',
+    metaDescription:
+      'راهنمای عملی شروع هوش مصنوعی در کسب‌وکار؛ شناسایی فرصت‌ها، حرکت از نمونه‌ی اولیه تا استقرار و دوری از اشتباه‌های رایج.',
+    intro:
+      'برای بیشتر کسب‌وکارها سؤال این نیست که «آیا» از هوش مصنوعی استفاده کنیم، بلکه «از کجا» شروع کنیم. این راهنما به همین می‌پردازد.',
+    sections: [
+      'چرا اکنون زمان مناسبی برای هوش مصنوعی است؟',
+      'شناسایی فرصت‌ها در کسب‌وکار شما',
+      'از نمونه‌ی اولیه تا استقرار',
+      'اشتباه‌های رایج و راه دوری از آن‌ها',
+      'جمع‌بندی و گام بعدی',
+    ],
+  },
+];
+
+async function seedBlogFa(strapi: Core.Strapi): Promise<void> {
+  if (process.env.SEED_AI_SOLUTIONS !== 'true') return;
+  try {
+    // Per-slug idempotency: create only the articles that don't exist yet, so
+    // a partial/interrupted run can be completed by re-seeding.
+    const existing = await strapi.documents('api::article.article').findMany({ locale: 'fa' });
+    const existingSlugs = new Set(existing.map((a: any) => a.slug));
+
+    // Shared (non-localized) category — safe to link from fa articles.
+    const cats = await strapi.documents('api::category.category').findMany({
+      filters: { name: 'هوش مصنوعی' },
+    });
+    const category: any =
+      cats[0] ||
+      (await (strapi.documents('api::category.category') as any).create({
+        data: { name: 'هوش مصنوعی' },
+        status: 'published',
+      }));
+
+    let created = 0;
+    for (const a of FA_BLOG_ARTICLES) {
+      if (existingSlugs.has(a.slug)) continue;
+      await (strapi.documents('api::article.article') as any).create({
+        locale: 'fa',
+        status: 'published',
+        data: {
+          title: a.title,
+          slug: a.slug,
+          description: a.description,
+          categories: category ? [category.documentId] : [],
+          seo: {
+            metaTitle: a.metaTitle,
+            metaDescription: a.metaDescription,
+            structuredData: blogPostingLd(a.title, a.description, a.slug),
+          },
+          dynamic_zone: [
+            { __component: 'shared.content', content: blogScaffoldBody(a.intro, a.sections) },
+          ],
+        },
+      });
+      created += 1;
+    }
+    strapi.log.info(`[seed] fa blog articles: created ${created}, already present ${existingSlugs.size}`);
+
+    // Localize the blog landing page (single type) to Persian.
+    const enBlog: any = await (strapi.documents('api::blog-page.blog-page') as any).findFirst({
+      locale: 'en',
+    });
+    const blogData = {
+      heading: 'وبلاگ',
+      sub_heading: 'مقاله‌ها و راهنماهایی درباره‌ی هوش مصنوعی برای کسب‌وکارها.',
+      seo: {
+        metaTitle: 'وبلاگ استودیو آرمان | هوش مصنوعی برای کسب‌وکارها',
+        metaDescription:
+          'راهنماها و مقاله‌هایی درباره‌ی اتوماسیون، بینایی ماشین و راهکارهای هوش مصنوعی سفارشی برای کسب‌وکارها.',
+      },
+    };
+    if (enBlog) {
+      await (strapi.documents('api::blog-page.blog-page') as any).update({
+        documentId: enBlog.documentId,
+        locale: 'fa',
+        status: 'published',
+        data: blogData,
+      });
+    } else {
+      await (strapi.documents('api::blog-page.blog-page') as any).create({
+        locale: 'fa',
+        status: 'published',
+        data: blogData,
+      });
+    }
+    strapi.log.info('[seed] localized fa blog-page');
+  } catch (e) {
+    strapi.log.warn(`[seed] blog seed failed (non-fatal): ${e}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Strapi lifecycle hooks
 // ---------------------------------------------------------------------------
 
@@ -678,5 +867,6 @@ export default {
     await seedAiSolutionsPage(strapi);
     await seedGlobalFa(strapi);
     await seedFaLocalizations(strapi);
+    await seedBlogFa(strapi);
   },
 };
