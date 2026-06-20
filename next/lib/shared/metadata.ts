@@ -1,6 +1,8 @@
+import { Metadata } from 'next';
+
 import { strapiImage } from '../strapi/strapiImage';
 
-export function generateMetadataObject(seo: any) {
+export function generateMetadataObject(seo: any): Metadata {
   return {
     title: seo?.metaTitle || 'Default Title',
     description: seo?.metaDescription || 'Default Description',
@@ -13,10 +15,15 @@ export function generateMetadataObject(seo: any) {
       ? { canonical: seo.canonicalURL }
       : undefined,
     openGraph: {
+      type: 'website',
       title: seo?.ogTitle || seo?.metaTitle || 'Default OG Title',
       description:
         seo?.ogDescription || seo?.metaDescription || 'Default OG Description',
-      images: seo?.metaImage ? [{ url: strapiImage(seo?.metaImage.url) }] : [],
+      url: seo?.canonicalURL || undefined,
+      siteName: 'استودیو آرمان',
+      images: seo?.metaImage
+        ? [{ url: strapiImage(seo?.metaImage.url) }]
+        : [{ url: 'https://studioarman.com/og/default.png' }],
     },
     twitter: {
       card: seo?.twitterCard || 'summary_large_image',
@@ -25,7 +32,9 @@ export function generateMetadataObject(seo: any) {
         seo?.twitterDescription ||
         seo?.metaDescription ||
         'Default Twitter Description',
-      images: seo?.twitterImage ? [{ url: seo.twitterImage }] : [],
+      images: seo?.twitterImage
+        ? [{ url: seo.twitterImage }]
+        : ['https://studioarman.com/og/default.png'],
     },
   };
 }

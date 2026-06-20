@@ -28,13 +28,27 @@ export async function generateMetadata(props: {
         slug: params.slug,
         locale: params.locale,
       },
-      populate: "seo.metaImage",
+      populate: { seo: { populate: "*" }, localizations: true },
     },
     true
   );
 
   const seo = pageData?.seo;
   const metadata = generateMetadataObject(seo);
+
+  // hreflang alternates — emit a language map across all localized versions
+  const BASE = "https://studioarman.com";
+  const languages: Record<string, string> = {
+    [params.locale]: `${BASE}/${params.locale}/${params.slug}`,
+  };
+  for (const loc of pageData?.localizations ?? []) {
+    if (loc?.locale && loc?.slug) {
+      languages[loc.locale] = `${BASE}/${loc.locale}/${loc.slug}`;
+    }
+  }
+  languages["x-default"] = languages["fa"] ?? languages[params.locale];
+  metadata.alternates = { ...(metadata.alternates ?? {}), languages };
+
   return metadata;
 }
 

@@ -75,7 +75,15 @@ const nextConfig = {
   },
   pageExtensions: ['ts', 'tsx'],
   async redirects() {
-    let redirections = [];
+    // Single-product studio site: the generic template homepage is unused, so
+    // the site root and the bare locale root land on the AI Solutions page.
+    const baseRedirects = [
+      { source: '/', destination: '/fa/ai-solutions', permanent: false },
+      { source: '/fa', destination: '/fa/ai-solutions', permanent: false },
+      // The hero's "view our work" CTA targets /projects (no such page); send it
+      // to the case-studies section on the AI Solutions page instead.
+      { source: '/:locale/projects', destination: '/:locale/ai-solutions#case-studies', permanent: false },
+    ];
     try {
       const apiUrl = process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(
@@ -83,7 +91,7 @@ const nextConfig = {
       );
       const result = await res.json();
       if (!result?.data) {
-        return [];
+        return baseRedirects;
       }
       const redirectItems = result.data.map(({ source, destination }) => {
         return {
@@ -93,15 +101,13 @@ const nextConfig = {
         };
       });
 
-      redirections = redirections.concat(redirectItems);
-
-      return redirections;
+      return baseRedirects.concat(redirectItems);
     } catch (error) {
       console.error(
         'Failed to fetch redirects from Strapi:',
         error instanceof Error ? error.message : error
       );
-      return [];
+      return baseRedirects;
     }
   },
 };

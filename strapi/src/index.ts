@@ -69,7 +69,7 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
     const seo = {
       metaTitle: 'راهکارهای هوش مصنوعی | استودیو آرمان',
       metaDescription:
-        'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما توسط استودیو آرمان.',
+        'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما — همین امروز مشاوره‌ی رایگان بگیرید.',
       keywords:
         'هوش مصنوعی, اتوماسیون, چت‌بات, یادگیری ماشین, راهکار سازمانی',
       metaRobots: 'index,follow',
@@ -78,38 +78,56 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
         '@context': 'https://schema.org',
         '@graph': [
           {
+            '@type': 'Organization',
+            '@id': 'https://studioarman.com/#organization',
+            name: 'استودیو آرمان',
+            url: 'https://studioarman.com',
+            logo: 'https://studioarman.com/logo.png',
+            contactPoint: {
+              '@type': 'ContactPoint',
+              contactType: 'customer support',
+              url: 'https://studioarman.com/fa/contact',
+              availableLanguage: ['fa', 'en'],
+            },
+          },
+          {
             '@type': 'Service',
             name: 'راهکارهای هوش مصنوعی',
             serviceType: 'AI consulting and development',
-            provider: {
-              '@type': 'Organization',
-              name: 'استودیو آرمان',
-              url: 'https://studioarman.com',
-            },
+            description:
+              'طراحی و پیاده‌سازی عامل‌های هوشمند، اتوماسیون فرایندها، بینایی ماشین و تحلیل داده برای کسب‌وکارها.',
+            provider: { '@id': 'https://studioarman.com/#organization' },
             areaServed: 'IR',
             url: 'https://studioarman.com/fa/ai-solutions',
           },
           {
+            '@type': 'HowTo',
+            name: 'چطور با هم کار می‌کنیم',
+            description: 'یک مسیر شفاف و چهار مرحله‌ای از نیاز تا نتیجه.',
+            step: [
+              { '@type': 'HowToStep', position: 1, name: 'کشف و نیازسنجی', text: 'فرایندها و داده‌های شما را می‌شناسیم و فرصت‌های هوش مصنوعی را مشخص می‌کنیم.' },
+              { '@type': 'HowToStep', position: 2, name: 'طراحی راهکار', text: 'معماری، مدل و تجربه‌ی کاربری متناسب با هدف کسب‌وکار را طراحی می‌کنیم.' },
+              { '@type': 'HowToStep', position: 3, name: 'پیاده‌سازی', text: 'راهکار را می‌سازیم، آزمایش می‌کنیم و با سیستم‌های شما یکپارچه می‌کنیم.' },
+              { '@type': 'HowToStep', position: 4, name: 'استقرار و پشتیبانی', text: 'راه‌اندازی، پایش و بهبود مستمر پس از تحویل.' },
+            ],
+          },
+          {
             '@type': 'BreadcrumbList',
             itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'خانه',
-                item: 'https://studioarman.com/fa',
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'راهکارهای هوش مصنوعی',
-                item: 'https://studioarman.com/fa/ai-solutions',
-              },
+              { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://studioarman.com/fa' },
+              { '@type': 'ListItem', position: 2, name: 'راهکارهای هوش مصنوعی', item: 'https://studioarman.com/fa/ai-solutions' },
             ],
           },
           {
             '@type': 'WebPage',
             name: 'راهکارهای هوش مصنوعی',
             url: 'https://studioarman.com/fa/ai-solutions',
+            description:
+              'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما توسط استودیو آرمان.',
+            inLanguage: 'fa-IR',
+            isPartOf: { '@type': 'WebSite', name: 'استودیو آرمان', url: 'https://studioarman.com' },
+            primaryImageOfPage: 'https://studioarman.com/og/ai-solutions.png',
+            dateModified: '2026-06-16',
           },
         ],
       },
@@ -129,7 +147,7 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
         reassurance: 'بدون تعهد؛ ظرف ۲۴ ساعت پاسخ می‌دهیم.',
         CTAs: [
           { text: 'رزرو جلسه‌ی ۳۰ دقیقه‌ای رایگان', URL: '/contact', variant: 'primary' },
-          { text: 'نمونه‌کارها', URL: '/projects', variant: 'outline' },
+          { text: 'نمونه‌کارها', URL: '/ai-solutions#case-studies', variant: 'outline' },
         ],
       },
 
@@ -433,6 +451,210 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Localize the English demo pages into `fa` so the navbar links + CTAs resolve
+// instead of 404-ing. Idempotent (skips a slug whose fa version already exists).
+// Mirrors the deepPopulate middleware so the full block tree is copied.
+// Guard: only runs when SEED_AI_SOLUTIONS=true (same switch as the AI seed).
+// ---------------------------------------------------------------------------
+function getPageDeepPopulate(uid: any): any {
+  const model: any = uid ? strapi.getModel(uid) : null;
+  if (!model || !model.attributes) return {};
+  return Object.entries(model.attributes).reduce((acc: any, [name, attr]: [string, any]) => {
+    switch (attr.type) {
+      case 'relation': {
+        if (String(attr.relation).toLowerCase().startsWith('morph')) break;
+        acc[name] = name === 'testimonials' ? { populate: 'user.image' } : { populate: '*' };
+        break;
+      }
+      case 'media':
+        acc[name] = { populate: '*' };
+        break;
+      case 'component':
+        acc[name] = { populate: getPageDeepPopulate(attr.component) };
+        break;
+      case 'dynamiczone': {
+        const on = (attr.components || []).reduce((o: any, c: any) => {
+          o[c] = { populate: getPageDeepPopulate(c) };
+          return o;
+        }, {});
+        acc[name] = { on };
+        break;
+      }
+      default:
+        break;
+    }
+    return acc;
+  }, {});
+}
+
+const SYS_KEYS = new Set([
+  'id', 'documentId', 'createdAt', 'updatedAt', 'publishedAt',
+  'locale', 'localizations', 'createdBy', 'updatedBy',
+]);
+
+// Strip system fields; turn media into id refs and content-relations into
+// documentId refs so the copied tree can be re-created under a new locale.
+function cleanForCopy(value: any): any {
+  if (Array.isArray(value)) return value.map(cleanForCopy).filter((v) => v !== undefined && v !== null);
+  if (value && typeof value === 'object') {
+    if (value.mime !== undefined && value.url !== undefined && value.id !== undefined) {
+      return value.id; // media file → reference by id
+    }
+    if (value.documentId !== undefined && value.__component === undefined) {
+      // Related content entry. Connecting a fa page to an entry that has no fa
+      // localization throws "locale fa not found", so drop the relation — the
+      // page still renders; the relation can be re-linked in the admin.
+      return undefined;
+    }
+    const out: any = {};
+    for (const [k, v] of Object.entries(value)) {
+      if (SYS_KEYS.has(k)) continue;
+      out[k] = cleanForCopy(v);
+    }
+    return out;
+  }
+  return value;
+}
+
+// Replace exact English strings with Persian ones during the en→fa copy.
+// Walks the cleaned block tree; any leaf string that matches a dictionary key
+// is swapped for its Persian value. Strings with no entry are left untouched.
+function applyTranslations(value: any, dict: Record<string, string>): any {
+  if (Array.isArray(value)) return value.map((v) => applyTranslations(v, dict));
+  if (value && typeof value === 'object') {
+    const out: any = {};
+    for (const [k, v] of Object.entries(value)) out[k] = applyTranslations(v, dict);
+    return out;
+  }
+  if (typeof value === 'string' && Object.prototype.hasOwnProperty.call(dict, value)) {
+    return dict[value];
+  }
+  return value;
+}
+
+// Persian copy for the reusable template pages. Keyed by the exact English
+// source string so the swap is precise (no fuzzy/partial matches).
+const FA_PAGE_TRANSLATIONS: Record<string, Record<string, string>> = {
+  contact: {
+    'Contact Us': 'با ما در تماس باشید',
+    'Please reach out to us and we will get back to you at the speed of light.':
+      'پیام یا شماره‌ی خود را بگذارید؛ در کوتاه‌ترین زمان (معمولاً ظرف ۲۴ ساعت) پاسخ می‌دهیم.',
+    'LaunchPad is trusted by thousands of Astropreneurs':
+      'کسب‌وکارها به استودیو آرمان اعتماد کرده‌اند',
+    'Join the ranks of successful entrepreneurs who have used LaunchPad to turn their ideas into reality.':
+      'به جمع کسب‌وکارهایی بپیوندید که فرایندهای خود را با هوش مصنوعی سفارشی متحول کرده‌اند.',
+  },
+};
+
+// Persian page-level SEO (the template demos ship English/empty SEO, which
+// renders a "Default Title" browser tab). Keyed by slug.
+const FA_PAGE_SEO: Record<string, { metaTitle: string; metaDescription: string }> = {
+  contact: {
+    metaTitle: 'تماس با استودیو آرمان | مشاوره‌ی رایگان هوش مصنوعی',
+    metaDescription:
+      'برای دریافت مشاوره‌ی رایگان درباره‌ی راهکارهای هوش مصنوعی سفارشی، با استودیو آرمان در تماس باشید.',
+  },
+};
+
+// Localize the global single-type (navbar + footer) into Persian.
+// The layout fetches `global` per-locale, so without an fa global every page
+// renders the English template chrome. This also repoints the nav/footer links
+// at destinations that actually exist in Persian (the AI Solutions page and the
+// contact page) and drops the demo-only links (Products/Blog/Sign up) that 404.
+async function seedGlobalFa(strapi: Core.Strapi): Promise<void> {
+  if (process.env.SEED_AI_SOLUTIONS !== 'true') return;
+  try {
+    const enGlobal: any = await (strapi.documents('api::global.global') as any).findFirst({
+      locale: 'en',
+    });
+    if (!enGlobal) {
+      strapi.log.warn('[seed] en global not found — cannot localize navbar/footer');
+      return;
+    }
+
+    const navMain = [
+      { text: 'راهکارهای هوش مصنوعی', URL: '/ai-solutions' },
+      { text: 'تماس با ما', URL: '/contact' },
+    ];
+
+    const data = {
+      navbar: {
+        left_navbar_items: navMain,
+        right_navbar_items: [{ text: 'رزرو مشاوره‌ی رایگان', URL: '/contact' }],
+      },
+      footer: {
+        description:
+          'استودیو آرمان راهکارهای هوش مصنوعی سفارشی برای کسب‌وکارها می‌سازد؛ از نیازسنجی تا استقرار — امن، یکپارچه و قابل‌اندازه‌گیری.',
+        copyright: '© ۲۰۲۶ استودیو آرمان. همه‌ی حقوق محفوظ است.',
+        designed_developed_by: 'طراحی و توسعه: استودیو آرمان',
+        built_with: '',
+        internal_links: [
+          { text: 'راهکارهای هوش مصنوعی', URL: '/ai-solutions' },
+          { text: 'نمونه‌کارها', URL: '/ai-solutions' },
+          { text: 'تماس با ما', URL: '/contact' },
+        ],
+        policy_links: [],
+        social_media_links: [],
+      },
+      seo: {
+        metaTitle: 'استودیو آرمان | راهکارهای هوش مصنوعی سفارشی',
+        metaDescription:
+          'استودیو آرمان عامل‌های هوشمند و اتوماسیون سفارشی برای کاهش هزینه و افزایش سرعت کسب‌وکارها می‌سازد.',
+      },
+    };
+
+    await (strapi.documents('api::global.global') as any).update({
+      documentId: enGlobal.documentId,
+      locale: 'fa',
+      status: 'published',
+      data,
+    });
+    strapi.log.info('[seed] localized fa global (navbar + footer) from en');
+  } catch (e) {
+    strapi.log.warn(`[seed] fa global localization failed (non-fatal): ${e}`);
+  }
+}
+
+async function seedFaLocalizations(strapi: Core.Strapi): Promise<void> {
+  if (process.env.SEED_AI_SOLUTIONS !== 'true') return;
+  // Only the contact page is linked from the (Persian) nav. The other template
+  // demos (homepage/pricing/faq) are not surfaced, so we don't translate them.
+  const slugs = ['contact'];
+
+  for (const slug of slugs) {
+    try {
+      const enPages = await strapi.documents('api::page.page').findMany({
+        filters: { slug }, locale: 'en', status: 'published',
+        populate: getPageDeepPopulate('api::page.page'),
+      });
+      const enPage: any = enPages[0];
+      if (!enPage) {
+        strapi.log.warn(`[seed] en/${slug} not found — cannot localize`);
+        continue;
+      }
+
+      // Re-localize on every seeded boot so translation edits take effect
+      // (update creates the fa variant if missing, or overwrites it).
+      const dict = FA_PAGE_TRANSLATIONS[slug] || {};
+      const seo = FA_PAGE_SEO[slug];
+      await (strapi.documents('api::page.page') as any).update({
+        documentId: enPage.documentId,
+        locale: 'fa',
+        status: 'published',
+        data: {
+          slug,
+          dynamic_zone: applyTranslations(cleanForCopy(enPage.dynamic_zone), dict),
+          ...(seo ? { seo } : {}),
+        },
+      });
+      strapi.log.info(`[seed] localized fa/${slug} from en (Persian copy)`);
+    } catch (e) {
+      strapi.log.warn(`[seed] fa/${slug} localization failed (non-fatal): ${e}`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Strapi lifecycle hooks
 // ---------------------------------------------------------------------------
 
@@ -454,5 +676,7 @@ export default {
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     await seedAiSolutionsPage(strapi);
+    await seedGlobalFa(strapi);
+    await seedFaLocalizations(strapi);
   },
 };

@@ -10,51 +10,20 @@ export async function POST(request: NextRequest) {
     const {
       contact,
       message,
-      turnstileToken,
       locale: requestLocale = 'fa',
     } = body;
     locale = requestLocale;
 
-    // Validate required fields
-    if (!contact || !message || !turnstileToken) {
+    // Validate required fields. (Turnstile is disabled on the client — see
+    // contact-us.tsx — so we no longer require/verify a turnstileToken; the
+    // server still demanding one made every submission fail with a 400.)
+    if (!contact || !message) {
       const errorMessage = await getApiMessage(
         'contact.apiErrors.requiredFields',
         locale
       );
       return NextResponse.json(
         { success: false, message: errorMessage },
-        { status: 400 }
-      );
-    }
-
-    // Verify Turnstile token
-    const turnstileResponse = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
-          response: turnstileToken,
-        }),
-      }
-    );
-
-    const turnstileResult = await turnstileResponse.json();
-
-    if (!turnstileResult.success) {
-      console.error('Turnstile verification failed:', turnstileResult);
-      const errorMessage = await getApiMessage(
-        'contact.apiErrors.securityFailed',
-        locale
-      );
-      return NextResponse.json(
-        {
-          success: false,
-          message: errorMessage,
-        },
         { status: 400 }
       );
     }

@@ -2,7 +2,7 @@ import { type MetadataRoute } from 'next';
 
 const BASE_URL =
   process.env.WEBSITE_URL ??
-  (process.env.DOMAIN ? `https://${process.env.DOMAIN}` : 'http://localhost:3000');
+  (process.env.DOMAIN ? `https://${process.env.DOMAIN}` : 'https://studioarman.com');
 
 export default function robots(): MetadataRoute.Robots {
   return {

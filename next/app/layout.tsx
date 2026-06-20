@@ -5,6 +5,7 @@ import './globals.css';
 
 import { SlugProvider } from './context/SlugContext';
 import { GlobalErrorBoundary } from '@/components/global-error-boundary';
+import { getDirection } from '@/lib/rtl-utils';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -21,7 +22,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={getDirection(locale)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <GlobalErrorBoundary>
           <SlugProvider>{children}</SlugProvider>

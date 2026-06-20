@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import {
   motion,
   useMotionTemplate,
@@ -16,13 +15,6 @@ import { FeatureIconContainer } from './features/feature-icon-container';
 import { getLocaleConfig } from '@/lib/fonts';
 import { getTablerIcon } from '@/lib/constants/icon-map';
 import { cn } from '@/lib/utils';
-
-// CanvasRevealEffect uses WebGL — must be client-only
-const CanvasRevealEffect = dynamic(
-  () =>
-    import('../ui/canvas-reveal-effect').then((mod) => mod.CanvasRevealEffect),
-  { ssr: false }
-);
 
 interface Capability {
   id?: number;
@@ -73,14 +65,10 @@ const CapabilityCard = ({
 
   const IconComponent = getTablerIcon(capability.icon);
 
-  // Resolve shader colors
-  const accentRgb = capability.accent ? hexToRgb(capability.accent) : null;
-  const shaderColors: number[][] = accentRgb
-    ? [accentRgb]
-    : [
-        [59, 130, 246],
-        [139, 92, 246],
-      ];
+  // Mouse-follow glow colour (accent, or indigo by default)
+  const [gr, gg, gb] = (capability.accent && hexToRgb(capability.accent)) || [
+    99, 102, 241,
+  ];
 
   const colSpan =
     capability.span === 'two' ? 'md:col-span-2' : 'md:col-span-1';
@@ -97,25 +85,13 @@ const CapabilityCard = ({
       )}
       onMouseMove={handleMouseMove}
     >
-      {/* Canvas reveal — dark mode only; looks wrong on white cards */}
+      {/* Mouse-follow glow — dark mode only, lightweight CSS (no WebGL) */}
       <motion.div
-        className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-40"
+        className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          maskImage: useMotionTemplate`radial-gradient(
-            300px circle at ${mouseX}px ${mouseY}px,
-            var(--neutral-900, #171717),
-            transparent 80%
-          )`,
+          background: useMotionTemplate`radial-gradient(260px circle at ${mouseX}px ${mouseY}px, rgba(${gr}, ${gg}, ${gb}, 0.18), transparent 70%)`,
         }}
-      >
-        <CanvasRevealEffect
-          animationSpeed={5}
-          containerClassName="bg-transparent absolute inset-0 pointer-events-none"
-          colors={shaderColors}
-          dotSize={2}
-          showGradient={false}
-        />
-      </motion.div>
+      />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col gap-4">

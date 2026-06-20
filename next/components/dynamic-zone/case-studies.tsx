@@ -149,7 +149,8 @@ export const CaseStudies = ({
 
   return (
     <section
-      className={cn('py-20 relative overflow-hidden', fontClass)}
+      id="case-studies"
+      className={cn('py-20 relative overflow-hidden scroll-mt-24', fontClass)}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />

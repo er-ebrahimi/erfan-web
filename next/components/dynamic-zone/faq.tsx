@@ -60,14 +60,14 @@ export const FAQ = ({
                   isRTL ? 'pr-4 border-r-2 border-indigo-500/30' : 'pl-4 border-l-2 border-indigo-500/30'
                 )}
               >
-                <h4
+                <h3
                   className={cn(
                     'text-base font-semibold text-foreground',
                     isRTL && 'text-right font-iran-sans'
                   )}
                 >
                   {faq.question}
-                </h4>
+                </h3>
                 <p
                   className={cn(
                     'text-sm leading-relaxed text-muted-foreground',

@@ -1,7 +1,9 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
+
+import { submitToWeb3Forms } from '@/lib/web3forms';
 
 const ContactUs = ({
   Title,
@@ -25,7 +27,6 @@ const ContactUs = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const t = useTranslations('contact');
-  const locale = useLocale();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -83,41 +84,22 @@ const ContactUs = ({
   }, []);
   */
 
-  const sendContactForm = async (
-    contact: string,
-    message: string
-    // ❌ token removed
-  ) => {
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contact,
-          message,
-          // ❌ turnstileToken removed
-          locale,
-        }),
-      });
+  const sendContactForm = async (contact: string, message: string) => {
+    // web3forms free plan only accepts browser-side submissions, so we POST
+    // directly from the client (see lib/web3forms.ts) instead of /api/contact.
+    const result = await submitToWeb3Forms({
+      subject: 'پیام جدید از فرم تماس استودیو آرمان',
+      from_name: 'فرم تماس وب‌سایت',
+      'راه ارتباطی': contact,
+      'پیام': message,
+    });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        return { success: true, message: result.message };
-      } else {
-        return {
-          success: false,
-          message: result.message || t('sendError'),
-        };
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: t('sendError'),
-      };
-    }
+    return {
+      success: result.success,
+      message: result.success
+        ? t('apiErrors.sendSuccess')
+        : t('sendError'),
+    };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

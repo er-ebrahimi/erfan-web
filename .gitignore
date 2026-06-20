@@ -12,3 +12,6 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 /.cursor
+# Local dev artifacts / tooling (added 2026-06-20)
+next/dev-preview.log
+.superpowers/

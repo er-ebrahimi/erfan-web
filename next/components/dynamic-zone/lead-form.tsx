@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Container } from '../container';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
+import { submitToWeb3Forms } from '@/lib/web3forms';
 
 interface LeadFormProps {
   heading: string;
@@ -27,6 +28,7 @@ interface FieldCopy {
   submitting: string;
   requiredError: string;
   genericError: string;
+  successMessage: string;
 }
 
 const copyFor = (isRTL: boolean): FieldCopy =>
@@ -44,6 +46,7 @@ const copyFor = (isRTL: boolean): FieldCopy =>
         submitting: 'در حال ارسال…',
         requiredError: 'لطفاً نام، راه ارتباطی و توضیح نیاز را تکمیل کنید.',
         genericError: 'ارسال ناموفق بود. لطفاً دوباره تلاش کنید.',
+        successMessage: 'درخواست شما با موفقیت ثبت شد! به‌زودی با شما تماس می‌گیریم.',
       }
     : {
         nameLabel: 'Full name',
@@ -58,6 +61,7 @@ const copyFor = (isRTL: boolean): FieldCopy =>
         submitting: 'Sending…',
         requiredError: 'Please fill in your name, contact, and need.',
         genericError: 'Submission failed. Please try again.',
+        successMessage: 'Your request was submitted! We will be in touch soon.',
       };
 
 export const LeadForm = ({
@@ -104,21 +108,22 @@ export const LeadForm = ({
     setStatus({ type: null, message: '' });
 
     try {
-      const response = await fetch('/api/ai-solutions-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, locale }),
+      // web3forms free plan is browser-side only — POST directly (see
+      // lib/web3forms.ts) rather than through /api/ai-solutions-lead.
+      const result = await submitToWeb3Forms({
+        subject: `سرنخ جدید از صفحه‌ی راهکارهای هوش مصنوعی — ${formData.name}`,
+        from_name: 'فرم سرنخ هوش مصنوعی',
+        نام: formData.name,
+        شرکت: formData.company || '—',
+        'راه ارتباطی': formData.contact,
+        نیاز: formData.need,
       });
-      const result = await response.json();
 
-      if (response.ok && result.success) {
-        setStatus({ type: 'success', message: result.message });
+      if (result.success) {
+        setStatus({ type: 'success', message: c.successMessage });
         setFormData({ name: '', company: '', contact: '', need: '' });
       } else {
-        setStatus({
-          type: 'error',
-          message: result.message || c.genericError,
-        });
+        setStatus({ type: 'error', message: c.genericError });
       }
     } catch {
       setStatus({ type: 'error', message: c.genericError });

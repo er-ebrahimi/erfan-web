@@ -1,7 +1,102 @@
 // ⚠️ TEMPORARY local preview — NOT part of the feature.
 // Renders the real AI Solutions blocks with the seed's placeholder content so
 // the page can be viewed without the Strapi backend running. Delete after review.
+import { Metadata } from 'next';
+
 import PageContent from '@/lib/shared/PageContent';
+import { JsonLd } from '@/components/seo/json-ld';
+
+export const metadata: Metadata = {
+  title: 'راهکارهای هوش مصنوعی | استودیو آرمان',
+  description:
+    'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما — همین امروز مشاوره‌ی رایگان بگیرید.',
+  keywords: 'هوش مصنوعی, اتوماسیون, چت‌بات, یادگیری ماشین, راهکار سازمانی',
+  alternates: {
+    canonical: 'https://studioarman.com/fa/ai-solutions',
+    languages: {
+      'fa-IR': 'https://studioarman.com/fa/ai-solutions',
+      'en-US': 'https://studioarman.com/en/ai-solutions',
+    },
+  },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: 'website',
+    title: 'راهکارهای هوش مصنوعی | استودیو آرمان',
+    description:
+      'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما.',
+    url: 'https://studioarman.com/fa/ai-solutions',
+    siteName: 'استودیو آرمان',
+    locale: 'fa_IR',
+    images: ['https://studioarman.com/og/ai-solutions.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'راهکارهای هوش مصنوعی | استودیو آرمان',
+    description:
+      'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما.',
+    images: ['https://studioarman.com/og/ai-solutions.png'],
+  },
+};
+
+// Full structured-data graph (mirrors the Strapi seed's seo.structuredData).
+// FAQPage JSON-LD is emitted separately by the FAQ block component.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://studioarman.com/#organization',
+      name: 'استودیو آرمان',
+      url: 'https://studioarman.com',
+      logo: 'https://studioarman.com/logo.png',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        url: 'https://studioarman.com/fa/contact',
+        availableLanguage: ['fa', 'en'],
+      },
+    },
+    {
+      '@type': 'Service',
+      name: 'راهکارهای هوش مصنوعی',
+      serviceType: 'AI consulting and development',
+      description:
+        'طراحی و پیاده‌سازی عامل‌های هوشمند، اتوماسیون فرایندها، بینایی ماشین و تحلیل داده برای کسب‌وکارها.',
+      provider: { '@id': 'https://studioarman.com/#organization' },
+      areaServed: 'IR',
+      url: 'https://studioarman.com/fa/ai-solutions',
+    },
+    {
+      '@type': 'HowTo',
+      name: 'چطور با هم کار می‌کنیم',
+      description: 'یک مسیر شفاف و چهار مرحله‌ای از نیاز تا نتیجه.',
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'کشف و نیازسنجی', text: 'فرایندها و داده‌های شما را می‌شناسیم و فرصت‌های هوش مصنوعی را مشخص می‌کنیم.' },
+        { '@type': 'HowToStep', position: 2, name: 'طراحی راهکار', text: 'معماری، مدل و تجربه‌ی کاربری متناسب با هدف کسب‌وکار را طراحی می‌کنیم.' },
+        { '@type': 'HowToStep', position: 3, name: 'پیاده‌سازی', text: 'راهکار را می‌سازیم، آزمایش می‌کنیم و با سیستم‌های شما یکپارچه می‌کنیم.' },
+        { '@type': 'HowToStep', position: 4, name: 'استقرار و پشتیبانی', text: 'راه‌اندازی، پایش و بهبود مستمر پس از تحویل.' },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://studioarman.com/fa' },
+        { '@type': 'ListItem', position: 2, name: 'راهکارهای هوش مصنوعی', item: 'https://studioarman.com/fa/ai-solutions' },
+      ],
+    },
+    {
+      '@type': 'WebPage',
+      name: 'راهکارهای هوش مصنوعی',
+      url: 'https://studioarman.com/fa/ai-solutions',
+      description:
+        'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما توسط استودیو آرمان.',
+      inLanguage: 'fa-IR',
+      isPartOf: { '@type': 'WebSite', name: 'استودیو آرمان', url: 'https://studioarman.com' },
+      primaryImageOfPage: 'https://studioarman.com/og/ai-solutions.png',
+      dateModified: '2026-06-16',
+    },
+  ],
+};
 
 const dynamic_zone: any[] = [
   {
@@ -252,5 +347,10 @@ export default async function PreviewAiSolutions(props: {
 }) {
   const { locale } = await props.params;
   const pageData = { locale, dynamic_zone };
-  return <PageContent pageData={pageData} />;
+  return (
+    <>
+      <JsonLd data={structuredData} />
+      <PageContent pageData={pageData} />
+    </>
+  );
 }

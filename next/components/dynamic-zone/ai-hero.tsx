@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Container } from '../container';
 import { Cover } from '../decorations/cover';
@@ -47,6 +47,19 @@ export const AiHero = ({
   const { fontClass, isRTL } = getLocaleConfig(locale);
   const prefersReducedMotion = useReducedMotion();
 
+  // The particle/star effects are the heaviest client JS on the hero. Render
+  // them on desktop only (they add little on phones and cost real main-thread
+  // time there). SSR + initial client render show none → no hydration mismatch.
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  const showEffects = isDesktop && !prefersReducedMotion;
+
   // Background can be a single media object or array — normalise to single
   const backgroundImage = Array.isArray(Background)
     ? Background?.[0]
@@ -83,15 +96,15 @@ export const AiHero = ({
           </>
         ) : (
           <>
-            {!prefersReducedMotion && <StarBackground />}
-            {!prefersReducedMotion && <ShootingStars />}
-            {!prefersReducedMotion && (
+            {showEffects && <StarBackground />}
+            {showEffects && <ShootingStars />}
+            {showEffects && (
               <SparklesCore
                 id="ai-hero-sparkles"
                 background="transparent"
                 minSize={0.4}
                 maxSize={1.2}
-                particleDensity={50}
+                particleDensity={22}
                 className="absolute inset-0 h-full w-full"
                 particleColor="#a78bfa"
                 speed={1}
@@ -126,7 +139,7 @@ export const AiHero = ({
           )}
         >
           {beforeLastWord && <>{beforeLastWord} </>}
-          <Cover className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-300 to-violet-400">{lastWord}</Cover>
+          <Cover>{lastWord}</Cover>
         </h1>
 
         {/* Subheading */}

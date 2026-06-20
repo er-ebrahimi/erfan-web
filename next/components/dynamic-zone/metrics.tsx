@@ -130,7 +130,7 @@ const MetricCard = ({
       </span>
 
       {metric.note && (
-        <span className={cn('text-[11px] text-neutral-400 dark:text-neutral-500', isRTL ? 'font-iran-sans' : '')}>
+        <span className={cn('text-[11px] text-neutral-600 dark:text-neutral-400', isRTL ? 'font-iran-sans' : '')}>
           {metric.note}
         </span>
       )}

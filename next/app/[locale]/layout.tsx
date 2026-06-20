@@ -41,7 +41,7 @@ export default async function LocaleLayout(props: {
 
   let pageData;
   try {
-    pageData = await fetchContentType('global', {}, true);
+    pageData = await fetchContentType('global', { locale }, true);
   } catch (error) {
     console.error('Failed to fetch global content type:', error);
     // Provide fallback data structure

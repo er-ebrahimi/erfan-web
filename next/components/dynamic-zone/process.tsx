@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import {
   motion,
   useMotionTemplate,
@@ -25,13 +24,6 @@ import { FeatureIconContainer } from './features/feature-icon-container';
 import { getLocaleConfig } from '@/lib/fonts';
 import { getTablerIcon } from '@/lib/constants/icon-map';
 import { cn } from '@/lib/utils';
-
-// CanvasRevealEffect uses WebGL — must be client-only
-const CanvasRevealEffect = dynamic(
-  () =>
-    import('../ui/canvas-reveal-effect').then((mod) => mod.CanvasRevealEffect),
-  { ssr: false }
-);
 
 interface Step {
   id?: number;
@@ -303,28 +295,13 @@ const StepCard = ({
         )}
         onMouseMove={handleMouseMove}
       >
-        {/* Canvas reveal — dark mode only */}
+        {/* Mouse-follow glow — dark mode only, lightweight CSS (no WebGL) */}
         <motion.div
-          className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-40"
+          className="hidden dark:block pointer-events-none absolute z-10 -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            maskImage: useMotionTemplate`radial-gradient(
-              300px circle at ${mouseX}px ${mouseY}px,
-              var(--neutral-900, #171717),
-              transparent 80%
-            )`,
+            background: useMotionTemplate`radial-gradient(260px circle at ${mouseX}px ${mouseY}px, rgba(59, 130, 246, 0.16), transparent 70%)`,
           }}
-        >
-          <CanvasRevealEffect
-            animationSpeed={5}
-            containerClassName="bg-transparent absolute inset-0 pointer-events-none"
-            colors={[
-              [59, 130, 246],
-              [139, 92, 246],
-            ]}
-            dotSize={2}
-            showGradient={false}
-          />
-        </motion.div>
+        />
 
         <div className="relative z-20">
           <h3

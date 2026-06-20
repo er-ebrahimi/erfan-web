@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 export const Subheading = ({
   className,
-  as: Tag = 'h2',
+  as: Tag = 'p',
   children,
   ...props
 }: {
