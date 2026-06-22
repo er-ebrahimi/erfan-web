@@ -15,3 +15,7 @@ node_modules
 # Local dev artifacts / tooling (added 2026-06-20)
 next/dev-preview.log
 .superpowers/
+# SEO keyword-tree working files (added 2026-06-22) — deliverables (seo-keyword-tree-ai.xlsx/.md, keywords-*) stay tracked
+docs/_demand_audit_*
+docs/seo-keyword-tree-ai.NEW.xlsx
+docs/~$*.xlsx
