@@ -4,12 +4,12 @@ This stack runs four containers behind **Caddy** (which gets free TLS certificat
 
 ```
 Internet ──▶ Caddy (:80/:443)
-               ├── studioarman.com, www  ──▶ web  (Next.js, :4000)
-               └── cms.studioarman.com   ──▶ strapi (:1337) ──▶ strapiDB (Postgres)
+               ├── aiunpacked.ir, www  ──▶ web  (Next.js, :4000)
+               └── cms.aiunpacked.ir   ──▶ strapi (:1337) ──▶ strapiDB (Postgres)
 ```
 
 - `web` talks to Strapi **internally** at `http://strapi:1337` (fast, no public hop) for server-side rendering.
-- The **browser** loads Strapi images/auth from the public `https://cms.studioarman.com`.
+- The **browser** loads Strapi images/auth from the public `https://cms.aiunpacked.ir`.
 - All data lives in Docker **volumes** (`pgdata`, `strapi-uploads`) — survives restarts and image rebuilds.
 
 > Files with real secrets (`deploy/.env`, `deploy/strapi.env`, `deploy/web.env`) and `deploy/strapi-content.tar.gz` are **git-ignored**. Copy them to the server manually (scp), don't commit them.
@@ -20,7 +20,7 @@ Internet ──▶ Caddy (:80/:443)
 
 - A Linux server (Ubuntu 22.04+ recommended), 2 GB RAM minimum (4 GB comfortable for the Strapi build).
 - **DNS A-records** pointing to the server's public IP — all three:
-  - `studioarman.com`, `www.studioarman.com`, `cms.studioarman.com`
+  - `aiunpacked.ir`, `www.aiunpacked.ir`, `cms.aiunpacked.ir`
 - Ports **80** and **443** open in the firewall (Caddy needs them for TLS + traffic).
 
 ---
@@ -48,7 +48,7 @@ cd erfan-web
 
 ## 3. Set your domains
 
-Edit these to your real domains (currently `studioarman.com` / `cms.studioarman.com`):
+Edit these to your real domains (currently `aiunpacked.ir` / `cms.aiunpacked.ir`):
 - `deploy/Caddyfile` — the email + the three hostnames
 - `deploy/docker-compose.prod.yml` — the `web` build `args` (NEXT_PUBLIC_* + DOMAIN)
 - `deploy/strapi.env` — `PUBLIC_URL` and `STRAPI_ADMIN_CLIENT_URL`
@@ -113,9 +113,9 @@ docker compose -f docker-compose.prod.yml logs -f caddy
 
 ## 7. Create the admin user + verify
 
-1. Open `https://cms.studioarman.com/admin` → register the **first admin** (this is the CMS login).
+1. Open `https://cms.aiunpacked.ir/admin` → register the **first admin** (this is the CMS login).
 2. In **Content Manager → Article**, switch the locale dropdown to **Persian (fa)** → you should see all 24 articles.
-3. Open `https://studioarman.com` → the site loads and `/fa/category/blog` lists the posts.
+3. Open `https://aiunpacked.ir` → the site loads and `/fa/category/blog` lists the posts.
 
 ---
 

@@ -1,14 +1,14 @@
 # CHANGE the email and the three domains to yours, then `docker compose ... up -d caddy`.
 {
-	email admin@studioarman.com
+	email admin@aiunpacked.ir
 }
 
-studioarman.com, www.studioarman.com {
+aiunpacked.ir, www.aiunpacked.ir {
 	encode gzip
 	reverse_proxy web:4000
 }
 
-cms.studioarman.com {
+cms.aiunpacked.ir {
 	encode gzip
 	reverse_proxy strapi:1337
 }

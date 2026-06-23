@@ -73,20 +73,20 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
       keywords:
         'هوش مصنوعی, اتوماسیون, چت‌بات, یادگیری ماشین, راهکار سازمانی',
       metaRobots: 'index,follow',
-      canonicalURL: 'https://studioarman.com/fa/ai-solutions',
+      canonicalURL: 'https://aiunpacked.ir/fa/ai-solutions',
       structuredData: {
         '@context': 'https://schema.org',
         '@graph': [
           {
             '@type': 'Organization',
-            '@id': 'https://studioarman.com/#organization',
+            '@id': 'https://aiunpacked.ir/#organization',
             name: 'استودیو آرمان',
-            url: 'https://studioarman.com',
-            logo: 'https://studioarman.com/logo.png',
+            url: 'https://aiunpacked.ir',
+            logo: 'https://aiunpacked.ir/logo.png',
             contactPoint: {
               '@type': 'ContactPoint',
               contactType: 'customer support',
-              url: 'https://studioarman.com/fa/contact',
+              url: 'https://aiunpacked.ir/fa/contact',
               availableLanguage: ['fa', 'en'],
             },
           },
@@ -96,9 +96,9 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
             serviceType: 'AI consulting and development',
             description:
               'طراحی و پیاده‌سازی عامل‌های هوشمند، اتوماسیون فرایندها، بینایی ماشین و تحلیل داده برای کسب‌وکارها.',
-            provider: { '@id': 'https://studioarman.com/#organization' },
+            provider: { '@id': 'https://aiunpacked.ir/#organization' },
             areaServed: 'IR',
-            url: 'https://studioarman.com/fa/ai-solutions',
+            url: 'https://aiunpacked.ir/fa/ai-solutions',
           },
           {
             '@type': 'HowTo',
@@ -114,19 +114,19 @@ async function seedAiSolutionsPage(strapi: Core.Strapi): Promise<void> {
           {
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://studioarman.com/fa' },
-              { '@type': 'ListItem', position: 2, name: 'راهکارهای هوش مصنوعی', item: 'https://studioarman.com/fa/ai-solutions' },
+              { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://aiunpacked.ir/fa' },
+              { '@type': 'ListItem', position: 2, name: 'راهکارهای هوش مصنوعی', item: 'https://aiunpacked.ir/fa/ai-solutions' },
             ],
           },
           {
             '@type': 'WebPage',
             name: 'راهکارهای هوش مصنوعی',
-            url: 'https://studioarman.com/fa/ai-solutions',
+            url: 'https://aiunpacked.ir/fa/ai-solutions',
             description:
               'خدمات هوش مصنوعی، اتوماسیون فرایندها، چت‌بات هوشمند و تحلیل داده برای کسب‌وکار شما توسط استودیو آرمان.',
             inLanguage: 'fa-IR',
-            isPartOf: { '@type': 'WebSite', name: 'استودیو آرمان', url: 'https://studioarman.com' },
-            primaryImageOfPage: 'https://studioarman.com/og/ai-solutions.png',
+            isPartOf: { '@type': 'WebSite', name: 'استودیو آرمان', url: 'https://aiunpacked.ir' },
+            primaryImageOfPage: 'https://aiunpacked.ir/og/ai-solutions.png',
             dateModified: '2026-06-16',
           },
         ],
@@ -664,7 +664,7 @@ async function seedFaLocalizations(strapi: Core.Strapi): Promise<void> {
 // JSON-LD + an H2 section outline for the owner to fill in (chosen: scaffold,
 // owner writes the prose). Idempotent — skips if any fa article exists.
 // ---------------------------------------------------------------------------
-const SITE_URL = 'https://studioarman.com';
+const SITE_URL = 'https://aiunpacked.ir';
 
 // Build a Strapi "blocks" body: intro paragraph + an H2 per section, each with
 // a placeholder paragraph prompting the owner to write.

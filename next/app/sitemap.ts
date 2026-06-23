@@ -3,7 +3,7 @@ import { type MetadataRoute } from 'next';
 import { locales } from '@/config';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
-const BASE_URL = 'https://studioarman.com';
+const BASE_URL = 'https://aiunpacked.ir';
 
 async function getPageRoutes(locale: string): Promise<MetadataRoute.Sitemap> {
   try {

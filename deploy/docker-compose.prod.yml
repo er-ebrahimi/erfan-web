@@ -38,9 +38,9 @@ services:
       dockerfile: Dockerfile
       args:
         # CHANGE to your CMS URL. NEXT_PUBLIC_* + DOMAIN are baked in at build time.
-        NEXT_PUBLIC_API_URL: "https://cms.studioarman.com"
-        NEXT_PUBLIC_STRAPI_URL: "https://cms.studioarman.com"
-        DOMAIN: "cms.studioarman.com"
+        NEXT_PUBLIC_API_URL: "https://cms.aiunpacked.ir"
+        NEXT_PUBLIC_STRAPI_URL: "https://cms.aiunpacked.ir"
+        DOMAIN: "cms.aiunpacked.ir"
         BACK_PORT: ""
     image: armanstudio-blog:latest
     restart: unless-stopped
