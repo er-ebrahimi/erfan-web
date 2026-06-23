@@ -1198,6 +1198,46 @@ async function seedBlogFa(strapi: Core.Strapi): Promise<void> {
 // Strapi lifecycle hooks
 // ---------------------------------------------------------------------------
 
+async function publishWave1Content(strapi: Core.Strapi): Promise<void> {
+  if (process.env.SEED_AI_SOLUTIONS !== 'true') return;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const fs = require('fs');
+    const fp = require('path').join(process.cwd(), 'src', 'seed-data', 'wave1-bodies.json');
+    if (!fs.existsSync(fp)) {
+      strapi.log.warn('[seed] wave1-bodies.json not found — skipping content publish');
+      return;
+    }
+    const bodies: Record<string, any[]> = JSON.parse(fs.readFileSync(fp, 'utf-8'));
+    let published = 0;
+    for (const [slug, blocks] of Object.entries(bodies)) {
+      const arts = await strapi.documents('api::article.article').findMany({
+        locale: 'fa',
+        filters: { slug } as any,
+        status: 'draft',
+      });
+      const doc: any = arts[0];
+      if (!doc) {
+        strapi.log.warn(`[seed] wave1 publish: no draft article for ${slug}`);
+        continue;
+      }
+      await (strapi.documents('api::article.article') as any).update({
+        documentId: doc.documentId,
+        locale: 'fa',
+        data: { dynamic_zone: [{ __component: 'shared.content', content: blocks }] },
+      });
+      await (strapi.documents('api::article.article') as any).publish({
+        documentId: doc.documentId,
+        locale: 'fa',
+      });
+      published += 1;
+    }
+    strapi.log.info(`[seed] wave1 content published: ${published}`);
+  } catch (e) {
+    strapi.log.warn(`[seed] wave1 publish failed (non-fatal): ${e}`);
+  }
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -1219,5 +1259,6 @@ export default {
     await seedGlobalFa(strapi);
     await seedFaLocalizations(strapi);
     await seedBlogFa(strapi);
+    await publishWave1Content(strapi);
   },
 };
