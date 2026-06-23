@@ -1238,6 +1238,23 @@ async function publishWave1Content(strapi: Core.Strapi): Promise<void> {
   }
 }
 
+async function ensureFaLocale(strapi: Core.Strapi): Promise<void> {
+  // The fa content was created with locale "fa", but the Persian locale must be
+  // registered in the i18n plugin for it to appear in the admin Content Manager.
+  try {
+    const svc: any = strapi.plugin('i18n').service('locales');
+    const locales: any[] = await svc.find();
+    if (!locales.some((l: any) => l.code === 'fa')) {
+      await svc.create({ code: 'fa', name: 'Persian (fa)' });
+      strapi.log.info('[seed] registered i18n locale: fa');
+    } else {
+      strapi.log.info('[seed] i18n locale fa already present');
+    }
+  } catch (e) {
+    strapi.log.warn(`[seed] ensureFaLocale failed (non-fatal): ${e}`);
+  }
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -1255,6 +1272,7 @@ export default {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    await ensureFaLocale(strapi);
     await seedAiSolutionsPage(strapi);
     await seedGlobalFa(strapi);
     await seedFaLocalizations(strapi);
