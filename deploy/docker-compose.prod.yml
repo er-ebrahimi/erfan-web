@@ -1,0 +1,71 @@
+# Production stack — fresh server, Postgres. Edit domains in Caddyfile + build args below.
+name: erfan-web
+
+services:
+  strapiDB:                       # name matches DATABASE_HOST baked in strapi/Dockerfile.prod
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strapi -d strapi"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: [internal]
+
+  strapi:
+    build:
+      context: ../strapi
+      dockerfile: Dockerfile.prod
+    image: strapi-erfanweb:latest
+    restart: unless-stopped
+    env_file: ./strapi.env
+    depends_on:
+      strapiDB:
+        condition: service_healthy
+    volumes:
+      - strapi-uploads:/opt/app/public/uploads
+    networks: [internal]
+
+  web:
+    build:
+      context: ../next
+      dockerfile: Dockerfile
+      args:
+        # CHANGE to your CMS URL. NEXT_PUBLIC_* + DOMAIN are baked in at build time.
+        NEXT_PUBLIC_API_URL: "https://cms.studioarman.com"
+        NEXT_PUBLIC_STRAPI_URL: "https://cms.studioarman.com"
+        DOMAIN: "cms.studioarman.com"
+        BACK_PORT: ""
+    image: armanstudio-blog:latest
+    restart: unless-stopped
+    env_file: ./web.env
+    depends_on: [strapi]
+    networks: [internal]
+
+  caddy:                          # reverse proxy + automatic HTTPS (Let's Encrypt)
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [web, strapi]
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  pgdata:
+  strapi-uploads:
+  caddy-data:
+  caddy-config:

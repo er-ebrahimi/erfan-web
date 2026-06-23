@@ -1,0 +1,14 @@
+# CHANGE the email and the three domains to yours, then `docker compose ... up -d caddy`.
+{
+	email admin@studioarman.com
+}
+
+studioarman.com, www.studioarman.com {
+	encode gzip
+	reverse_proxy web:4000
+}
+
+cms.studioarman.com {
+	encode gzip
+	reverse_proxy strapi:1337
+}

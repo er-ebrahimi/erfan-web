@@ -20,3 +20,9 @@ docs/_demand_audit_*
 docs/_wave1_*
 docs/seo-keyword-tree-ai.NEW.xlsx
 docs/~$*.xlsx
+# Deploy: keep templates/compose/guide, never commit real secrets or content exports (added 2026-06-23)
+deploy/.env
+deploy/strapi.env
+deploy/web.env
+deploy/.secrets.tmp
+deploy/*.tar.gz
