@@ -86,6 +86,41 @@ Forked from `strapi/LaunchPad`.
 - **Husky pre-commit is check-only** (stub, not actively enforcing). `lint-staged-check.json` has check-only config.
 - Order: `yarn fix:format` → `(cd next && yarn lint)` → `(cd next && yarn typecheck)`.
 
+## Playwright E2E Testing
+
+- Suite lives at `next/playwright.config.ts` (config) and `next/e2e/` (tests, pages, fixtures).
+- Uses **Page Object Model** — all pages extend `BasePage` in `next/e2e/pages/`.
+- Tests are tagged: `@smoke` (P0 — critical), `@regression` (P1 — important), `@api` (P1 — contract).
+- Custom fixtures: `mockContactApi` (mocks `/api/contact` POST), `mockContactApiWithFailure`.
+- ALTCHA handled via auto-verify (Web Crypto in browser) + route interception fallback.
+- Runs against 3 projects: chromium (1280×720), tablet (768×1024), mobile (375×667).
+- **After adding new pages or changing existing ones, always run smoke tests:**
+  ```bash
+  cd next && yarn test:e2e:smoke
+  ```
+- **Before releasing, run full suite:**
+  ```bash
+  cd next && yarn test:e2e
+  ```
+- **When adding a new page/feature, always create:**
+  1. Page Object in `e2e/pages/`
+  2. Smoke test in `e2e/tests/smoke/` (tagged `@smoke`)
+  3. Regression test in `e2e/tests/regression/` (tagged `@regression`) if applicable
+- **Always use role-based locators** (`getByRole`, `getByPlaceholder`, `getByLabel`), never CSS selectors.
+- **Tests must be independent** — no shared state between tests.
+- **Dynamic content**: use `test.skip(count === 0, 'No items')` for Strapi-driven content.
+
+### Key commands
+
+| Where | Command | What it does |
+|-------|---------|--------------|
+| `next/` | `yarn test:e2e` | Full suite (all projects) |
+| `next/` | `yarn test:e2e:smoke` | Smoke tests only (`@smoke`) |
+| `next/` | `yarn test:e2e:regression` | Regression tests (`@regression`) |
+| `next/` | `yarn test:e2e:api` | API contract tests (`@api`) |
+| `next/` | `yarn test:e2e:debug` | Debug mode (Inspector) |
+| `next/` | `yarn test:e2e:ui` | Playwright UI mode |
+
 ## Deployment (legacy)
 
 - Old blue-green Docker deploy via `next/deploy.sh` (not actively used).
