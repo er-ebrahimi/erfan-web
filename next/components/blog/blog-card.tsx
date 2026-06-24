@@ -87,7 +87,7 @@ export const BlogCardVertical = ({
 }) => {
   return (
     <div
-      className="shadow-derek   rounded-3xl group border border-transparent hover:border-border w-full hover:bg-neutral-900  overflow-hidden  hover:scale-[1.02] transition duration-200 relative"
+      className="shadow-derek   rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50  overflow-hidden  hover:scale-[1.02] transition duration-200 relative"
     >
       <Link
         href={`/${locale}/category/${article.slug}`}

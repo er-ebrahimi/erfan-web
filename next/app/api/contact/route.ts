@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { verifyAltchaPayload } from '@/lib/altcha';
 import { getApiMessage } from '@/lib/intl-api';
 
 export async function POST(request: NextRequest) {
@@ -10,13 +11,13 @@ export async function POST(request: NextRequest) {
     const {
       contact,
       message,
-      turnstileToken,
+      altcha: altchaPayload,
       locale: requestLocale = 'fa',
     } = body;
     locale = requestLocale;
 
     // Validate required fields
-    if (!contact || !message || !turnstileToken) {
+    if (!contact || !message || !altchaPayload) {
       const errorMessage = await getApiMessage(
         'contact.apiErrors.requiredFields',
         locale
@@ -27,25 +28,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify Turnstile token
-    const turnstileResponse = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
-          response: turnstileToken,
-        }),
-      }
-    );
+    // Verify ALTCHA payload
+    const { error: altchaError } = await verifyAltchaPayload(altchaPayload);
 
-    const turnstileResult = await turnstileResponse.json();
-
-    if (!turnstileResult.success) {
-      console.error('Turnstile verification failed:', turnstileResult);
+    if (altchaError) {
+      console.error('ALTCHA verification failed:', altchaError);
       const errorMessage = await getApiMessage(
         'contact.apiErrors.securityFailed',
         locale

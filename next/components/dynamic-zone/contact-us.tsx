@@ -1,7 +1,77 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
+
+import 'altcha';
+
+import type { AltchaWidgetElement } from 'altcha/types/generic';
+
+import type { } from 'altcha/types/react';
+
+const faI18n = {
+  ariaLinkLabel: 'Altcha (وبسایت رسمی)',
+  enterCode: 'کد را وارد کنید',
+  enterCodeAria: 'کدی را که می‌شنوید وارد کنید. برای پخش صدا space را بزنید.',
+  error: 'تأیید امنیتی ناموفق بود. دوباره تلاش کنید.',
+  expired: 'اعتبار تأیید منقضی شد. دوباره تلاش کنید.',
+  footer:
+    'محافظت شده توسط <a href="https://altcha.org/" tabindex="-1" target="_blank" aria-label="Altcha (وبسایت رسمی)">ALTCHA</a>',
+  getAudioChallenge: 'دریافت چالش صوتی',
+  label: 'من ربات نیستم',
+  loading: 'در حال بارگذاری...',
+  reload: 'بارگذاری مجدد',
+  verify: 'تأیید',
+  verificationRequired: 'تأیید امنیتی الزامی است!',
+  verified: 'تأیید شد',
+  verifying: 'در حال تأیید...',
+  waitAlert: 'در حال تأیید... لطفاً صبر کنید.',
+  cancel: 'لغو',
+  enterCodeFromImage: 'برای ادامه، کد تصویر زیر را وارد کنید.',
+};
+
+function AltchaWidget({
+  widgetRef,
+  locale,
+}: {
+  widgetRef: React.RefObject<HTMLElement | null>;
+  locale: string;
+}) {
+  const isClient = useSyncExternalStore(
+    () => () => { },
+    () => true,
+    () => false
+  );
+
+  useEffect(() => {
+    if (locale === 'fa') {
+      const $altcha = (globalThis as any).$altcha;
+      if ($altcha?.i18n && !$altcha.i18n.store.fa) {
+        $altcha.i18n.set('fa', faI18n);
+      }
+    }
+  }, [locale]);
+
+  if (!isClient) {
+    return <div className="h-16" />;
+  }
+
+  return (
+    <altcha-widget
+      ref={widgetRef}
+      challenge="/api/altcha/challenge"
+      auto="onload"
+      name="altcha"
+      language={locale === 'fa' ? 'fa' : 'en'}
+      className="w-full max-w-xs"
+    />
+  );
+}
 
 const ContactUs = ({
   Title,
@@ -19,10 +89,7 @@ const ContactUs = ({
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
-
-  // ❌ Turnstile disabled
-  // const [turnstileToken, setTurnstileToken] = useState<string>('');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const widgetRef = useRef<HTMLElement>(null);
 
   const t = useTranslations('contact');
   const locale = useLocale();
@@ -36,57 +103,21 @@ const ContactUs = ({
       [name]: value,
     }));
   };
-
-  // ❌ Turnstile callback disabled
-  /*
-  const handleTurnstileCallback = (token: string) => {
-    setTurnstileToken(token);
+  const getAltchaPayload = (): string | undefined => {
+    const widget = widgetRef.current as AltchaWidgetElement | null;
+    if (!widget || widget.getState() !== 'verified') {
+      return undefined;
+    }
+    return (
+      widget.querySelector<HTMLInputElement>('input[type="hidden"]')?.value ??
+      undefined
+    );
   };
-  */
-
-  // Dark mode detection (kept because UI may need it)
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      setIsDarkMode(isDark);
-    };
-
-    checkDarkMode();
-
-    const observer = new MutationObserver(checkDarkMode);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  // ❌ Turnstile script loading removed
-  /*
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-
-    (window as any).handleTurnstileCallback = handleTurnstileCallback;
-
-    return () => {
-      const existingScript = document.querySelector(
-        'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]'
-      );
-      if (existingScript) existingScript.remove();
-      delete (window as any).handleTurnstileCallback;
-    };
-  }, []);
-  */
 
   const sendContactForm = async (
     contact: string,
-    message: string
-    // ❌ token removed
+    message: string,
+    altchaPayload: string
   ) => {
     try {
       const response = await fetch('/api/contact', {
@@ -97,7 +128,7 @@ const ContactUs = ({
         body: JSON.stringify({
           contact,
           message,
-          // ❌ turnstileToken removed
+          altcha: altchaPayload,
           locale,
         }),
       });
@@ -131,7 +162,14 @@ const ContactUs = ({
       return;
     }
 
-    // ❌ Turnstile validation removed
+    const altchaPayload = getAltchaPayload();
+    if (!altchaPayload) {
+      setSubmitStatus({
+        type: 'error',
+        message: t('captchaError'),
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
@@ -139,7 +177,8 @@ const ContactUs = ({
     try {
       const result = await sendContactForm(
         formData.contact,
-        formData.message
+        formData.message,
+        altchaPayload
       );
 
       if (result.success) {
@@ -148,7 +187,8 @@ const ContactUs = ({
           message: result.message,
         });
         setFormData({ contact: '', message: '' });
-        // ❌ setTurnstileToken removed
+        const widget = widgetRef.current as AltchaWidgetElement | null;
+        widget?.reset();
       } else {
         setSubmitStatus({
           type: 'error',
@@ -167,7 +207,7 @@ const ContactUs = ({
 
   return (
     <section className="py-16 px-4 flex justify-center items-center">
-      <div className="container border border-border rounded-xl p-12 w-fit shadow-lg bg-card">
+      <div className="container border border-border rounded-xl p-12 w-full shadow-lg bg-card">
         <div className="max-w-lg text-center mb-6">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             {Title}
@@ -182,11 +222,10 @@ const ContactUs = ({
         >
           {submitStatus.type && (
             <div
-              className={`p-4 rounded-lg text-center ${
-                submitStatus.type === 'success'
-                  ? 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-200 border border-green-200 dark:border-green-700'
-                  : 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-200 border border-red-200 dark:border-red-700'
-              }`}
+              className={`p-4 rounded-lg text-center ${submitStatus.type === 'success'
+                ? 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-200 border border-green-200 dark:border-green-700'
+                : 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-200 border border-red-200 dark:border-red-700'
+                }`}
             >
               {submitStatus.message}
             </div>
@@ -230,22 +269,13 @@ const ContactUs = ({
             />
           </div>
 
-          {/* ❌ Turnstile Widget Disabled */}
-          {/*
           <div className="flex justify-center">
-            <div
-              className="cf-turnstile"
-              data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-              data-callback="handleTurnstileCallback"
-              data-theme={isDarkMode ? 'dark' : 'light'}
-              data-language="en"
-            ></div>
+            <AltchaWidget widgetRef={widgetRef} locale={locale} />
           </div>
-          */}
 
           <button
             type="submit"
-            disabled={isSubmitting} // ✅ Only depends on submitting state now
+            disabled={isSubmitting}
             className="mt-4 w-full py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? t('submittingButton') : t('submitButton')}

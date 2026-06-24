@@ -171,6 +171,7 @@ export interface DynamicZoneFormNextToSection extends Struct.ComponentSchema {
   attributes: {
     form: Schema.Attribute.Component<'shared.form', false>;
     heading: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     section: Schema.Attribute.Component<'shared.section', false>;
     social_media_icon_links: Schema.Attribute.Component<
       'shared.social-media-icon-links',
