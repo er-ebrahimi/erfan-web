@@ -28,6 +28,12 @@
       "component": "shared.social-media-icon-links",
       "repeatable": true
     },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
     "image": {
       "type": "media",
       "multiple": false,

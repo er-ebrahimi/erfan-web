@@ -12,6 +12,9 @@
     "URL": {
       "type": "text"
     },
+    "info": {
+      "type": "string"
+    },
     "target": {
       "type": "enumeration",
       "enum": [

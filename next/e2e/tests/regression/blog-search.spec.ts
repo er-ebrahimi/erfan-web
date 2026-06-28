@@ -22,39 +22,39 @@ test.describe('Blog search and pagination', { tag: '@regression' }, () => {
     await blogPage.goto();
   });
 
-  // test('filters articles as user types in search', async () => {
-  //   const initialCount = await blogPage.articleRowLinks.count();
-  //   test.skip(initialCount === 0, 'No articles to search');
+  test('filters articles as user types in search', async () => {
+    const initialCount = await blogPage.articleRowLinks.count();
+    test.skip(initialCount === 0, 'No articles to search');
 
-  //   await blogPage.search(BLOG_SEARCH.existingTerm);
-  //   await blogPage.page.waitForTimeout(500);
-  //   const filteredCount = await blogPage.articleRowLinks.count();
-  //   expect(filteredCount).toBeLessThanOrEqual(initialCount);
-  // });
+    await blogPage.search(BLOG_SEARCH.existingTerm);
+    await blogPage.page.waitForTimeout(500);
+    const filteredCount = await blogPage.articleRowLinks.count();
+    expect(filteredCount).toBeLessThanOrEqual(initialCount);
+  });
 
-  // test('shows no results message for non-matching search', async () => {
-  //   const initialCount = await blogPage.articleRowLinks.count();
-  //   test.skip(initialCount === 0, 'No articles to search');
+  test('shows no results message for non-matching search', async () => {
+    const initialCount = await blogPage.articleRowLinks.count();
+    test.skip(initialCount === 0, 'No articles to search');
 
-  //   await blogPage.search(BLOG_SEARCH.nonExistingTerm);
-  //   await blogPage.page.waitForTimeout(500);
+    await blogPage.search(BLOG_SEARCH.nonExistingTerm);
+    await blogPage.page.waitForTimeout(500);
 
-  //   await expect(blogPage.noResultsMessage).toBeVisible();
-  // });
+    await expect(blogPage.noResultsMessage).toBeVisible();
+  });
 
-  // test('search input is cleared and resets to full list', async () => {
-  //   const initialCount = await blogPage.articleRowLinks.count();
-  //   test.skip(initialCount === 0, 'No articles to search');
+  test('search input is cleared and resets to full list', async () => {
+    const initialCount = await blogPage.articleRowLinks.count();
+    test.skip(initialCount === 0, 'No articles to search');
 
-  //   await blogPage.search(BLOG_SEARCH.nonExistingTerm);
-  //   await blogPage.page.waitForTimeout(500);
-  //   await expect(blogPage.noResultsMessage).toBeVisible();
+    await blogPage.search(BLOG_SEARCH.nonExistingTerm);
+    await blogPage.page.waitForTimeout(500);
+    await expect(blogPage.noResultsMessage).toBeVisible();
 
-  //   await blogPage.search('');
-  //   await blogPage.page.waitForTimeout(500);
-  //   const resetCount = await blogPage.articleRowLinks.count();
-  //   expect(resetCount).toBe(initialCount);
-  // });
+    await blogPage.search('');
+    await blogPage.page.waitForTimeout(500);
+    const resetCount = await blogPage.articleRowLinks.count();
+    expect(resetCount).toBe(initialCount);
+  });
 
   test('pagination controls appear when there are enough articles', async () => {
     const initialCount = await blogPage.articleRowLinks.count();

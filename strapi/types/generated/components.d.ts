@@ -169,6 +169,7 @@ export interface DynamicZoneFormNextToSection extends Struct.ComponentSchema {
     icon: 'book';
   };
   attributes: {
+    description: Schema.Attribute.Text;
     form: Schema.Attribute.Component<'shared.form', false>;
     heading: Schema.Attribute.Text;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
@@ -178,6 +179,7 @@ export interface DynamicZoneFormNextToSection extends Struct.ComponentSchema {
       true
     >;
     sub_heading: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -597,6 +599,7 @@ export interface SharedLink extends Struct.ComponentSchema {
   };
   attributes: {
     children: Schema.Attribute.Component<'shared.button', true>;
+    info: Schema.Attribute.String;
     target: Schema.Attribute.Enumeration<
       ['_blank', '_self', '_parent', '_top']
     >;
