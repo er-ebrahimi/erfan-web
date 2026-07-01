@@ -21,7 +21,7 @@ export default function RootError({
   reset: () => void;
 }) {
   const pathname = usePathname();
-  const locale = (pathname?.split('/')[1] as keyof typeof messages) || 'fa';
+  const locale = (pathname?.split('/')[1] as keyof typeof messages);
   const currentMessages = messages[locale] || messages['fa'];
 
   return (

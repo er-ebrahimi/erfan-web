@@ -149,6 +149,14 @@ See **Docker build & deploy** section below for the current deployment flow.
 `NEXT_PUBLIC_*` vars are **baked into the JS bundle at build time** — changing them requires a rebuild.  
 `STRAPI_INTERNAL_URL` is read from `process.env` at runtime — change it in `.env.local` and restart the container.
 
+### Product favicons
+
+| Var | Purpose | Default |
+|-----|---------|---------|
+| `NEXT_PUBLIC_SITE_ID` | Selects favicon set from `public/favicon-sets/{SITE_ID}/` | `site-a` |
+
+Each deployment sets `NEXT_PUBLIC_SITE_ID` to pick its favicon set. Add new sets as `public/favicon-sets/<id>/` with `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, and `apple-touch-icon.png`.
+
 ### Build & save image (local machine)
 ```bash
 cd next

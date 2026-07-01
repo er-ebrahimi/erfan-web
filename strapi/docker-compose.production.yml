@@ -10,3 +10,7 @@ services:
       - "1337"
     networks:
       - studio-net
+
+networks:
+  studio-net:
+    driver: bridge

@@ -95,7 +95,13 @@ const nextConfig = {
         ],
       },
       {
-        source: '/:path((?:favicon\\.ico|robots\\.txt|sitemap\\.xml))',
+        source: '/favicon-sets/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:path((?:robots\\.txt|sitemap\\.xml))',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],

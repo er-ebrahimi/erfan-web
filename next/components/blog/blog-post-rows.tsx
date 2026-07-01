@@ -1,6 +1,6 @@
 'use client';
 
-import { format } from 'date-fns';
+import { format } from 'date-fns-jalali';
 import FuzzySearch from 'fuzzy-search';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from 'next-view-transitions';

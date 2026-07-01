@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { verifyAltchaPayload } from '@/lib/altcha';
 import { getApiMessage } from '@/lib/intl-api';
+import { getProvider } from '@/lib/notifications/registry';
 
 export async function POST(request: NextRequest) {
-  let locale = 'fa'; // Default locale
+  let locale = 'fa';
 
   try {
     const body = await request.json();
@@ -16,7 +17,6 @@ export async function POST(request: NextRequest) {
     } = body;
     locale = requestLocale;
 
-    // Validate required fields
     if (!contact || !message || !altchaPayload) {
       const errorMessage = await getApiMessage(
         'contact.apiErrors.requiredFields',
@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify ALTCHA payload
     const { error: altchaError } = await verifyAltchaPayload(altchaPayload);
 
     if (altchaError) {
@@ -38,65 +37,30 @@ export async function POST(request: NextRequest) {
         locale
       );
       return NextResponse.json(
-        {
-          success: false,
-          message: errorMessage,
-        },
+        { success: false, message: errorMessage },
         { status: 400 }
       );
     }
 
-    // Send email using web3forms
-    const emailPayload = {
-      access_key: process.env.CONTACT_EMAIL_ACCESS_KEY,
-      subject: `📧 New Message from Contact Form - ${contact}`,
-      message: `
-New message from the contact form:
+    const provider = getProvider();
+    const result = await provider.send({ contact, message });
 
-Contact Info: ${contact}
-Message: ${message}
-
-Sent at: ${new Date().toLocaleString('en-US')}
-      `,
-      from_name: 'Website Contact Form',
-      to: process.env.CONTACT_EMAIL || 'your-email@example.com',
-      reply_to: contact,
-    };
-
-    const emailResponse = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(emailPayload),
-    });
-
-    const emailResult = await emailResponse.json();
-
-    if (emailResponse.ok && emailResult.success) {
+    if (result.success) {
       const successMessage = await getApiMessage(
         'contact.apiErrors.sendSuccess',
         locale
       );
-      return NextResponse.json({
-        success: true,
-        message: successMessage,
-      });
-    } else {
-      console.error('Failed to send email:', emailResult);
-      const errorMessage = await getApiMessage(
-        'contact.apiErrors.sendFailed',
-        locale
-      );
-      return NextResponse.json(
-        {
-          success: false,
-          message: errorMessage,
-        },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: true, message: successMessage });
     }
+
+    const errorMessage = await getApiMessage(
+      'contact.apiErrors.sendFailed',
+      locale
+    );
+    return NextResponse.json(
+      { success: false, message: errorMessage },
+      { status: 500 }
+    );
   } catch (error) {
     console.error('Contact form error:', error);
     const errorMessage = await getApiMessage(
@@ -104,10 +68,7 @@ Sent at: ${new Date().toLocaleString('en-US')}
       locale
     );
     return NextResponse.json(
-      {
-        success: false,
-        message: errorMessage,
-      },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

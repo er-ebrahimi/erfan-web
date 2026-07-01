@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import enamadLogo from "@/public/enamad.webp"
+
+import enamadLogo from "@/public/enamad.webp";
+
+const SHOW_ENAMAD = process.env.NEXT_PUBLIC_SHOW_ENAMAD === 'true';
+const ENAMAD_URL = process.env.NEXT_PUBLIC_ENAMAD_URL || '';
+
 export const EnamadLogo = () => {
+  if (!SHOW_ENAMAD || !ENAMAD_URL) {
+    return null;
+  }
+
   return (
-    <a
-      referrerPolicy="origin"
-      target="_blank"
-      href="https://trustseal.enamad.ir/?id=690945&Code=rgk8cRpwyv7qi7lWVM6noaAn9SiQzaP9"
-    >
+    <a referrerPolicy="origin" target="_blank" href={ENAMAD_URL}>
       <Image
         referrerPolicy="origin"
         src={enamadLogo}

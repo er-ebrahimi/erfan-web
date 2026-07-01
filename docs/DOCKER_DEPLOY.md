@@ -28,10 +28,10 @@
 cd strapi
 
 # Build the production image
-docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.yml build
 
 # Save to tar (~6.7 GB)
-docker save -o strapi-erfanweb.tar strapi-erfanweb:latest
+docker save -o strapi-prod.tar strapi-prod:latest
 ```
 
 ### Next.js
@@ -40,7 +40,7 @@ docker save -o strapi-erfanweb.tar strapi-erfanweb:latest
 cd next
 
 # Build with production API URLs baked in
-docker compose -f docker-compose.dev.yml build
+docker compose build
 
 # Save to tar (~350 MB)
 docker save -o armanstudio-blog.tar armanstudio-blog:latest
@@ -59,7 +59,7 @@ sudo docker rmi strapi-erfanweb
 # Copy both tar files to server (scp / rsync)
 
 # Load images
-docker load -i strapi-erfanweb.tar
+docker load -i strapi-prod.tar
 docker load -i armanstudio-blog.tar
 
 # Start everything

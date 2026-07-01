@@ -19,7 +19,7 @@ import {
   IconUser,
   IconCheck,
   IconMenu2,
-  IconChevronDown,
+  IconPlus,
 } from '@tabler/icons-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
@@ -47,6 +47,7 @@ import { useSlugContext } from '@/app/context/SlugContext';
 import { languageLabels } from '@/lib/constants';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
+import { useRouter } from "next/navigation";
 
 type NavbarItem = {
   URL: string;
@@ -163,7 +164,12 @@ export function NavbarMenu({
 }: Props) {
   const { theme, setTheme } = useTheme();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const pathname = usePathname();
+  useEffect(() => {
+  }, [sheetOpen]);
 
+  useEffect(() => {
+  }, [pathname]);
   // Language logic
   const { state } = useSlugContext();
   const { localizedSlugs } = state;
@@ -171,9 +177,8 @@ export function NavbarMenu({
   const t = useTranslations('common');
   const { direction: dir, isRTL, fontClass } = getLocaleConfig(currentLocale);
 
-  const pathname = usePathname();
   const segments = pathname?.split('/') || [];
-
+  const router = useRouter();
   const generateLocalizedPath = (targetLocale: string): string => {
     if (!pathname) return `/${targetLocale}`;
 
@@ -204,7 +209,7 @@ export function NavbarMenu({
           <SheetTrigger asChild>
             <Button
               variant="simple"
-              className="h-auto p-1 rounded-full z-1"
+              className="h-auto p-2 rounded-full z-1"
               aria-label={t('menu')}
             >
               <IconMenu2 className="h-6 w-6" />
@@ -298,11 +303,11 @@ export function NavbarMenu({
         <NavigationMenu viewport={false} delayDuration={200}>
           <NavigationMenuList className="flex-nowrap gap-1 whitespace-nowrap rtl:flex-row-reverse">
             {/* Left Navbar Items */}
-            { leftNavbarItems?.map((item, index) => {
+            {leftNavbarItems?.map((item, index) => {
               if (item.children && item.children.length > 0) {
                 return (
                   <NavigationMenuItem key={`left-${index}`}>
-                    <NavigationMenuTrigger className="px-2">
+                    <NavigationMenuTrigger className="px-2" onClick={() => { router.push(`/${locale}/${(item.URL || '').replace(/^\//, '')}`) }}>
                       <div className="flex items-center gap-2">
                         <span>{item.text}</span>
                       </div>
@@ -474,21 +479,39 @@ export function NavbarMenu({
 
 function MobileNavItem({ item, locale, onClose }: { item: NavbarItem, locale: string, onClose?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [animation, setAnimation] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
   const { isRTL } = getLocaleConfig(locale);
+  const router = useRouter();
 
   if (hasChildren) {
     return (
       <div className="flex flex-col gap-2">
         <div
           className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-accent cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(e) => {
+            onClose?.()
+            router.push(`/${locale}/${(item.URL || '').replace(/^\//, '')}`)
+          }}
         >
           <div className="flex items-center gap-2 font-medium">
             {getIconForNavItem(item.text || '', item.icon)}
             <span>{item.text}</span>
           </div>
-          <IconChevronDown className={cn("h-4 w-4 transition-transform duration-300", isOpen && "rotate-180")} />
+          <button className="rounded-full p-1.5 border border-border hover:border-primary 
+             text-muted-foreground hover:text-primary hover:bg-primary/10 
+             active:scale-95 transition-all duration-200"
+            onPointerDownCapture={(e) => e.stopPropagation()}
+
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsOpen((prev) => {
+                return !prev
+              })
+            }}>
+
+            <IconPlus className={cn("h-4 w-4 transition-transform duration-300", isOpen && "rotate-180")} />
+          </button>
         </div>
         <AnimatePresence initial={false}>
           {isOpen && (

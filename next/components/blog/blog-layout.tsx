@@ -1,5 +1,5 @@
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { format } from 'date-fns';
+import { format } from 'date-fns-jalali';
 import { getTranslations } from 'next-intl/server';
 import { Link } from 'next-view-transitions';
 
@@ -73,7 +73,7 @@ export async function BlogLayout({
               ))}
             </div>
             <header className="flex flex-col">
-              <h1 className={cn("mt-8 text-4xl font-bold tracking-tight text-foreground sm:text-5xl", "!leading-relaxed")}>
+              <h1 className={cn("mt-8 text-4xl font-bold tracking-tight  text-primary sm:text-5xl", "!leading-relaxed")}>
                 {article.title}
               </h1>
             </header>

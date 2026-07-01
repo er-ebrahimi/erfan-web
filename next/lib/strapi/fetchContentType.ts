@@ -49,6 +49,10 @@ export default async function fetchContentType(
   });
 
   if (!res.ok) {
+    if (res.status === 404) {
+      console.warn(`fetchContentType: "${contentType}" not found (404)`);
+      return null;
+    }
     throw new Error(
       `fetchContentType failed for "${contentType}": ${res.status} ${res.statusText}`
     );

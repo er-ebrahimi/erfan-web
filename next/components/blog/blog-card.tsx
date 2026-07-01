@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format } from 'date-fns-jalali';
 import { Link } from 'next-view-transitions';
 
 import { BlurImage } from '@/components/blur-image';
