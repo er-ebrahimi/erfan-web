@@ -53,9 +53,6 @@ COPY --from=build /opt/app/config ./config
 COPY --from=build /opt/app/src ./src
 COPY --from=build /opt/app/package.json ./
 COPY --from=build /opt/app/tsconfig.json ./
-COPY .env.production ./.env
-RUN echo "DATABASE_HOST=strapiDB" >> ./.env
-
 RUN chown -R node:node /opt/app
 USER node
 
