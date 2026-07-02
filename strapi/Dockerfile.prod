@@ -8,8 +8,10 @@ RUN --mount=type=cache,target=/var/cache/apk \
 
 WORKDIR /opt/app
 
+RUN yarn config set npmRegistryServer https://mirror-npm.runflare.com
+
 COPY package.json yarn.lock ./
-COPY scripts ./scripts  
+COPY scripts ./scripts
 # ✅ Cache yarn modules — node_modules only rebuilds when yarn.lock changes
 RUN --mount=type=cache,target=/root/.yarn \
     YARN_CACHE_FOLDER=/root/.yarn \

@@ -1,5 +1,6 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
+RUN npm config set registry https://mirror-npm.runflare.com
 COPY package*.json .npmrc* ./
 RUN npm install --legacy-peer-deps
 
