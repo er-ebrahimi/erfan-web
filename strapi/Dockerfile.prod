@@ -20,6 +20,9 @@ RUN --mount=type=cache,target=/root/.yarn \
 # ---- Stage 2: Build ----
 FROM deps AS build
 
+# Admin build needs more heap than Node's default (~1GB); small servers rely on swap.
+ENV NODE_OPTIONS=--max-old-space-size=3072
+
 WORKDIR /opt/app
 COPY --from=deps /opt/app/node_modules ./node_modules
 COPY . .
