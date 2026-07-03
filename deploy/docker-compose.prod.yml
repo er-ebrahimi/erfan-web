@@ -1,23 +1,7 @@
-# Production stack — fresh server, Postgres. Edit domains in Caddyfile + build args below.
+# Production stack — fresh server, SQLite. Edit domains in Caddyfile + build args below.
 name: erfan-web
 
 services:
-  strapiDB:                       # name matches DATABASE_HOST baked in strapi/Dockerfile.prod
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: strapi
-      POSTGRES_USER: strapi
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U strapi -d strapi"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-    networks: [internal]
-
   strapi:
     build:
       context: ../strapi
@@ -25,10 +9,8 @@ services:
     image: strapi-erfanweb:latest
     restart: unless-stopped
     env_file: ./strapi.env
-    depends_on:
-      strapiDB:
-        condition: service_healthy
     volumes:
+      - strapi-data:/opt/app/.tmp
       - strapi-uploads:/opt/app/public/uploads
     networks: [internal]
 
@@ -65,7 +47,7 @@ networks:
   internal:
 
 volumes:
-  pgdata:
+  strapi-data:
   strapi-uploads:
   caddy-data:
   caddy-config:

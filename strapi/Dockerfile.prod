@@ -58,7 +58,7 @@ COPY --from=build /opt/app/config ./config
 COPY --from=build /opt/app/src ./src
 COPY --from=build /opt/app/package.json ./
 COPY --from=build /opt/app/tsconfig.json ./
-RUN chown -R node:node /opt/app
+RUN mkdir -p /opt/app/.tmp && chown -R node:node /opt/app
 USER node
 
 EXPOSE 1337
