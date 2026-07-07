@@ -11,6 +11,7 @@ import { Button } from '../elements/button';
 import { StrapiImage } from '../ui/strapi-image';
 import { useLocaleConfig } from '@/hooks/use-locale-config';
 import { cn } from '@/lib/utils';
+import { localizeHref } from '@/lib/url';
 
 export const CTA = ({
   heading,
@@ -49,7 +50,7 @@ export const CTA = ({
                     <Button
                       as={Link}
                       key={index}
-                      href={cta.URL?.startsWith('http') ? cta.URL : `/${locale}${cta.URL}`}
+                      href={localizeHref(cta.URL, locale)}
                       variant={cta.variant}
                       className="flex flex-row gap-1"
                       target={cta.target}

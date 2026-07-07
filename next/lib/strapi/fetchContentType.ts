@@ -49,8 +49,8 @@ export default async function fetchContentType(
   });
 
   if (!res.ok) {
-    if (res.status === 404) {
-      console.warn(`fetchContentType: "${contentType}" not found (404)`);
+    if (res.status === 404 || res.status === 403) {
+      console.warn(`fetchContentType: "${contentType}" not found (${res.status})`);
       return null;
     }
     throw new Error(

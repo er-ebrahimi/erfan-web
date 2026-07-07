@@ -105,27 +105,67 @@ function MyComponent() {
 4. **User Experience**: Smooth theme transitions and system preference support
 5. **Maintainability**: Centralized theme configuration and easy customization
 
-## 🔧 Customization
+## 🔧 Product Line — Per-Product Theming
 
-To customize colors, edit the CSS variables in `app/globals.css`:
+This is a **product line** — each deployment (product) has its own brand identity.
+Colors are selected at **build time** via `NEXT_PUBLIC_SITE_ID`.
+
+### How it works
+
+```
+.env.local:  NEXT_PUBLIC_SITE_ID=site-b
+                            │
+                            ▼
+root layout:  <html class="theme-site-b">
+                            │
+                            ▼
+app/themes.css:  .theme-site-b { --primary: oklch(...); }
+                 .theme-site-b.dark { --primary: oklch(...); }
+```
+
+### File structure
+
+| File | Purpose |
+|------|---------|
+| `app/globals.css` | Base `:root` / `.dark` (default = site-a). Structural styles only. |
+| `app/themes.css` | Per-product CSS variable overrides, scoped under `.theme-<id>` classes. |
+| `app/layout.tsx` | Reads `NEXT_PUBLIC_SITE_ID`, applies `theme-<id>` class to `<html>`. |
+
+### Adding a new product theme
+
+1. Add a block in `app/themes.css`:
 
 ```css
-:root {
-  --primary: 221.2 83.2% 53.3%; /* Change primary color */
-  --secondary: 210 40% 96%; /* Change secondary color */
-  /* ... other variables */
+.theme-site-c {
+  --primary: oklch(...);
+  /* all tokens */
+}
+.theme-site-c.dark {
+  /* dark mode tokens */
 }
 ```
 
-## 📁 Files Modified
+2. Add its favicon set to `public/favicon-sets/site-c/`.
 
-- `tailwind.config.ts` - Added theme configuration
-- `app/globals.css` - Added CSS variables for both themes
-- `components.json` - Enabled CSS variables
-- `components/theme-provider.tsx` - New theme provider component
-- `components/theme-toggle.tsx` - New theme toggle component
-- `app/[locale]/layout.tsx` - Integrated theme provider
-- `components/navbar/desktop-navbar.tsx` - Added theme toggle
-- `components/navbar/mobile-navbar.tsx` - Added theme toggle
+3. Deploy with `NEXT_PUBLIC_SITE_ID=site-c`.
 
-The implementation follows SOLID principles with separated concerns and is fully compatible with your existing codebase structure.
+### One-line switching
+
+```bash
+# .env.local — change this one line, rebuild, new brand everywhere
+NEXT_PUBLIC_SITE_ID=site-b
+```
+
+### Theme-able controls
+
+Each theme sets all shadcn color tokens (`--background`, `--foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--muted`, `--accent`, `--border`, `--input`, `--ring`, `--radius`, `--chart-1` through `--chart-5`, `--sidebar-*`).
+
+## 📁 Files
+
+- `tailwind.config.ts` — Theme configuration (CSS variable mapping)
+- `app/globals.css` — Base CSS variables (site-a default)
+- `app/themes.css` — Per-product theme overrides
+- `app/layout.tsx` — Theme class on `<html>`, dynamic viewport
+- `components.json` — CSS variables enabled
+- `components/theme-provider.tsx` — Theme provider component
+- `components/theme-toggle.tsx` — Theme toggle component

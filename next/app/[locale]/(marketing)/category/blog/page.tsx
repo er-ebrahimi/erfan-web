@@ -1,6 +1,7 @@
 import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
 import { draftMode } from 'next/headers';
+import { notFound } from 'next/navigation';
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog/blog-card';
 import { BlogPostRows } from '@/components/blog/blog-post-rows';
@@ -31,8 +32,7 @@ export async function generateMetadata(props: {
   );
 
   const seo = pageData?.seo;
-  const metadata = generateMetadataObject(seo);
-  return metadata;
+  return generateMetadataObject(seo);
 }
 
 export default async function Blog(props: {
@@ -77,13 +77,25 @@ export default async function Blog(props: {
     throw err;
   }
 
-  const localizedSlugs = blogPage.localizations?.reduce(
+  if (!articles?.data) {
+    notFound();
+  }
+
+  const blogArticles = articles.data.filter(
+    (article: Article) => article.slug.includes('blog')
+  );
+
+  if (blogArticles.length === 0) {
+    notFound();
+  }
+
+  const localizedSlugs: Record<string, string> = blogPage?.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {
       acc[localization.locale] = 'blog';
       return acc;
     },
     { [params.locale]: 'blog' }
-  );
+  ) ?? { [params.locale]: 'blog' };
 
   return (
     <div className="relative overflow-hidden py-20 md:py-0">
@@ -95,14 +107,14 @@ export default async function Blog(props: {
             <IconClipboardText className="h-6 w-6 text-primary-foreground" />
           </FeatureIconContainer>
           <Heading as="h1" className="mt-4">
-            {blogPage.heading}
+            {blogPage?.heading || 'Blog'}
           </Heading>
           <Subheading className="max-w-3xl mx-auto">
-            {blogPage.sub_heading}
+            {blogPage?.sub_heading || ''}
           </Subheading>
         </div>
 
-        {articles.data.slice(0, 1).map((article: Article) => {
+        {blogArticles.slice(0, 1).map((article: Article) => {
           return <BlogCard
             article={article}
             locale={params.locale}
@@ -110,7 +122,7 @@ export default async function Blog(props: {
           />;
         })}
 
-        <BlogPostRows articles={articles.data.filter((article: Article) => article.slug.includes('blog')).map((article: Article) => article)} />
+        <BlogPostRows articles={blogArticles} />
       </Container>
     </div>
   );

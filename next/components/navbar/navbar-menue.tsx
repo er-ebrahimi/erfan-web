@@ -47,6 +47,7 @@ import { useSlugContext } from '@/app/context/SlugContext';
 import { languageLabels } from '@/lib/constants';
 import { getLocaleConfig } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
+import { localizeHref } from '@/lib/url';
 import { useRouter } from "next/navigation";
 
 type NavbarItem = {
@@ -235,7 +236,7 @@ export function NavbarMenu({
                 {/* Theme Toggle */}
                 {showTheme && (
                   <div
-                    className="flex items-center gap-2 px-2 py-2 cursor-pointer hover:bg-accent rounded-md"
+                    className="flex items-center gap-2 px-2 py-2 cursor-pointer hover:bg-accent rounded-full"
                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   >
                     <div className="relative h-4 w-4 mr-1">
@@ -276,7 +277,7 @@ export function NavbarMenu({
                           href={generateLocalizedPath(language.code)}
                           onClick={() => setSheetOpen(false)}
                           className={cn(
-                            "flex items-center justify-between w-full rounded-md px-3 py-3 hover:bg-accent hover:text-accent-foreground",
+                            "flex items-center justify-between w-full rounded-full px-3 py-3 hover:bg-accent hover:text-accent-foreground",
                             isActive && "bg-accent text-accent-foreground"
                           )}
                         >
@@ -307,7 +308,7 @@ export function NavbarMenu({
               if (item.children && item.children.length > 0) {
                 return (
                   <NavigationMenuItem key={`left-${index}`}>
-                    <NavigationMenuTrigger className="px-2" onClick={() => { router.push(`/${locale}/${(item.URL || '').replace(/^\//, '')}`) }}>
+                    <NavigationMenuTrigger className="px-2" onClick={() => { router.push(localizeHref(item.URL, locale)) }}>
                       <div className="flex items-center gap-2">
                         <span>{item.text}</span>
                       </div>
@@ -321,7 +322,7 @@ export function NavbarMenu({
                           <ListItem
                             key={`child-${childIndex}`}
                             title={child.text}
-                            href={`/${locale}/${(child.URL || '').replace(/^\//, '')}`}
+                            href={localizeHref(child.URL, locale)}
                           >
                             {/* {child.variant} */}
                           </ListItem>
@@ -333,8 +334,8 @@ export function NavbarMenu({
               }
               return (
                 <NavigationMenuItem key={`left-${index}`} className="flex justify-center items-center">
-                  <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), "px-2")}>
-                    <Link href={`/${locale}/${(item.URL || '').replace(/^\//, '')}`} className="flex items-center gap-2">
+                  <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), "px-4")}>
+                    <Link href={localizeHref(item.URL, locale)} className="flex items-center gap-2">
                       <span>{item.text}</span>
                     </Link>
                   </NavigationMenuLink>
@@ -347,7 +348,7 @@ export function NavbarMenu({
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   <button
-                    className={cn(navigationMenuTriggerStyle(), "cursor-pointer px-2")}
+                    className={cn(navigationMenuTriggerStyle(), "cursor-pointer px-3")}
                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   >
                     <div className="flex items-center gap-2 h-4 w-4">
@@ -444,7 +445,7 @@ export function NavbarMenu({
                           <ListItem
                             key={`child-${childIndex}`}
                             title={child.text}
-                            href={`/${locale}/${(child.URL || '').replace(/^\//, '')}`}
+                            href={localizeHref(child.URL, locale)}
                           >
                           </ListItem>
                         ))}
@@ -456,7 +457,7 @@ export function NavbarMenu({
               return (
                 <NavigationMenuItem key={`right-${index}`}>
                   <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), "px-2")}>
-                    <Link href={`/${locale}/${(item.URL || '').replace(/^\//, '')}`} className="flex items-center gap-2">
+                    <Link href={localizeHref(item.URL, locale)} className="flex items-center gap-2">
                       {item.icon ? (
                         getIconForNavItem(item.text || '', item.icon)
                       ) : index === (rightNavbarItems?.length || 0) - 1 ? (
@@ -491,7 +492,7 @@ function MobileNavItem({ item, locale, onClose }: { item: NavbarItem, locale: st
           className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-accent cursor-pointer"
           onClick={(e) => {
             onClose?.()
-            router.push(`/${locale}/${(item.URL || '').replace(/^\//, '')}`)
+            router.push(localizeHref(item.URL, locale))
           }}
         >
           <div className="flex items-center gap-2 font-medium">
@@ -529,7 +530,7 @@ function MobileNavItem({ item, locale, onClose }: { item: NavbarItem, locale: st
                 {item.children?.map((child, i) => (
                   <Link
                     key={i}
-                    href={`/${locale}/${(child.URL || '').replace(/^\//, '')}`}
+                    href={localizeHref(child.URL, locale)}
                     onClick={onClose}
                     className="block px-3 py-3 text-sm hover:bg-accent rounded-md transition-colors text-right"
                   >
@@ -548,7 +549,7 @@ function MobileNavItem({ item, locale, onClose }: { item: NavbarItem, locale: st
 
   return (
     <Link
-      href={`/${locale}/${(item.URL || '').replace(/^\//, '')}`}
+      href={localizeHref(item.URL, locale)}
       onClick={onClose}
       className="flex items-center gap-2 px-3 py-3 rounded-md hover:bg-accent font-medium"
     >

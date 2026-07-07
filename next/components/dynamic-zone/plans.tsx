@@ -6,12 +6,6 @@ import { Timeline } from '@/components/ui/timeline';
 const getImageUrl = (pic: any) => {
   const base = process.env.NEXT_PUBLIC_STRAPI_URL || '';
   if (!pic) return '/next.svg';
-
-  // Support multiple possible shapes returned by Strapi or other APIs:
-  // - pic.formats.large.url
-  // - pic.attributes.formats.large.url
-  // - pic.data.attributes.formats.large.url
-  // - pic.url
   const attrs = pic?.attributes ?? pic?.data?.attributes ?? pic;
 
   const path =

@@ -6,6 +6,7 @@ import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 import { StrapiImage } from '@/types/types';
+import { localizeHref } from '@/lib/url';
 
 type CTA = {
   id: string;
@@ -61,7 +62,7 @@ export const HeroPicture = ({
             <Button
               key={cta?.id}
               as={Link}
-              href={`/${locale}${cta.URL}`}
+              href={localizeHref(cta.URL, locale)}
               {...(cta.variant && { variant: cta.variant })}
               className="mx-2"
             >

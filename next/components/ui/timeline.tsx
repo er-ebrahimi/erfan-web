@@ -36,7 +36,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
   const dir: 'rtl' | 'ltr' = isRTL ? 'rtl' : 'ltr';
   return (
     <div
-      className="w-full  dark:bg-neutral-950 font-sans lg:px-10"
+      className="w-full dark:bg-background font-sans lg:px-10"
       ref={containerRef}
     >
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
@@ -45,7 +45,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
             height: height + 'px',
           }}
           className={
-            'absolute overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-300 dark:via-neutral-700 to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] ' +
+            'absolute overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-border to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] ' +
             (dir === 'rtl'
               ? ' lg:right-8 right-8 top-0 '
               : ' lg:left-8 left-8 top-0 ')
@@ -56,7 +56,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
               height: heightTransform,
               opacity: opacityTransform,
             }}
-            className="absolute inset-x-0 top-0  w-[2px] bg-gradient-to-t from-blue-800 via-blue-300 to-transparent from-[0%] via-[10%] rounded-full"
+            className="absolute inset-x-0 top-0  w-[2px] bg-gradient-to-t from-primary via-primary to-transparent from-[0%] via-[10%] rounded-full"
           />
         </div>
         {data.map((item, index) => (
@@ -66,15 +66,15 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
           >
             <div className="sticky flex flex-col lg:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm lg:w-full">
               <div
-                className={`h-10 absolute w-10 rounded-full bg-white dark:bg-black flex items-center justify-center ${
+                className={`h-10 absolute w-10 rounded-full bg-background flex items-center justify-center ${
                   dir === 'rtl' ? 'right-3 lg:right-3' : 'left-3 lg:left-3'
                 }`}
               >
-                <div className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-400 dark:border-neutral-700 p-2" />
+                <div className="h-4 w-4 rounded-full bg-muted border border-border p-2" />
               </div>
               <h3
                 className={
-                  'hidden lg:block text-xl lg:text-5xl font-bold text-neutral-800 dark:text-neutral-200 text-right ' +
+                  'hidden lg:block text-xl lg:text-5xl font-bold text-foreground text-right ' +
                   (dir === 'rtl' ? ' lg:pr-20 font-iran-sans ' : ' lg:pl-20 ')
                 }
               >
@@ -92,7 +92,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
               dir={dir}
             >
               <h3
-                className={`lg:hidden block text-2xl mb-4  font-bold text-neutral-800 dark:text-neutral-200 ${
+                className={`lg:hidden block text-2xl mb-4 font-bold text-foreground ${
                   dir === 'rtl' ? 'font-iran-sans' : ''
                 }`}
               >

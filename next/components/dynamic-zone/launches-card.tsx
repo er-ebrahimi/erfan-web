@@ -3,8 +3,7 @@
 import { IconRocket } from '@tabler/icons-react';
 import { motion, useMotionValueEvent } from 'framer-motion';
 import { useScroll } from 'framer-motion';
-import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
@@ -25,11 +24,6 @@ export const LaunchesCard = ({
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
     icon: getStrapiMedia(getBestFormat(entry.Image).url),
-    // content: (
-    //   <p className="text-4xl md:text-7xl font-bold text-neutral-800">
-    //     {entry.mission_number}
-    //   </p>
-    // ),
   }));
 
   const ref = useRef<HTMLDivElement>(null);
@@ -38,9 +32,9 @@ export const LaunchesCard = ({
     offset: ['start end', 'end start'],
   });
   const backgrounds = [
-    'hsl(var(--background))',
-    'hsl(var(--muted))',
-    'hsl(var(--background))',
+    'var(--background)',
+    'var(--muted)',
+    'var(--background)',
   ];
 
   const [gradient, setGradient] = useState(backgrounds[0]);

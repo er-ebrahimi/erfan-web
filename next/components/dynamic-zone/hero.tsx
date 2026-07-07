@@ -8,6 +8,7 @@ import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { StrapiImage } from '../ui/strapi-image';
 import { cn } from '@/lib/utils';
+import { localizeHref } from '@/lib/url';
 
 export const Hero = ({
   heading,
@@ -34,7 +35,8 @@ export const Hero = ({
               alt={backgroundImage.alternativeText || 'Hero Background'}
               fill
               className="object-cover brightness-[0.6]"
-              loading="lazy"
+              // loading="lazy"
+              sizes='100vw'
             />
             <div className="absolute inset-0 bg-background/70" />
           </>
@@ -51,7 +53,7 @@ export const Hero = ({
       >
         {heading}
       </Heading>
-      <Subheading className="text-center mt-2  dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10 text-white">
+      <Subheading className="text-center mt-2  dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10 text-white px-3">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
@@ -60,7 +62,7 @@ export const Hero = ({
             <Button
               key={cta?.id}
               as={Link}
-              href={`/${locale}${cta.URL}`}
+              href={localizeHref(cta.URL, locale)}
               {...(cta.variant && { variant: cta.variant })}
             >
               {cta.text}

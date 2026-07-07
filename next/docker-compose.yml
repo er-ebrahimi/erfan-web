@@ -1,8 +1,8 @@
 # docker compose -f .\docker-compose.dev.yml up --build
 services:
   app:
-    container_name: armanstudio-blog
-    image: armanstudio-blog:latest
+    container_name: web-blog
+    image: web-blog:latest
     build:
       context: .
       dockerfile: Dockerfile

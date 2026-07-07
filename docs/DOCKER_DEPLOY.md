@@ -2,18 +2,18 @@
 
 ## Containers
 
-| Container | Image | Location |
-|-----------|-------|----------|
-| Next.js frontend | `armanstudio-blog:latest` | `next/` |
-| Strapi CMS | `strapi-erfanweb:latest` | `strapi/` |
+| Container        | Image                    | Location  |
+| ---------------- | ------------------------ | --------- |
+| Next.js frontend | `web-blog:latest`        | `next/`   |
+| Strapi CMS       | `strapi-erfanweb:latest` | `strapi/` |
 
 ## Environment variables — 3 tiers (Next.js)
 
-| Var | Prefixed? | Inlined at build? | Purpose | Local (Docker) | Server |
-|-----|-----------|:-:|---------|----------------|--------|
-| `STRAPI_INTERNAL_URL` | No | ❌ Runtime | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_API_URL` | `NEXT_PUBLIC_` | ✅ Yes | Client auth calls (auth-context.tsx) | `http://localhost:1337` | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` | ✅ Yes | Browser-facing image URLs | `http://localhost:1337` | `https://studioarman.site:2087` |
+| Var                      | Prefixed?      | Inlined at build? | Purpose                                              | Local (Docker)                     | Server                          |
+| ------------------------ | -------------- | :---------------: | ---------------------------------------------------- | ---------------------------------- | ------------------------------- |
+| `STRAPI_INTERNAL_URL`    | No             |     ❌ Runtime     | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_API_URL`    | `NEXT_PUBLIC_` |       ✅ Yes       | Client auth calls (auth-context.tsx)                 | `http://localhost:1337`            | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` |       ✅ Yes       | Browser-facing image URLs                            | `http://localhost:1337`            | `https://studioarman.site:2087` |
 
 `NEXT_PUBLIC_*` vars are **baked into the JS bundle at build time** — changing them requires a rebuild.  
 `STRAPI_INTERNAL_URL` is read from `process.env` at runtime — change it in `.env.local` and restart the container.
@@ -43,7 +43,7 @@ cd next
 docker compose build
 
 # Save to tar (~350 MB)
-docker save -o armanstudio-blog.tar armanstudio-blog:latest
+docker save -o web-blog.tar web-blog:latest
 ```
 
 ---
@@ -53,14 +53,14 @@ docker save -o armanstudio-blog.tar armanstudio-blog:latest
 ```bash
 # bring down the images and delete them
 sudo docker compose down
-sudo docker rmi armanstudio-blog
+sudo docker rmi web-blog
 sudo docker rmi strapi-erfanweb
 
 # Copy both tar files to server (scp / rsync)
 
 # Load images
 docker load -i strapi-prod.tar
-docker load -i armanstudio-blog.tar
+docker load -i web-blog.tar
 
 # Start everything
 docker compose up
@@ -89,8 +89,8 @@ services:
 
 services:
   app:
-    image: armanstudio-blog:latest
-    container_name: armanstudio-blog
+    image: web-blog:latest
+    container_name: web-blog
     ports:
       - "3000:4000"
     env_file:
@@ -116,10 +116,10 @@ volumes:
 
 Two named Docker volumes store all persistent data:
 
-| Volume | Container path | Contains |
-|--------|---------------|----------|
-| `strapi-data` | `/opt/app/.tmp` | SQLite database (`data.db`), session data |
-| `strapi-uploads` | `/opt/app/public/uploads` | Uploaded media files (images, documents) |
+| Volume           | Container path            | Contains                                  |
+| ---------------- | ------------------------- | ----------------------------------------- |
+| `strapi-data`    | `/opt/app/.tmp`           | SQLite database (`data.db`), session data |
+| `strapi-uploads` | `/opt/app/public/uploads` | Uploaded media files (images, documents)  |
 
 These volumes **survive** container restarts (`docker compose restart`), teardown (`docker compose down`), and image updates.
 
@@ -207,12 +207,12 @@ IMAGE_HOSTNAME=studioarman.site:2087
 
 ## Quick reference
 
-| Step | Command |
-|------|---------|
-| Build Strapi | `cd strapi && docker compose -f docker-compose.prod.yml build` |
-| Save Strapi tar | `cd strapi && docker save -o strapi-erfanweb.tar strapi-erfanweb:latest` |
-| Build Next.js | `cd next && docker compose -f docker-compose.dev.yml build` |
-| Save Next.js tar | `cd next && docker save -o armanstudio-blog.tar armanstudio-blog:latest` |
-| Load on server | `docker load -i <name>.tar` |
-| Start all | `docker compose up -d` |
+| Step                 | Command                                                                    |
+| -------------------- | -------------------------------------------------------------------------- |
+| Build Strapi         | `cd strapi && docker compose -f docker-compose.prod.yml build`             |
+| Save Strapi tar      | `cd strapi && docker save -o strapi-erfanweb.tar strapi-erfanweb:latest`   |
+| Build Next.js        | `cd next && docker compose -f docker-compose.dev.yml build`                |
+| Save Next.js tar     | `cd next && docker save -o web-blog.tar web-blog:latest`                   |
+| Load on server       | `docker load -i <name>.tar`                                                |
+| Start all            | `docker compose up -d`                                                     |
 | Check data persisted | `docker compose down && docker compose up -d` — data should still be there |

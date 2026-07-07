@@ -5,8 +5,8 @@ import { StrapiImage } from '@/components/ui/strapi-image';
 import type { StrapiImage as StrapiImageType } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import logoWhite from '@/public/logo-white.png'
-import logoBlack from '@/public/logo-black.png'
+
+const siteId = process.env.NEXT_PUBLIC_SITE_ID || 'website';
 interface SocialLinkItem {
   id: number;
   image: {
@@ -62,8 +62,8 @@ export function FormNextToSection({
           })}
         </ul>
         <div className="flex-1 flex items-center justify-center absolute bottom-0">
-          <Image src={logoWhite} alt="Logo" width={700} height={700} className="opacity-10 hidden dark:block" />
-          <Image src={logoBlack} alt="Logo" width={700} height={700} className="opacity-10 dark:hidden" />
+          <Image src={`/${siteId}/logo-white.png`} alt="Logo" width={700} height={700} className="opacity-10 hidden dark:block" />
+          <Image src={`/${siteId}/logo-black.png`} alt="Logo" width={700} height={700} className="opacity-10 dark:hidden" />
         </div>
       </div>
       <div className="relative z-20 w-full justify-center px-4 py-4 lg:py-40 sm:px-6 lg:flex-none lg:px-20 xl:px-24 overflow-hidden">

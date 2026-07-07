@@ -30,7 +30,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: process.env.DOMAIN,
-        port: process.env.BACK_PORT,
         pathname: '/uploads/**',
       },
       {
@@ -69,6 +68,11 @@ const nextConfig = {
         pathname: '/uploads/**',
       },
       {
+        protocol: 'https',
+        hostname: 'strapi.painfoolsstudio.com',
+        pathname: '/uploads/**',
+      },
+      {
         protocol: 'http',
         hostname: 'strapi.studioarman.com',
         pathname: '/uploads/**',
@@ -96,6 +100,12 @@ const nextConfig = {
       },
       {
         source: '/favicon-sets/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:siteId/favicon-sets/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],

@@ -1,6 +1,5 @@
 'use client';
 
-import { RotateDirection } from '@tsparticles/engine';
 import Image from 'next/image';
 import React from 'react';
 

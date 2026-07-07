@@ -206,13 +206,13 @@ const ContactUs = ({
   };
 
   return (
-    <section className="px-4 flex justify-center items-center">
-      <div className="container border border-border rounded-xl p-12 w-full shadow-lg bg-card max-w-xl">
+    <section className="flex justify-center items-center m-4">
+      <div className="container border border-border rounded-xl p-6 md:p-12 w-full shadow-lg bg-card max-w-xl">
         <div className="max-w-lg text-center mb-6">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          <h2 className="text-xl  md:text-4xl font-bold mb-4 text-foreground">
             {Title}
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-sm md:text-xl text-muted-foreground">
             {Description}
           </p>
         </div>

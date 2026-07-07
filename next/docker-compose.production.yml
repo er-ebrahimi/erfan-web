@@ -1,14 +1,14 @@
 services:
-  strapi:
-    container_name: strapi
-    build:
-      dockerfile: Dockerfile.prod
-    restart: unless-stopped
-    environment:
-      DATABASE_CLIENT: sqlite
-      DATABASE_FILENAME: .tmp/data.db
-      NODE_ENV: production
-    expose:
-      - "1337"
+  app:
+    image: web-blog:latest
+    container_name: web-blog
+    ports:
+      - "3000:4000"
+    env_file:
+      - .env
     networks:
-      - studio-net
+      - strapi
+networks:
+  strapi:
+    name: Strapi
+    driver: bridge

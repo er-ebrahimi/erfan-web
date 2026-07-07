@@ -55,20 +55,20 @@ Forked from `strapi/LaunchPad`.
 
 ## Key commands
 
-| Where | Command | What it does |
-|-------|---------|--------------|
-| root | `yarn setup` | installs root + Next + Strapi deps; copies `.env.example` → `.env` |
-| root | `yarn dev` | starts Strapi (`:1337`), waits for it, then starts Next (`:3000` via turbopack) |
-| root | `yarn seed` | `cd strapi && yarn strapi import -f ./data/export_*.tar.gz --force` |
-| root | `yarn fix:format` | `prettier . --write --cache` |
-| root | `yarn check:format` | `prettier . --check --cache` |
-| `next/` | `yarn dev` | `next dev --turbopack` |
-| `next/` | `yarn build` | `next build` (output: `standalone`; sitemap runs in `postbuild`) |
-| `next/` | `yarn lint` | `eslint . --ext .js,.jsx,.ts,.tsx` |
-| `next/` | `yarn typecheck` | `tsc --noEmit` |
-| `next/` | `yarn production` | `cross-env PORT=4000 next start` |
-| `strapi/` | `yarn develop` | Strapi dev with autoReload |
-| `strapi/` | `yarn seed` | `strapi import -f ./data/export_20250116105447.tar.gz` |
+| Where     | Command             | What it does                                                                    |
+| --------- | ------------------- | ------------------------------------------------------------------------------- |
+| root      | `yarn setup`        | installs root + Next + Strapi deps; copies `.env.example` → `.env`              |
+| root      | `yarn dev`          | starts Strapi (`:1337`), waits for it, then starts Next (`:3000` via turbopack) |
+| root      | `yarn seed`         | `cd strapi && yarn strapi import -f ./data/export_*.tar.gz --force`             |
+| root      | `yarn fix:format`   | `prettier . --write --cache`                                                    |
+| root      | `yarn check:format` | `prettier . --check --cache`                                                    |
+| `next/`   | `yarn dev`          | `next dev --turbopack`                                                          |
+| `next/`   | `yarn build`        | `next build` (output: `standalone`; sitemap runs in `postbuild`)                |
+| `next/`   | `yarn lint`         | `eslint . --ext .js,.jsx,.ts,.tsx`                                              |
+| `next/`   | `yarn typecheck`    | `tsc --noEmit`                                                                  |
+| `next/`   | `yarn production`   | `cross-env PORT=4000 next start`                                                |
+| `strapi/` | `yarn develop`      | Strapi dev with autoReload                                                      |
+| `strapi/` | `yarn seed`         | `strapi import -f ./data/export_20250116105447.tar.gz`                          |
 
 ## i18n (next-intl v4)
 
@@ -112,14 +112,14 @@ Forked from `strapi/LaunchPad`.
 
 ### Key commands
 
-| Where | Command | What it does |
-|-------|---------|--------------|
-| `next/` | `yarn test:e2e` | Full suite (all projects) |
-| `next/` | `yarn test:e2e:smoke` | Smoke tests only (`@smoke`) |
+| Where   | Command                    | What it does                     |
+| ------- | -------------------------- | -------------------------------- |
+| `next/` | `yarn test:e2e`            | Full suite (all projects)        |
+| `next/` | `yarn test:e2e:smoke`      | Smoke tests only (`@smoke`)      |
 | `next/` | `yarn test:e2e:regression` | Regression tests (`@regression`) |
-| `next/` | `yarn test:e2e:api` | API contract tests (`@api`) |
-| `next/` | `yarn test:e2e:debug` | Debug mode (Inspector) |
-| `next/` | `yarn test:e2e:ui` | Playwright UI mode |
+| `next/` | `yarn test:e2e:api`        | API contract tests (`@api`)      |
+| `next/` | `yarn test:e2e:debug`      | Debug mode (Inspector)           |
+| `next/` | `yarn test:e2e:ui`         | Playwright UI mode               |
 
 ## Deployment (legacy)
 
@@ -140,34 +140,49 @@ See **Docker build & deploy** section below for the current deployment flow.
 
 ### Environment variables — 3 tiers
 
-| Var | Prefixed? | Inlined at build? | Purpose | Local (Docker) | Server |
-|-----|-----------|:-:|---------|----------------|--------|
-| `STRAPI_INTERNAL_URL` | No | ❌ Runtime | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_API_URL` | `NEXT_PUBLIC_` | ✅ Yes | Client auth calls (auth-context.tsx) | `http://localhost:1337` | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` | ✅ Yes | Browser-facing image URLs | `http://localhost:1337` | `https://studioarman.site:2087` |
+| Var                      | Prefixed?      | Inlined at build? | Purpose                                              | Local (Docker)                     | Server                          |
+| ------------------------ | -------------- | :---------------: | ---------------------------------------------------- | ---------------------------------- | ------------------------------- |
+| `STRAPI_INTERNAL_URL`    | No             |     ❌ Runtime     | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_API_URL`    | `NEXT_PUBLIC_` |       ✅ Yes       | Client auth calls (auth-context.tsx)                 | `http://localhost:1337`            | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` |       ✅ Yes       | Browser-facing image URLs                            | `http://localhost:1337`            | `https://studioarman.site:2087` |
 
 `NEXT_PUBLIC_*` vars are **baked into the JS bundle at build time** — changing them requires a rebuild.  
 `STRAPI_INTERNAL_URL` is read from `process.env` at runtime — change it in `.env.local` and restart the container.
 
-### Product favicons
+### Product theming
 
-| Var | Purpose | Default |
-|-----|---------|---------|
-| `NEXT_PUBLIC_SITE_ID` | Selects favicon set from `public/favicon-sets/{SITE_ID}/` | `site-a` |
+`NEXT_PUBLIC_SITE_ID` controls **both favicons and the full color theme** per deployment.
 
-Each deployment sets `NEXT_PUBLIC_SITE_ID` to pick its favicon set. Add new sets as `public/favicon-sets/<id>/` with `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, and `apple-touch-icon.png`.
+| Var                   | Purpose                               | Default  |
+| --------------------- | ------------------------------------- | -------- |
+| `NEXT_PUBLIC_SITE_ID` | Selects favicon set + CSS color theme | `site-a` |
+
+**One-line brand switch:** `NEXT_PUBLIC_SITE_ID=site-b` → rebuild → new colors everywhere.
+
+**How it works:**
+- `next/app/layout.tsx` reads `NEXT_PUBLIC_SITE_ID` and adds `theme-<id>` class to `<html>`.
+- `next/app/themes.css` defines per-product CSS variable overrides (`.theme-site-b`, `.theme-site-b.dark`, etc.).
+- Default values live in `:root` / `.dark` in `next/app/globals.css` (= site-a).
+- `generateViewport()` picks the theme-color meta tag per product.
+
+**To add a new product theme:**
+1. Add a block in `next/app/themes.css` (`.theme-site-c`, `.theme-site-c.dark` — all shadcn tokens).
+2. Add favicon set in `public/favicon-sets/site-c/`.
+3. Deploy with `NEXT_PUBLIC_SITE_ID=site-c`.
+
+See `next/docs/THEME_IMPLEMENTATION.md` for full details.
 
 ### Build & save image (local machine)
 ```bash
 cd next
 docker compose -f docker-compose.dev.yml build
-docker save -o armanstudio-blog.tar armanstudio-blog:latest
+docker save -o web-blog.tar web-blog:latest
 ```
 
 ### Deploy to server
 ```bash
 # Copy the tar to the server, then:
-docker load -i armanstudio-blog.tar
+docker load -i web-blog.tar
 docker compose up -d   # start
 docker compose down    # stop
 ```
@@ -176,8 +191,8 @@ docker compose down    # stop
 ```yaml
 services:
   app:
-    image: armanstudio-blog:latest
-    container_name: armanstudio-blog
+    image: web-blog:latest
+    container_name: web-blog
     ports:
       - "3000:4000"
     env_file:

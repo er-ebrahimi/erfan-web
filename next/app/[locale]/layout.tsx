@@ -10,10 +10,8 @@ import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { CartProvider } from '@/context/cart-context';
 import { routing } from '@/i18n/routing';
-import { getFontForLocale } from '@/lib/fonts';
-import { getLocaleClasses } from '@/lib/rtl-utils';
+import { getDirection } from '@/lib/rtl-utils';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import { cn } from '@/lib/utils';
 
 export const revalidate = 60;
 
@@ -29,8 +27,7 @@ export default async function LocaleLayout(props: {
     notFound();
   }
 
-  const { fontClass, direction } = getLocaleClasses(locale);
-  const font = getFontForLocale(locale);
+  const direction = getDirection(locale);
 
   const { children } = props;
 
@@ -74,17 +71,13 @@ export default async function LocaleLayout(props: {
       <ViewTransitions>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme={process.env.NEXT_PUBLIC_DEFAULT_THEME || 'system'}
           enableSystem
           disableTransitionOnChange
         >
             <CartProvider>
               <div
-                className={cn(
-                  font?.className,
-                  fontClass,
-                  'bg-background text-foreground antialiased h-full w-full'
-                )}
+                className="bg-background text-foreground antialiased h-full w-full"
                 dir={direction}
               >
                 <Navbar

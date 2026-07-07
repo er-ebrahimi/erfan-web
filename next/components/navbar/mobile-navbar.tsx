@@ -11,6 +11,7 @@ import { ThemeToggle } from '../theme-toggle';
 import { Button } from '@/components/elements/button';
 import { Logo } from '@/components/logo';
 import { cn } from '@/lib/utils';
+import { localizeHref } from '@/lib/url';
 
 type Props = {
   leftNavbarItems: {
@@ -82,7 +83,7 @@ export const MobileNavbar = ({
                     {navItem.children.map((childNavItem: any, idx: number) => (
                       <Link
                         key={`link=${idx}`}
-                        href={`/${locale}${childNavItem.URL}`}
+                        href={localizeHref(childNavItem.URL, locale)}
                         onClick={() => setOpen(false)}
                         className="relative max-w-[15rem] text-left text-2xl"
                       >
@@ -95,7 +96,7 @@ export const MobileNavbar = ({
                 ) : (
                   <Link
                     key={`link=${idx}`}
-                    href={`/${locale}${navItem.URL}`}
+                    href={localizeHref(navItem.URL, locale)}
                     onClick={() => setOpen(false)}
                     className="relative"
                   >
@@ -115,7 +116,7 @@ export const MobileNavbar = ({
                   index === rightNavbarItems.length - 1 ? 'primary' : 'simple'
                 }
                 as={Link}
-                href={`/${locale}${item.URL}`}
+                href={localizeHref(item.URL, locale)}
               >
                 {item.text}
               </Button>
