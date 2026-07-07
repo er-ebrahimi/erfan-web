@@ -44,3 +44,8 @@ next-env.d.ts
 /builds/
 
 /e2e/reports/*
+
+/.env.painfoolsstudio
+/.env.studioarman
+
+/.tmp/
