@@ -10,6 +10,8 @@ services:
         FRONT_URL: ${FRONT_URL:-https://studioarman.com}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://studioarman.site:2087}
         NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-https://studioarman.site:2087}
+        NEXT_PUBLIC_SHOW_ENAMAD: ${NEXT_PUBLIC_SHOW_ENAMAD:-true}
+        NEXT_PUBLIC_ENAMAD_URL: ${NEXT_PUBLIC_ENAMAD_URL:-}
         DOMAIN: ${DOMAIN:-localhost}
         BACK_PORT: ${BACK_PORT:-1337}
     ports:

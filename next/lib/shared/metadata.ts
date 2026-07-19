@@ -32,5 +32,5 @@ export function generateMetadataObject(seo: any) {
 
 export function generateStructuredData(seo: any): string | undefined {
   if (!seo?.structuredData) return undefined;
-  return JSON.stringify(seo.structuredData);
+  return JSON.stringify(seo.structuredData).replace(/</g, '\\u003c');
 }
