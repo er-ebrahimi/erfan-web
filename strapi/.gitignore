@@ -132,3 +132,5 @@ build
 data/*
 
 archive/*
+
+.tmp/*
