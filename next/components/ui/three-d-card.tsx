@@ -19,7 +19,7 @@ export const ThreeDCard = ({ items }: { items: CardItem[] }) => {
   const router = useRouter();
 
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 max-w-7xl gap-4 m-auto">
       {items.map((item, idx) => (
         <TiltCard key={idx} item={item} router={router} />
       ))}
@@ -61,10 +61,10 @@ function TiltCard({ item, router }: { item: CardItem; router: any }) {
           transformPerspective: 1000,
         } as any
       }
-      className=" "
+      className="h-full flex flex-col"
     >
-      <CardContainer className="inter-var m-4">
-        <CardBody className="bg-card relative group/card dark:hover:shadow-2xl dark:hover:shadow-primary/[0.1] dark:bg-card dark:border-border border-border w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
+      <CardContainer className="inter-var m-4 w-full" containerClassName="items-stretch h-full">
+        <CardBody className="bg-card relative group/card dark:hover:shadow-2xl dark:hover:shadow-primary/[0.1] dark:bg-card dark:border-border border-border w-full h-full flex flex-col rounded-xl p-6 border  ">
           <CardItem translateZ="100" className="w-full">
             <Image
               src={item.icon}
@@ -76,14 +76,14 @@ function TiltCard({ item, router }: { item: CardItem; router: any }) {
           </CardItem>
           <CardItem
             translateZ="50"
-            className="text-xl font-bold text-foreground"
+            className="pt-5 text-xl font-bold text-foreground"
           >
             {item.title}
           </CardItem>
           <CardItem
             as="p"
             translateZ="60"
-            className="text-muted-foreground text-sm max-w-sm mt-2"
+            className="text-muted-foreground text-sm max-w-sm mt-2 flex-1"
           >
             {item.description}
           </CardItem>

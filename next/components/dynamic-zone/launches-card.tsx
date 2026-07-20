@@ -68,7 +68,7 @@ export const LaunchesCard = ({
     >
       <div className="px-6">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconRocket className="h-6 w-6 text-foreground" />
+          <IconRocket className="h-6 w-6 text-white" />
         </FeatureIconContainer>
         <Heading className="mt-4 text-foreground">{heading}</Heading>
         <Subheading className="text-muted-foreground">{sub_heading}</Subheading>

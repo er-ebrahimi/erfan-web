@@ -45,7 +45,7 @@ export const Pricing = ({
     <div className="pt-40">
       <Container>
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconReceipt2 className="h-6 w-6 text-foreground" />
+          <IconReceipt2 className="h-6 w-6 text-white" />
         </FeatureIconContainer>
         <Heading className="pt-4">{heading}</Heading>
         <Subheading className="max-w-3xl mx-auto">{sub_heading}</Subheading>
@@ -128,7 +128,7 @@ const Card = ({ plan, onClick }: { plan: Plan; onClick: () => void }) => {
           className={cn(
             'w-full mt-10 mb-4',
             plan.featured &&
-              'bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground'
+            'bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground'
           )}
           onClick={onClick}
         >

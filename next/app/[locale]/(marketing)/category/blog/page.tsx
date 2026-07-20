@@ -67,7 +67,9 @@ export default async function Blog(props: {
     articles = await fetchContentType(
       'articles',
       {
-        filters: { locale: params.locale },
+        filters: { locale: params.locale, slug: { $contains: 'blog' } },
+        pagination: { pageSize: 100 },
+        populate: ['image', 'categories'],
       },
       false,
       { preview: isEnabled }
@@ -77,15 +79,7 @@ export default async function Blog(props: {
     throw err;
   }
 
-  if (!articles?.data) {
-    notFound();
-  }
-
-  const blogArticles = articles.data.filter(
-    (article: Article) => article.slug.includes('blog')
-  );
-
-  if (blogArticles.length === 0) {
+  if (!articles?.data?.length) {
     notFound();
   }
 
@@ -114,7 +108,7 @@ export default async function Blog(props: {
           </Subheading>
         </div>
 
-        {blogArticles.slice(0, 1).map((article: Article) => {
+        {articles.data.slice(0, 1).map((article: Article) => {
           return <BlogCard
             article={article}
             locale={params.locale}
@@ -122,7 +116,7 @@ export default async function Blog(props: {
           />;
         })}
 
-        <BlogPostRows articles={blogArticles} />
+        <BlogPostRows articles={articles.data} />
       </Container>
     </div>
   );
