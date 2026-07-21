@@ -15,7 +15,7 @@ export const BlogCard = ({
 }) => {
   return (
     <div
-      className="shadow-derek grid grid-cols-1 md:grid-cols-2 rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50 overflow-hidden hover:scale-[1.02] transition duration-200 relative"
+      className="shadow-derek grid grid-cols-1 md:grid-cols-2 rounded-3xl group border border-transparent hover:border-border w-full hover:bg-card/50 overflow-hidden hover:scale-[1.02] transition duration-200 relative max-h-[24rem]"
     >
       <Link
         href={`/${locale}/category/${article.slug}`}
@@ -68,7 +68,6 @@ export const BlogCard = ({
             className="rounded-full h-5 w-5"
           /> */}
           {/* <p className="text-sm font-normal text-primary-foreground">{article.author}</p> */}
-          <div className="h-1 w-1 bg-muted-foreground rounded-full"></div>
           <p className="text-muted-foreground text-sm  max-w-xl group-hover:text-foreground transition duration-200">
             {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
           </p>
@@ -139,7 +138,6 @@ export const BlogCardVertical = ({
             className="rounded-full h-5 w-5"
           />
           <p className="text-sm font-normal text-primary-foreground">{article.author}</p> */}
-          <div className="h-1 w-1 bg-muted-foreground rounded-full"></div>
           <p className="text-muted-foreground text-sm  max-w-xl group-hover:text-foreground transition duration-200">
             {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
           </p>

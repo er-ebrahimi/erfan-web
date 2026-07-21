@@ -20,12 +20,13 @@ export async function generateMetadata(props: {
         slug: 'homepage',
         locale: params.locale,
       },
-      populate: 'seo',
+      // populate: 'seo',
     },
     true
   );
 
   const seo = pageData?.seo;
+  console.log("🚀 ~ generateMetadata ~ seo 1:", pageData)
   const metadata = generateMetadataObject(seo);
   return metadata;
 }

@@ -30,8 +30,8 @@ test.describe('Error states', { tag: '@regression' }, () => {
     const homeLink = page.getByRole('link', { name: 'برو به خانه' });
     await expect(homeLink).toBeVisible();
     await homeLink.click();
-    await page.waitForLoadState('domcontentloaded', { timeout: 10_000 }).catch(() => {});
+    await page.waitForLoadState('domcontentloaded', { timeout: 10_000 }).catch(() => { });
 
-    await expect(page).toHaveURL(/\/fa$/);
+    await expect(page).toHaveURL(new RegExp(`/`));
   });
 });

@@ -43,10 +43,16 @@ export default async function fetchContentType(
   const url = new URL(`api/${contentType}`, apiUrl);
   url.search = qs.stringify(queryParams as any);
 
-  const res = await fetch(url.toString(), {
-    next: { revalidate },
-    signal: AbortSignal.timeout(10000),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      next: { revalidate },
+      signal: AbortSignal.timeout(10000),
+    });
+  } catch {
+    console.warn(`fetchContentType: "${contentType}" unreachable, returning null`);
+    return null;
+  }
 
   if (!res.ok) {
     if (res.status === 404 || res.status === 403) {

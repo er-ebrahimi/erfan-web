@@ -125,7 +125,6 @@ export const BlogPostRow = ({ article }: { article: Article }) => {
             <p className="text-muted-foreground text-sm max-w-xl group-hover:text-foreground transition duration-200">
               {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
             </p>
-            <div className="h-1 w-1 rounded-full bg-muted-foreground"></div>
             <div className="flex gap-4 flex-wrap pointer-events-auto">
               {article.categories?.map((category, idx) => (
                 <Link

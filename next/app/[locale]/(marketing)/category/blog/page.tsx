@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
     'blog-page',
     {
       filters: { locale: params.locale },
-      populate: 'seo',
+      // populate: 'seo',
     },
     true
   );

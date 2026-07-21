@@ -14,7 +14,7 @@ export const Footer = async ({
   if (!data) return null;
 
   return (
-    <div className="relative">
+    <footer className="relative">
       <div className="border-t border-border px-8 pt-20 pb-32 relative">
         <div className="max-w-7xl mx-auto text-sm text-muted-foreground flex sm:flex-row flex-col justify-between items-start ">
           <div>
@@ -32,7 +32,7 @@ export const Footer = async ({
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

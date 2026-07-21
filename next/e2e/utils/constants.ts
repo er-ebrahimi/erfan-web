@@ -5,6 +5,7 @@ export const BASE_PATH = `/${LOCALE}` as const;
 export const ROUTES = {
   home: BASE_PATH,
   blog: `${BASE_PATH}/category/blog`,
+  faq: `${BASE_PATH}/faq`,
 } as const;
 
 export const VIEWPORTS = {
