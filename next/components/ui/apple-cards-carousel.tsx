@@ -17,6 +17,7 @@ import React, {
 } from 'react';
 
 import { useOutsideClick } from '@/hooks/use-outside-click';
+import { useLocaleConfig } from '@/hooks/use-locale-config';
 import { cn } from '@/lib/utils';
 
 interface CarouselProps {
@@ -36,7 +37,7 @@ export const CarouselContext = createContext<{
   onCardClose: (index: number) => void;
   currentIndex: number;
 }>({
-  onCardClose: () => {},
+  onCardClose: () => { },
   currentIndex: 0,
 });
 
@@ -93,7 +94,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   return (
     <CarouselContext.Provider
       value={{ onCardClose: handleCardClose, currentIndex }}
-      // value={{ onCardClose: () => {}, currentIndex: 0 }}
+    // value={{ onCardClose: () => {}, currentIndex: 0 }}
     >
       <div className="relative w-full">
         <div
@@ -173,7 +174,7 @@ export const Card = ({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { onCardClose, currentIndex } = useContext(CarouselContext);
-
+  const { fontClass, direction } = useLocaleConfig();
   const handleClose = useCallback(() => {
     setOpen(false);
     onCardClose(index);
@@ -212,7 +213,7 @@ export const Card = ({
     <>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-50 h-screen overflow-auto" dir="rtl">
+          <div className="fixed inset-0 z-50 h-screen overflow-auto" dir={direction}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -225,7 +226,7 @@ export const Card = ({
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
+              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4  md:p-10 dark:bg-neutral-900"
             >
               <button
                 className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-black dark:bg-white"
@@ -237,17 +238,17 @@ export const Card = ({
               </button>
               <motion.p
                 layoutId={layout ? `category-${card.title}` : undefined}
-                className="text-base font-medium text-black dark:text-white"
+                className={`text-base font-medium text-black dark:text-white ${fontClass}`}
               >
                 {card.category}
               </motion.p>
               <motion.p
                 layoutId={layout ? `title-${card.title}` : undefined}
-                className="mt-4 text-2xl font-semibold text-neutral-700 md:text-5xl dark:text-white"
+                className={`mt-4 text-2xl font-semibold text-neutral-700 md:text-5xl dark:text-white ${fontClass}`}
               >
                 {card.title}
               </motion.p>
-              <div className="py-10">{card.content}</div>
+              <div className={`py-10 ${fontClass}`}>{card.content}</div>
             </motion.div>
           </div>
         )}
@@ -261,13 +262,13 @@ export const Card = ({
         <div className="relative z-40 p-8">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-right font-sans text-sm font-medium text-white md:text-base"
+            className={`text-right text-sm font-medium text-white md:text-base ${fontClass}`}
           >
             {card.category}
           </motion.p>
           <motion.p
             layoutId={layout ? `title-${card.title}` : undefined}
-            className="mt-2 max-w-xs text-right font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl"
+            className={`mt-2 max-w-xs text-right text-xl font-semibold [text-wrap:balance] text-white md:text-3xl ${fontClass}`}
           >
             {card.title}
           </motion.p>

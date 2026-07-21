@@ -5,6 +5,7 @@ import React from 'react';
 import { Carousel } from '@/components/ui/apple-cards-carousel';
 import { Card } from '@/components/ui/apple-cards-carousel';
 import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
+import { useLocaleConfig } from '@/hooks/use-locale-config';
 
 interface PromiseItem {
   Subtitle: string;
@@ -25,6 +26,7 @@ const PromisedLand: React.FC<PromisedLandProps> = ({
   Description,
   Promise,
 }) => {
+  const { fontClass, direction } = useLocaleConfig();
   const cards = Promise.map((card, index) => {
     const best = card.Pic ? getBestFormat(card.Pic) : null;
     return (
@@ -46,13 +48,13 @@ const PromisedLand: React.FC<PromisedLandProps> = ({
       dir="ltr"
     >
       <div
-        dir="rtl"
+        dir={direction}
         className="mx-8 flex justify-center flex-col items-center max-w-4xl gap-4"
       >
-        <h2 className="max-w-7xl pl-4 mx-auto text-2xl md:text-4xl font-bold text-foreground font-sans text-center">
+        <h2 className={`max-w-7xl pl-4 mx-auto text-2xl md:text-4xl font-bold text-foreground text-center ${fontClass}`}>
           {Title}
         </h2>
-        <p className="max-w-7xl pt-4 pl-4 mx-auto text-sm md:text-base text-muted-foreground font-sans text-center">
+        <p className={`max-w-7xl pt-4 pl-4 mx-auto text-sm md:text-base text-muted-foreground text-center ${fontClass}`}>
           {Description}
         </p>
       </div>

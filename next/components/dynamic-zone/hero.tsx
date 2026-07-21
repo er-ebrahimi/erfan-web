@@ -26,7 +26,7 @@ export const Hero = ({
   const backgroundImage = Background?.[0];
 
   return (
-    <div className="h-[calc(100vh-1rem)] m-2 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center bg-black">
+    <div className="h-[calc(100vh-1rem)] m-2 lg:h-[calc(100vh-48px)] lg:m-[24px] rounded-[32px] dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center bg-black">
       <div>
         {backgroundImage ? (
           <>

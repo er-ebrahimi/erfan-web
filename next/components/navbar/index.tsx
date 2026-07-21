@@ -41,7 +41,7 @@ export function Navbar({
       // Mobile: Top Right
       "top-4 right-4 m-0 left-auto rounded-full shadow-md",
       // Desktop: Top Center
-      " md:right-auto md:left-1/2 md:-translate-x-1/2 md:px-3 md:py-2 md:rounded-3xl md:shadow-none "
+      " lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:px-3 lg:py-2 lg:rounded-3xl lg:shadow-none "
     )}>
       <NavbarMenu
         locale={locale}

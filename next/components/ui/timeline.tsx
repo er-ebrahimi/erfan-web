@@ -36,7 +36,7 @@ export const Timeline = ({ data, locale }: TimelineProps) => {
   const dir: 'rtl' | 'ltr' = isRTL ? 'rtl' : 'ltr';
   return (
     <div
-      className="w-full dark:bg-background font-sans lg:px-10"
+      className="w-full dark:bg-background  lg:px-10"
       ref={containerRef}
     >
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20">

@@ -3,6 +3,8 @@
 import React from 'react';
 import { MdCancel } from 'react-icons/md';
 
+import { AmbientColor } from '@/components/decorations/ambient-color';
+
 interface ConItem {
   Title: string;
   Description: string;
@@ -20,10 +22,12 @@ const Cons: React.FC<ConsProps> = ({ Cons, Title, Description, locale }) => {
   const direction = isRTL ? 'rtl' : 'ltr';
 
   return (
-    <div
-      dir={direction}
-      className={`flex flex-col gap-12 ${isRTL ? 'text-right' : 'text-left'} justify-center items-center mx-4 md:mx-8 py-16 md:py-32 bg-background`}
-    >
+    <div className="relative">
+      <AmbientColor />
+      <div
+        dir={direction}
+        className={`relative z-10 flex flex-col gap-12 ${isRTL ? 'text-right' : 'text-left'} justify-center items-center mx-4 md:mx-8 py-16 md:py-32 bg-background`}
+      >
       <div className="flex flex-col gap-2 text-center max-w-3xl">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground">{Title}</h2>
         <p className="text-muted-foreground text-base md:text-lg">{Description}</p>
@@ -50,6 +54,7 @@ const Cons: React.FC<ConsProps> = ({ Cons, Title, Description, locale }) => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

@@ -205,7 +205,7 @@ export function NavbarMenu({
   return (
     <>
       {/* Mobile View: Inline Trigger inside Top Right Container */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button
@@ -300,7 +300,7 @@ export function NavbarMenu({
       </div>
 
       {/* Desktop View: Traditional Navbar */}
-      <div className="hidden md:flex w-fit justify-center">
+      <div className="hidden lg:flex w-fit justify-center">
         <NavigationMenu viewport={false} delayDuration={200}>
           <NavigationMenuList className="flex-nowrap gap-1 whitespace-nowrap rtl:flex-row-reverse">
             {/* Left Navbar Items */}
@@ -438,7 +438,7 @@ export function NavbarMenu({
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className={cn(
-                        "grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]",
+                        "grid w-[400px] gap-3 p-4 lg:w-[500px] lg:grid-cols-2 xl:w-[600px]",
                         isRTL ? "text-right" : "text-left"
                       )}>
                         {item.children.map((child, childIndex) => (

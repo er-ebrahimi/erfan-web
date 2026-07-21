@@ -89,26 +89,26 @@ function TiltCard({ item, router }: { item: CardItem; router: any }) {
           </CardItem>
 
           <div className="flex justify-between items-center mt-4">
-            {item.Buttons.map((x: any, index: number) => (
-              <CardItem
-                key={`${x.label}-${index}`}
+            {item.Buttons.map((item: any, index: number) => {
+              return <CardItem
+                key={`${item.label}-${index}`}
                 translateZ={20}
                 as="button"
-                variant={x.variant}
+                variant={item.variant}
                 className={
-                  x.variant === 'simple'
+                  item.variant === 'simple'
                     ? 'px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold'
-                    : x.variant === 'outline'
+                    : item.variant === 'outline'
                       ? 'px-4 py-2 rounded-xl text-xs font-normal text-foreground'
                       : ''
                 }
                 onClick={() => {
-                  router.push(x.Link);
+                  router.push(item.URL);
                 }}
               >
-                {x.text}
+                {item.text}
               </CardItem>
-            ))}
+            })}
           </div>
         </CardBody>
       </CardContainer>
