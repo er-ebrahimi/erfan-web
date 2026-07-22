@@ -1,6 +1,5 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from './base.page';
-import { TIMEOUTS } from '../utils/constants';
 
 export class ContactPage extends BasePage {
   constructor(page: Page) {
@@ -35,10 +34,6 @@ export class ContactPage extends BasePage {
     return this.page.locator('[class*="bg-red"]');
   }
 
-  get altchaWidget(): Locator {
-    return this.page.locator('altcha-widget');
-  }
-
   async fillContact(value: string): Promise<void> {
     await this.contactInput.fill(value);
   }
@@ -50,24 +45,6 @@ export class ContactPage extends BasePage {
   async fillForm(contact: string, message: string): Promise<void> {
     await this.fillContact(contact);
     await this.fillMessage(message);
-  }
-
-  async waitForAltchaVerification(): Promise<boolean> {
-    await this.altchaWidget.waitFor({ state: 'attached', timeout: TIMEOUTS.altchaVerification });
-    try {
-      await this.page.waitForFunction(
-        () => {
-          const widget = document.querySelector('altcha-widget');
-          if (!widget) return false;
-          const state = (widget as unknown as { getState: () => string }).getState();
-          return state === 'verified';
-        },
-        { timeout: TIMEOUTS.altchaVerification }
-      );
-      return true;
-    } catch {
-      return false;
-    }
   }
 
   async submit(): Promise<void> {

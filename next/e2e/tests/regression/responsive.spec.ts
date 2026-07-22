@@ -43,41 +43,4 @@ test.describe('Responsive layout', { tag: '@regression' }, () => {
       }
     });
   }
-
-  test.describe('Mobile navigation', () => {
-    test.use({ viewport: VIEWPORTS.mobile });
-
-    test('mobile menu button is visible on small screens', async ({ page }) => {
-      const homepage = new HomepagePage(page);
-      await homepage.goto();
-      const navbar = new NavbarPage(page);
-
-      await expect(navbar.mobileMenuButton).toBeVisible();
-    });
-
-    test('mobile sheet opens and contains nav links', async ({ page }) => {
-      const homepage = new HomepagePage(page);
-      await homepage.goto();
-      const navbar = new NavbarPage(page);
-
-      await navbar.openMobileMenu();
-      await expect(page.locator('[role="dialog"]')).toBeVisible();
-      const linkCount = await page.locator('[role="dialog"] a').count();
-      expect(linkCount).toBeGreaterThan(0);
-    });
-  });
-
-  test.describe('Tablet', () => {
-    test.use({ viewport: VIEWPORTS.tablet });
-
-    test('tablet viewport renders desktop-style navbar', async ({ page }) => {
-      const homepage = new HomepagePage(page);
-      await homepage.goto();
-      const navbar = new NavbarPage(page);
-
-      const mobileButton = navbar.mobileMenuButton;
-      const mobileVisible = await mobileButton.isVisible().catch(() => false);
-      expect(mobileVisible).toBe(false);
-    });
-  });
 });

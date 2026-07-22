@@ -32,6 +32,7 @@ export async function generateMetadata(props: {
   );
 
   const seo = pageData?.seo;
+  seo.canonicalURL = `${process.env.NEXT_PUBLIC_FRONT_URL}/${params.locale}/category/blog`;
   return generateMetadataObject(seo);
 }
 

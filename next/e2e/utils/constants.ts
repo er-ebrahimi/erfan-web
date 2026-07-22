@@ -20,10 +20,7 @@ export const NAV_ITEM_LABELS = {
   contact: 'تماس',
 } as const;
 
-export const ALTCHA_SELECTOR = 'altcha-widget';
-
 export const TIMEOUTS = {
-  altchaVerification: 30_000,
   navigation: 10_000,
   networkIdle: 5_000,
 } as const;

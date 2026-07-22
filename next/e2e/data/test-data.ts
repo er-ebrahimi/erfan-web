@@ -11,10 +11,6 @@ export const CONTACT_FORM = {
     contact: '',
     message: '',
   },
-  altchaError: {
-    contact: 'user@test.com',
-    message: 'Testing captcha error state.',
-  },
 } as const;
 
 export const BLOG_SEARCH = {

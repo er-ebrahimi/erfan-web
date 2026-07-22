@@ -4,6 +4,8 @@ import { verifyAltchaPayload } from '@/lib/altcha';
 import { getApiMessage } from '@/lib/intl-api';
 import { getProvider } from '@/lib/notifications/registry';
 
+const ALTCHA_DISABLED = process.env.NEXT_PUBLIC_ALTCHA_DISABLED === 'true';
+
 export async function POST(request: NextRequest) {
   let locale = 'fa';
 
@@ -17,7 +19,7 @@ export async function POST(request: NextRequest) {
     } = body;
     locale = requestLocale;
 
-    if (!contact || !message || !altchaPayload) {
+    if (!contact || !message) {
       const errorMessage = await getApiMessage(
         'contact.apiErrors.requiredFields',
         locale
@@ -28,18 +30,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { error: altchaError } = await verifyAltchaPayload(altchaPayload);
+    if (!ALTCHA_DISABLED) {
+      if (!altchaPayload) {
+        const errorMessage = await getApiMessage(
+          'contact.apiErrors.requiredFields',
+          locale
+        );
+        return NextResponse.json(
+          { success: false, message: errorMessage },
+          { status: 400 }
+        );
+      }
 
-    if (altchaError) {
-      console.error('ALTCHA verification failed:', altchaError);
-      const errorMessage = await getApiMessage(
-        'contact.apiErrors.securityFailed',
-        locale
-      );
-      return NextResponse.json(
-        { success: false, message: errorMessage },
-        { status: 400 }
-      );
+      const { error: altchaError } = await verifyAltchaPayload(altchaPayload);
+
+      if (altchaError) {
+        console.error('ALTCHA verification failed:', altchaError);
+        const errorMessage = await getApiMessage(
+          'contact.apiErrors.securityFailed',
+          locale
+        );
+        return NextResponse.json(
+          { success: false, message: errorMessage },
+          { status: 400 }
+        );
+      }
     }
 
     const provider = getProvider();

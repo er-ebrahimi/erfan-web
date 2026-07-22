@@ -44,5 +44,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
     cwd: './',
+    env: {
+      NEXT_PUBLIC_ALTCHA_DISABLED: 'true',
+    },
   },
 });

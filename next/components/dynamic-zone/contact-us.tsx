@@ -14,6 +14,8 @@ import type { AltchaWidgetElement } from 'altcha/types/generic';
 
 import type { } from 'altcha/types/react';
 
+const ALTCHA_DISABLED = process.env.NEXT_PUBLIC_ALTCHA_DISABLED === 'true';
+
 const faI18n = {
   ariaLinkLabel: 'Altcha (وبسایت رسمی)',
   enterCode: 'کد را وارد کنید',
@@ -56,6 +58,10 @@ function AltchaWidget({
       }
     }
   }, [locale]);
+
+  if (ALTCHA_DISABLED) {
+    return <input type="hidden" name="altcha" value="disabled" />;
+  }
 
   if (!isClient) {
     return <div className="h-16" />;
@@ -104,6 +110,7 @@ const ContactUs = ({
     }));
   };
   const getAltchaPayload = (): string | undefined => {
+    if (ALTCHA_DISABLED) return 'disabled';
     const widget = widgetRef.current as AltchaWidgetElement | null;
     if (!widget || widget.getState() !== 'verified') {
       return undefined;
