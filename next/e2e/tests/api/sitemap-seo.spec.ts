@@ -26,7 +26,7 @@ test.describe('Sitemap & SEO', { tag: '@api' }, () => {
 
   test('pages from sitemap have meta title, description, and canonical URL', async ({ page }) => {
     test.setTimeout(120_000);
-    const urlsToCheck = sitemapUrls.slice(0, 20);
+    const urlsToCheck = sitemapUrls.slice(0, 1000);
     test.skip(urlsToCheck.length === 0, 'No sitemap URLs to check');
 
     for (const url of urlsToCheck) {

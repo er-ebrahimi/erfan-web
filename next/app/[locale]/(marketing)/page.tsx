@@ -26,7 +26,6 @@ export async function generateMetadata(props: {
   );
 
   const seo = pageData?.seo;
-  console.log("🚀 ~ generateMetadata ~ seo 1:", pageData)
   const metadata = generateMetadataObject(seo);
   return metadata;
 }
