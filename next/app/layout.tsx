@@ -14,6 +14,7 @@ import {
   getLanguageFont,
   iranSans,
 } from '@/lib/fonts';
+import { buildSiteStructuredData } from '@/lib/shared/site-structured-data';
 
 const siteId = process.env.NEXT_PUBLIC_SITE_ID || 'site-a';
 
@@ -73,6 +74,16 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <LocaleScript />
+        {buildSiteStructuredData().map((data) => (
+          <script
+            key={String(data['@type'])}
+            id={`site-${String(data['@type']).toLowerCase()}-structured-data`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(data).replace(/</g, '\\u003c'),
+            }}
+          />
+        ))}
         <GlobalErrorBoundary>
           <SlugProvider>{children}</SlugProvider>
         </GlobalErrorBoundary>

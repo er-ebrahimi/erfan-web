@@ -92,24 +92,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/_next/image/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
         source: '/favicon-sets/:path*',
         headers: [
           {
@@ -128,7 +110,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/:path((?:robots\\.txt|sitemap\\.xml))',
+        source: '/:path((?:robots\\.txt|sitemap\\.xml|llms\\.txt))',
         headers: [
           {
             key: 'Cache-Control',
@@ -141,9 +123,18 @@ const nextConfig = {
   async redirects() {
     let redirections = [];
     try {
-      const apiUrl =
+      const rawApiUrl =
         process.env.STRAPI_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL;
-      const res = await fetch(`${apiUrl}/api/redirections`);
+      if (!rawApiUrl) {
+        return [];
+      }
+
+      const apiUrl = rawApiUrl.replace(/\/+$/, '');
+      const res = await fetch(`${apiUrl}/api/redirections?populate=*`);
+      if (!res.ok) {
+        return [];
+      }
+
       const result = await res.json();
       if (!result?.data) {
         return [];

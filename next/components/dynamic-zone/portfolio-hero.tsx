@@ -1,5 +1,3 @@
-import { useId } from 'react';
-
 import {
   IconBrandDribbble,
   IconBrandGithub,
@@ -12,6 +10,7 @@ import {
   IconLink,
   IconUser,
 } from '@tabler/icons-react';
+import { useId } from 'react';
 
 import { BlurImage } from '@/components/blur-image';
 import { Container } from '@/components/container';
