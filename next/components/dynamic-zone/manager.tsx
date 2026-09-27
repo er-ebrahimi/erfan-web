@@ -128,6 +128,14 @@ const componentMapping: { [key: string]: any } = {
     () => import('./portfolio-projects').then((mod) => mod.PortfolioProjects),
     { ssr: true }
   ),
+  'dynamic-zone.ask-hero': dynamic(
+    () => import('./ask-hero').then((mod) => mod.AskHero),
+    { ssr: false }
+  ),
+  'dynamic-zone.ai-gateway': dynamic(
+    () => import('./ai-gateway').then((mod) => mod.AiGateway),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

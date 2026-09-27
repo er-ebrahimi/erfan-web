@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_dynamic_zone_ask_heroes",
+  "info": {
+    "displayName": "Ask Hero",
+    "icon": "search",
+    "description": "Ask-first hero with prompt bar routing to the AI product"
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "text"
+    },
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "input_placeholder": {
+      "type": "text"
+    },
+    "submit_label": {
+      "type": "text"
+    },
+    "suggestions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ask.prompt-chip"
+    },
+    "questionnaire_label": {
+      "type": "text"
+    },
+    "questionnaire_url": {
+      "type": "text"
+    },
+    "projects_link_label": {
+      "type": "text"
+    },
+    "projects_link_url": {
+      "type": "text"
+    }
+  }
+}

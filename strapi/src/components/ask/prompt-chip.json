@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_ask_prompt_chips",
+  "info": {
+    "displayName": "Prompt Chip",
+    "icon": "quote",
+    "description": "Suggested prompt for ask-first hero"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
