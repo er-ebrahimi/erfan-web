@@ -74,6 +74,42 @@ export interface PortfolioSocialLink {
   icon?: string;
 }
 
+export interface AskPromptChip {
+  id?: number;
+  text: string;
+}
+
+export interface AskHeroBlock {
+  __component: 'dynamic-zone.ask-hero';
+  id: number;
+  eyebrow?: string;
+  heading?: string;
+  sub_heading?: string;
+  input_placeholder?: string;
+  submit_label?: string;
+  suggestions?: AskPromptChip[];
+  questionnaire_label?: string;
+  questionnaire_url?: string;
+  projects_link_label?: string;
+  projects_link_url?: string;
+}
+
+export interface AiGatewayLink {
+  id?: number;
+  text?: string;
+  URL?: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+}
+
+export interface AiGatewayBlock {
+  __component: 'dynamic-zone.ai-gateway';
+  id: number;
+  heading?: string;
+  sub_heading?: string;
+  primary_cta_label?: string;
+  action_links?: AiGatewayLink[];
+}
+
 export interface PortfolioParagraph {
   text: string;
 }

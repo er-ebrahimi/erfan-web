@@ -43,15 +43,19 @@ export const Features = ({
   social_media_card: any;
 }) => {
   return (
-    <GradientContainer className="md:my-20">
-      <Container className="py-20 max-w-7xl mx-auto  relative z-40">
-        <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconRocket className="h-6 w-6 text-white" />
+    <GradientContainer className="md:my-10 lg:my-14">
+      <Container className="py-12 md:py-16 max-w-7xl mx-auto relative z-40">
+        <FeatureIconContainer className="flex justify-center items-center overflow-hidden scale-90">
+          <IconRocket className="h-5 w-5 text-white" />
         </FeatureIconContainer>
-        <Heading className="pt-4">{heading}</Heading>
-        <Subheading className="max-w-3xl mx-auto">{sub_heading}</Subheading>
+        <Heading className="pt-3 text-2xl md:text-4xl font-semibold">
+          {heading}
+        </Heading>
+        <Subheading className="max-w-2xl mx-auto text-muted-foreground text-sm md:text-base">
+          {sub_heading}
+        </Subheading>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-8 md:py-10">
           {globe_card && (
             <Card
               className={`md:col-span-${convertWordToNumber(globe_card?.span) || '2'}`}

@@ -35,6 +35,8 @@ const dynamicZoneComponents = [
   'dynamic-zone.guide',
   'dynamic-zone.related-articles',
   'dynamic-zone.related-products',
+  'dynamic-zone.ask-hero',
+  'dynamic-zone.ai-gateway',
 ];
 
 console.log(' Strapi Translation Helper');

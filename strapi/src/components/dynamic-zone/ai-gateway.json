@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_dynamic_zone_ai_gateways",
+  "info": {
+    "displayName": "AI Gateway",
+    "icon": "magic",
+    "description": "Dark band promoting entry into the AI architecture product"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "primary_cta_label": {
+      "type": "text"
+    },
+    "action_links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.link"
+    }
+  }
+}
