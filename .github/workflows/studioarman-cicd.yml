@@ -1,0 +1,161 @@
+name: Studioarman Next.js CI/CD
+
+# Frontend pipeline for studioarman/v0.0.
+# .github/workflows/ci-cd.yaml stays on main only, so the two workflows do not both run.
+
+on:
+  push:
+    branches:
+      - studioarman/v0.0
+      - ci/studioarman-cicd
+  pull_request:
+    branches:
+      - studioarman/v0.0
+
+concurrency:
+  group: studioarman-${{ github.workflow }}-${{ github.ref }}
+  # Queue production deploys. Cancel superseded PR and feature-branch runs.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/studioarman/v0.0' }}
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_REPO: ghcr.io/er-ebrahimi/erfan-web
+
+jobs:
+  quality:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: next
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: next/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Build
+        run: yarn build
+
+  docker:
+    name: Build Docker image
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Path context (not the default Git context) so the untracked .env.local is uploaded.
+      # Production pushes require the secret. PR and feature-branch builds may use an empty
+      # file; committed next/.env.production still applies for those builds.
+      - name: Write next/.env.local
+        env:
+          STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+        run: |
+          set -eu
+          publish=0
+          if [ "$EVENT_NAME" = "push" ] && [ "$REF_NAME" = "refs/heads/studioarman/v0.0" ]; then
+            publish=1
+          fi
+          if [ -n "$STUDIOARMAN_ENV_LOCAL" ]; then
+            printf '%s\n' "$STUDIOARMAN_ENV_LOCAL" > next/.env.local
+          elif [ "$publish" -eq 1 ]; then
+            echo "STUDIOARMAN_ENV_LOCAL is required to publish the production image" >&2
+            exit 1
+          else
+            : > next/.env.local
+            echo "STUDIOARMAN_ENV_LOCAL is unset; wrote an empty next/.env.local for this non-publishing build"
+          fi
+          if [ "$publish" -eq 1 ] && ! grep -q '^NEXT_PUBLIC_API_URL=.' next/.env.local; then
+            echo "STUDIOARMAN_ENV_LOCAL must set a non-empty NEXT_PUBLIC_API_URL" >&2
+            exit 1
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./next
+          file: ./next/Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0' }}
+          provenance: false
+          tags: |
+            ${{ env.IMAGE_REPO }}:studioarman-${{ github.sha }}
+            ${{ env.IMAGE_REPO }}:studioarman-latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Studioarman host
+    needs: docker
+    if: github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure deploy directory
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: mkdir -p /home/ai-bot/studioarman-web
+
+      - name: Copy compose file and deploy script
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          source: next/deploy/docker-compose.prod.yml,next/deploy/remote-deploy.sh
+          target: /home/ai-bot/studioarman-web/
+          strip_components: 2
+          overwrite: true
+
+      - name: Pull image and replace container
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          STUDIOARMAN_IMAGE_TAG: studioarman-${{ github.sha }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          command_timeout: 20m
+          envs: GHCR_USERNAME,GHCR_PULL_TOKEN,STUDIOARMAN_IMAGE_TAG
+          script: sh /home/ai-bot/studioarman-web/remote-deploy.sh
