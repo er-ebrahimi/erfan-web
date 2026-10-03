@@ -1,0 +1,123 @@
+name: Studioarman Next.js CI/CD
+
+# Frontend pipeline for studioarman/v0.0.
+# .github/workflows/ci-cd.yaml triggers only on main.
+
+on:
+  push:
+    branches:
+      - studioarman/v0.0
+      - ci/studioarman-cicd
+      - cursor/**
+  pull_request:
+    branches:
+      - studioarman/v0.0
+
+concurrency:
+  group: studioarman-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/studioarman/v0.0' }}
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_REPO: ghcr.io/er-ebrahimi/erfan-web
+  NEXT_PUBLIC_API_URL: http://localhost:1337
+  DOMAIN: localhost
+  BACK_PORT: 1337
+  IMAGE_HOSTNAME: localhost:1337
+  BACKEND_URL: http://localhost:1337
+
+jobs:
+  quality:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: next
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: next/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Build
+        run: yarn build
+
+  docker:
+    name: Build Docker image
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write next/.env.local
+        env:
+          STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+        run: |
+          set -eu
+          publish=0
+          if [ "$EVENT_NAME" = "push" ] && [ "$REF_NAME" = "refs/heads/studioarman/v0.0" ]; then
+            publish=1
+          fi
+          if [ -n "$STUDIOARMAN_ENV_LOCAL" ]; then
+            printf '%s\n' "$STUDIOARMAN_ENV_LOCAL" > next/.env.local
+          elif [ "$publish" -eq 1 ]; then
+            echo "STUDIOARMAN_ENV_LOCAL is required to publish the production image" >&2
+            exit 1
+          else
+            printf '%s\n' \
+              "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" \
+              "DOMAIN=${DOMAIN}" \
+              "BACK_PORT=${BACK_PORT}" \
+              "IMAGE_HOSTNAME=${IMAGE_HOSTNAME}" \
+              "BACKEND_URL=${BACKEND_URL}" \
+              > next/.env.local
+          fi
+          if [ "$publish" -eq 1 ] && ! grep -q '^NEXT_PUBLIC_API_URL=.' next/.env.local; then
+            echo "STUDIOARMAN_ENV_LOCAL must set a non-empty NEXT_PUBLIC_API_URL" >&2
+            exit 1
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./next
+          file: ./next/Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0' }}
+          provenance: false
+          tags: |
+            ${{ env.IMAGE_REPO }}:studioarman-${{ github.sha }}
+            ${{ env.IMAGE_REPO }}:studioarman-latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

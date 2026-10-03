@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '../elements/button';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
+import { clientEnv } from '@/env/client';
 import { StrapiImage } from '@/types/types';
 
 type CTA = {
@@ -26,7 +27,7 @@ export const HeroPicture = ({
   locale: string;
   background?: StrapiImage;
 }) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_API_URL;
 
   return (
     <div className="h-screen overflow-hidden relative flex flex-col items-center justify-center">

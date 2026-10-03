@@ -9,6 +9,7 @@ import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { FeatureIconContainer } from './features/feature-icon-container';
 import { ThreeDCard } from '@/components/ui/three-d-card';
+import { clientEnv } from '@/env/client';
 
 export const Launches = ({
   heading,
@@ -19,7 +20,7 @@ export const Launches = ({
   sub_heading: string;
   launches: any[];
 }) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_API_URL;
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
     icon: entry.Image?.formats?.large?.url

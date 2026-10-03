@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { draftMode } from 'next/headers';
 import qs from 'qs';
-import axios from 'axios';
+
+import { clientEnv } from '@/env/client';
 
 /**
  * Fetches data for a specified Strapi content type.
@@ -42,7 +44,7 @@ export default async function fetchContentType(
     if (isEnabled) {
       queryParams.status = 'draft';
     }
-    const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
+    const url = new URL(`api/${contentType}`, clientEnv.NEXT_PUBLIC_API_URL);
 
     const response = await axios.get<StrapiResponse>(url.href, {
       params: queryParams,

@@ -1,6 +1,8 @@
 import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { serverEnv } from '@/env/server';
+
 export const GET = async (request: Request) => {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
@@ -9,7 +11,7 @@ export const GET = async (request: Request) => {
   const uid = searchParams.get('uid');
   const status = searchParams.get('status');
 
-  if (secret !== process.env.PREVIEW_SECRET) {
+  if (secret !== serverEnv.PREVIEW_SECRET) {
     return new Response('Invalid token', { status: 401 });
   }
 

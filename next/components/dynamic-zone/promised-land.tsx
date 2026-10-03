@@ -4,9 +4,10 @@ import React from 'react';
 
 import { Carousel } from '@/components/ui/apple-cards-carousel';
 import { Card } from '@/components/ui/apple-cards-carousel';
+import { clientEnv } from '@/env/client';
 
 const getImageUrl = (pic: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_API_URL;
   if (
     pic &&
     pic.formats &&
