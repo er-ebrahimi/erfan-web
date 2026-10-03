@@ -2,9 +2,10 @@ import Image from 'next/image';
 import React from 'react';
 
 import { Timeline } from '@/components/ui/timeline';
+import { clientEnv } from '@/env/client';
 
 const getImageUrl = (pic: any) => {
-  const base = process.env.NEXT_PUBLIC_API_URL ?? '';
+  const base = clientEnv.NEXT_PUBLIC_API_URL ?? '';
   if (!pic) return '/next.svg';
 
   // Support multiple possible shapes returned by Strapi or other APIs:
@@ -45,9 +46,7 @@ const Plans: React.FC<PlansProps> = ({ Title, Description, Plan, locale }) => {
 
   return (
     <section className="w-full py-32 px-4 bg-background">
-      <div
-        className={`max-w-4xl mx-auto text-center mb-12`}
-      >
+      <div className={`max-w-4xl mx-auto text-center mb-12`}>
         <h2
           className={`text-3xl md:text-4xl font-bold mb-4 text-foreground ${isRTL ? 'font-iran-sans' : ''}`}
         >

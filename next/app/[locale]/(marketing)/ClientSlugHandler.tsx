@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { useSlugContext } from '@/app/context/SlugContext';
+import { clientEnv } from '@/env/client';
 
 export default function ClientSlugHandler({
   localizedSlugs,
@@ -23,7 +24,7 @@ export default function ClientSlugHandler({
   useEffect(() => {
     const handleMessage = async (message: MessageEvent<any>) => {
       if (
-        message.origin === process.env.NEXT_PUBLIC_API_URL &&
+        message.origin === clientEnv.NEXT_PUBLIC_API_URL &&
         message.data.type === 'strapiUpdate'
       ) {
         router.refresh();

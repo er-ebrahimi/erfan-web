@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { serverEnv } from '@/env/server';
 import { getApiMessage } from '@/lib/intl-api';
 
 export async function POST(request: NextRequest) {
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
+          secret: serverEnv.TURNSTILE_SECRET_KEY,
           response: turnstileToken,
         }),
       }
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using web3forms
     const emailPayload = {
-      access_key: process.env.CONTACT_EMAIL_ACCESS_KEY,
+      access_key: serverEnv.CONTACT_EMAIL_ACCESS_KEY,
       subject: `📧 New Message from Contact Form - ${contact}`,
       message: `
 New message from the contact form:
@@ -72,7 +73,7 @@ Message: ${message}
 Sent at: ${new Date().toLocaleString('en-US')}
       `,
       from_name: 'Website Contact Form',
-      to: process.env.CONTACT_EMAIL || 'your-email@example.com',
+      to: serverEnv.CONTACT_EMAIL || 'your-email@example.com',
       reply_to: contact,
     };
 

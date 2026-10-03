@@ -24,8 +24,6 @@ export const TeamMembers: React.FC<{
   Member?: Member[]; // kept the user's spelling to match incoming data
   locale?: string;
 }> = ({ Title, Description, Member = [] }) => {
-  const url = process.env.NEXT_PUBLIC_API_URL || '';
-
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4 flex justify-center flex-col items-center">
