@@ -1,13 +1,14 @@
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { format } from 'date-fns';
+import { format } from 'date-fns-jalali';
 import { getTranslations } from 'next-intl/server';
 import { Link } from 'next-view-transitions';
 
 import { Container } from '../container';
 import DynamicZoneManager from '../dynamic-zone/manager';
+import { JsonLd } from '@/components/json-ld';
 import { StrapiImage } from '@/components/ui/strapi-image';
-import { Article } from '@/types/types';
 import { cn } from '@/lib/utils';
+import { Article } from '@/types/types';
 
 export async function BlogLayout({
   article,
@@ -19,28 +20,32 @@ export async function BlogLayout({
   children: React.ReactNode;
 }) {
   const t = await getTranslations({ locale, namespace: 'blog' });
+
   return (
     <Container className="mt-16 lg:mt-32">
+      <JsonLd seo={article?.seo} id="article-structured-data" />
       <div className="flex justify-between items-center px-2 py-8">
         <Link
-          href={`/${locale}/category`}
+          href={`/${locale}/category/blog`}
           className="flex space-x-2 items-center hover:text-foreground transition-colors"
         >
           <IconArrowRight className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">{t('back')}</span>
         </Link>
       </div>
-      <div className="w-full mx-auto">
+      <div className="relative w-full mx-auto h-40 md:h-96 aspect-square rounded-3xl overflow-hidden">
         {article?.image ? (
           <StrapiImage
             src={article.image.url}
-            height={800}
-            width={800}
-            className="h-40 md:h-96 w-full aspect-square object-cover rounded-3xl dark:[mask-image:radial-gradient(circle,white,transparent)]"
             alt={article.title}
+            fill
+            quality={90}
+            loading="lazy"
+            sizes="(max-width: 768px) calc(100vw - 2rem),1248px"
+            className="object-cover dark:[mask-image:radial-gradient(circle,white,transparent)]"
           />
         ) : (
-          <div className="h-40 md:h-96 w-full aspect-square rounded-3xl shadow-derek bg-card flex items-center justify-center">
+          <div className="absolute inset-0 shadow-derek bg-card flex items-center justify-center">
             {/* <Logo /> */}
           </div>
         )}
@@ -59,7 +64,12 @@ export async function BlogLayout({
               ))}
             </div>
             <header className="flex flex-col">
-              <h1 className={cn("mt-8 text-4xl font-bold tracking-tight text-foreground sm:text-5xl", "!leading-relaxed")}>
+              <h1
+                className={cn(
+                  'mt-8 text-4xl font-bold tracking-tight  text-primary sm:text-5xl',
+                  '!leading-relaxed'
+                )}
+              >
                 {article.title}
               </h1>
             </header>

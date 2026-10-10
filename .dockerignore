@@ -1,0 +1,7 @@
+**/node_modules
+.git
+next
+strapi/public
+strapi/.tmp
+strapi/.env
+.next

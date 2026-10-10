@@ -16,12 +16,10 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "company": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

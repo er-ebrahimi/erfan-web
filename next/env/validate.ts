@@ -14,12 +14,13 @@ const optionalNonEmpty = z
 
 const envSchema = z.object({
   NEXT_PUBLIC_API_URL: z
-    .string({
-      required_error: 'NEXT_PUBLIC_API_URL is required',
-      invalid_type_error: 'NEXT_PUBLIC_API_URL is required',
-    })
+    .string()
     .min(1, 'NEXT_PUBLIC_API_URL is required')
     .url('NEXT_PUBLIC_API_URL must be a valid URL'),
+  NEXT_PUBLIC_STRAPI_URL: optionalNonEmpty,
+  STRAPI_INTERNAL_URL: optionalNonEmpty,
+  LOCALES: optionalNonEmpty,
+  DEFAULT_LOCALE: optionalNonEmpty,
   NEXT_PUBLIC_SITE_URL: optionalNonEmpty,
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: optionalNonEmpty,
   DOMAIN: optionalNonEmpty,
@@ -50,6 +51,10 @@ function formatValidationError(error: z.ZodError): string {
 
 const skipDefaults: ValidatedEnv = {
   NEXT_PUBLIC_API_URL: 'http://localhost:1337',
+  NEXT_PUBLIC_STRAPI_URL: undefined,
+  STRAPI_INTERNAL_URL: undefined,
+  LOCALES: undefined,
+  DEFAULT_LOCALE: undefined,
   NEXT_PUBLIC_SITE_URL: undefined,
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: undefined,
   DOMAIN: 'localhost',

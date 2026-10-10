@@ -16,13 +16,13 @@
       "type": "text"
     },
     "copyright": {
-      "type": "string"
+      "type": "text"
     },
     "designed_developed_by": {
-      "type": "string"
+      "type": "text"
     },
     "built_with": {
-      "type": "string"
+      "type": "text"
     },
     "internal_links": {
       "type": "component",

@@ -18,21 +18,31 @@ export const Media = ({ media }: MediaProps) => {
   if (!mediaItem?.url) return null;
 
   const url = mediaItem.url.startsWith('/')
-    ? (clientEnv.NEXT_PUBLIC_API_URL || '') + mediaItem.url
+    ? (clientEnv.NEXT_PUBLIC_STRAPI_URL || '') + mediaItem.url
     : mediaItem.url;
 
   return (
     <Container className="py-2 flex justify-center">
-      <video
-        controls
-        playsInline
-        className="w-full max-w-2xl rounded-lg shadow-lg"
-        src={url}
-        width={mediaItem.width || undefined}
-        height={mediaItem.height || undefined}
+      <div
+        className="w-full max-w-2xl"
+        style={{
+          aspectRatio:
+            mediaItem.width && mediaItem.height
+              ? `${mediaItem.width}/${mediaItem.height}`
+              : '16/9',
+        }}
       >
-        {t('videoFallback')}
-      </video>
+        <video
+          controls
+          playsInline
+          className="w-full h-full rounded-lg shadow-lg object-contain"
+          src={url}
+          width={mediaItem.width || 1280}
+          height={mediaItem.height || 720}
+        >
+          {t('videoFallback')}
+        </video>
+      </div>
     </Container>
   );
 };

@@ -95,6 +95,14 @@
     "inStock": "En stock",
     "outOfStock": "Rupture de stock"
   },
+  "portfolio": {
+    "projects": "Projets",
+    "sideProjects": "Projets secondaires",
+    "viewProject": "Voir le projet",
+    "viewLive": "Voir en ligne",
+    "viewAll": "Tout voir",
+    "noProjects": "Aucun projet pour le moment"
+  },
   "contact": {
     "contactLabel": "Contact ou Email",
     "contactPlaceholder": "Entrez votre contact ou email",

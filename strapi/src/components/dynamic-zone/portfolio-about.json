@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_dynamic_zone_portfolio_abouts",
+  "info": {
+    "displayName": "Portfolio About",
+    "icon": "information",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "about_intro": {
+      "type": "text"
+    },
+    "about_paragraphs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "portfolio.paragraph"
+    },
+    "about_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "skills": {
+      "type": "component",
+      "repeatable": true,
+      "component": "portfolio.skill"
+    }
+  }
+}

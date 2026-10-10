@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_portfolio_social_links",
+  "info": {
+    "displayName": "Social Link",
+    "icon": "link",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "text"
+    },
+    "url": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "text"
+    }
+  }
+}

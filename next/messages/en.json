@@ -96,6 +96,14 @@
     "inStock": "In Stock",
     "outOfStock": "Out of Stock"
   },
+  "portfolio": {
+    "projects": "Projects",
+    "sideProjects": "Side Projects",
+    "viewProject": "View Project",
+    "viewLive": "View Live",
+    "viewAll": "View All",
+    "noProjects": "No projects yet"
+  },
   "contact": {
     "contactLabel": "Contact or Email",
     "contactPlaceholder": "Enter your contact or email",

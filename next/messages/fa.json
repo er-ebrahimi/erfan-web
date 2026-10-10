@@ -96,6 +96,14 @@
     "inStock": "موجود",
     "outOfStock": "ناموجود"
   },
+  "portfolio": {
+    "projects": "پروژه‌ها",
+    "sideProjects": "پروژه‌های جانبی",
+    "viewProject": "مشاهده پروژه",
+    "viewLive": "مشاهده آنلاین",
+    "viewAll": "مشاهده همه",
+    "noProjects": "هنوز پروژه‌ای ثبت نشده است"
+  },
   "contact": {
     "contactLabel": "شماره تماس یا ایمیل",
     "contactPlaceholder": "شماره تماس یا ایمیل خود را وارد کنید",

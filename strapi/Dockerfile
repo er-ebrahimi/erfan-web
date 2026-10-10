@@ -1,30 +1,18 @@
-FROM node:20-slim
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    autoconf \
-    automake \
-    zlib1g-dev \
-    libpng-dev \
-    nasm \
-    bash \
-    libvips-dev \
-    git && \
-    rm -rf /var/lib/apt/lists/*
-ARG NODE_ENV=development
+FROM node:22-alpine
+# Installing libvips-dev for sharp Compatibility
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev
+ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
 COPY package.json yarn.lock ./
-COPY scripts ./scripts
-RUN yarn install --frozen-lockfile
-ENV PATH=/opt/node_modules/.bin:$PATH
+RUN yarn config set network-timeout 600000 -g && yarn install
 
 WORKDIR /opt/app
 COPY . .
-RUN mkdir -p /opt/app/.tmp && chmod 777 /opt/app/.tmp
+ENV PATH /opt/node_modules/.bin:$PATH
 RUN chown -R node:node /opt/app
 USER node
 RUN ["yarn", "build"]
 EXPOSE 1337
-CMD ["yarn", "develop"]
+CMD ["yarn", "start"]

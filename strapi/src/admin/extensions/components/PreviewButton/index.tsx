@@ -1,7 +1,7 @@
-import React from 'react';
 import { Button } from '@strapi/design-system/Button';
-import Eye from '@strapi/icons/Eye';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
+import Eye from '@strapi/icons/Eye';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const PreviewButton = () => {

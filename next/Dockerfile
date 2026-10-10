@@ -1,36 +1,50 @@
-# Install dependencies only when needed
 FROM node:22-alpine AS deps
-WORKDIR /usr/src/app
-COPY package*.json ./
-COPY .npmrc[c] ./
-RUN npm install -g npm@11.6.2 \
-    && npm cache clean --force \
-    && npm config set fund false \
-    && npm config set audit false \
-    && npm install --legacy-peer-deps --verbose
+WORKDIR /app
+COPY package*.json .npmrc* ./
+RUN npm install --legacy-peer-deps
 
-# Rebuild the source code only when needed
 FROM node:22-alpine AS builder
-WORKDIR /usr/src/app
-COPY --from=deps /usr/src/app/node_modules ./node_modules
+ARG FRONT_URL
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_STRAPI_URL
+ARG NEXT_PUBLIC_SHOW_ENAMAD
+ARG NEXT_PUBLIC_ENAMAD_URL
+ARG DOMAIN
+ARG BACK_PORT
+ENV FRONT_URL=$FRONT_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_STRAPI_URL=$NEXT_PUBLIC_STRAPI_URL
+ENV NEXT_PUBLIC_SHOW_ENAMAD=$NEXT_PUBLIC_SHOW_ENAMAD
+ENV NEXT_PUBLIC_ENAMAD_URL=$NEXT_PUBLIC_ENAMAD_URL
+ENV DOMAIN=$DOMAIN
+ENV BACK_PORT=$BACK_PORT
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY .env.local .env.local
 RUN npm run build
 
 FROM node:22-alpine AS runner
-WORKDIR /usr/src/app
-
+ARG FRONT_URL
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_STRAPI_URL
+ARG NEXT_PUBLIC_SHOW_ENAMAD
+ARG NEXT_PUBLIC_ENAMAD_URL
+ARG DOMAIN
+ARG BACK_PORT
+ENV FRONT_URL=$FRONT_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_STRAPI_URL=$NEXT_PUBLIC_STRAPI_URL
+ENV NEXT_PUBLIC_SHOW_ENAMAD=$NEXT_PUBLIC_SHOW_ENAMAD
+ENV NEXT_PUBLIC_ENAMAD_URL=$NEXT_PUBLIC_ENAMAD_URL
+ENV DOMAIN=$DOMAIN
+ENV BACK_PORT=$BACK_PORT
+WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=4000
 
-# bring in your built standalone server
-COPY --from=builder /usr/src/app/.next/standalone ./
-# static assets
-COPY --from=builder /usr/src/app/.next/static ./.next/static
-COPY --from=builder /usr/src/app/public ./public
-
-# **new**: copy your .env.local so Next.js will see NEXTAUTH_*
-COPY --from=builder /usr/src/app/.env.local ./.env.local
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 EXPOSE 4000
 CMD ["node", "server.js"]

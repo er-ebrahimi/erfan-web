@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+
 import { NotFound } from '@/components/not-found';
 
 export const metadata: Metadata = {
@@ -8,7 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootNotFound() {
-  return (
-      <NotFound />
-  );
+  return <NotFound />;
 }

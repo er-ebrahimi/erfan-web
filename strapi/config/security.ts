@@ -34,12 +34,7 @@ export default {
         'localhost:*',
         '127.0.0.1:*',
       ],
-      'style-src': [
-        "'self'",
-        "'unsafe-inline'",
-        'localhost:*',
-        '127.0.0.1:*',
-      ],
+      'style-src': ["'self'", "'unsafe-inline'", 'localhost:*', '127.0.0.1:*'],
       upgradeInsecureRequests: null,
     },
   },

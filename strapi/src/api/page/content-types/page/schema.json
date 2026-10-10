@@ -61,7 +61,10 @@
         "dynamic-zone.project-pictures",
         "dynamic-zone.contact",
         "dynamic-zone.team-members",
-        "dynamic-zone.hero-picture"
+        "dynamic-zone.hero-picture",
+        "dynamic-zone.portfolio-hero",
+        "dynamic-zone.portfolio-about",
+        "dynamic-zone.portfolio-projects"
       ]
     }
   }

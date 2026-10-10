@@ -12,10 +12,10 @@
   "pluginOptions": {},
   "attributes": {
     "source": {
-      "type": "string"
+      "type": "text"
     },
     "destination": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

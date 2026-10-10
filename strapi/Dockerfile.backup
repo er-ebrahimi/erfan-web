@@ -1,0 +1,26 @@
+# Minimal container for scripts/db-backup.mjs — build on the dev machine, ship as a tar.
+# The server has Docker but no Node and flaky internet; this image carries node + deps.
+FROM node:22-slim
+
+WORKDIR /app
+
+# Keep the script's on-disk layout intact (it resolves paths relative to this dir):
+#   scripts/db-backup.mjs  → dirname = /app/scripts, parent = /app (repo root)
+#   strapi/package.json    → createRequire anchor, resolves better-sqlite3 up to /app/node_modules
+COPY scripts/db-backup.mjs scripts/
+COPY strapi/package.json strapi/
+
+# ONE install at /app serves both consumers:
+#   - archiver (v8 — MANDATORY, ESM-only with the ZipArchive named export) via import from /app/scripts
+#   - better-sqlite3 via createRequire from /app/strapi (walks up to /app/node_modules)
+# better-sqlite3 ships prebuilt glibc binaries for node:22-slim — no build tools needed.
+RUN npm install archiver@^8.0.0 better-sqlite3
+
+# ponytail: wall-clock sleep instead of a fixed-time scheduler — no cron, no supervisor.
+# Runs once on start, then sleeps until the next 03:00 server-local (clamped to >= 60s
+# so a slow/failed run can't busy-loop). Upgrade path: move this CMD to a systemd timer
+# or k8s CronJob; the script and image stay unchanged.
+CMD ["sh", "-c", "while :; do node scripts/db-backup.mjs; now=$(date +%s); next=$(date -d 'tomorrow 03:00' +%s); secs=$((next - now)); if [ \"$secs\" -lt 60 ]; then secs=60; fi; sleep \"$secs\"; done"]
+
+# ponytail: runs as root so it can write the mounted keep-dir (strapi/.tmp/backups).
+# A non-root USER would need chown/volume-permission plumbing for zero benefit here.

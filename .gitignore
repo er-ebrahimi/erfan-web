@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .vscode
 .env
+.env.production
 .claude/settings.local.json
 .pnp.*
 .yarn/*
@@ -11,10 +12,10 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 /.cursor
+strapi-backup.tar
 strapi/public/uploads_backup_1780320593525/
 strapi/public/uploads_backup_1779954886446/
 strapi/public/uploads_backup_1780065198127/
-strapi/public/uploads_backup_1779954886446/
 strapi/public/public/
 /prototype/
 /strapi/data

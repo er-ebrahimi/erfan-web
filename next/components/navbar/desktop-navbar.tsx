@@ -14,6 +14,7 @@ import { ThemeToggle } from '../theme-toggle';
 import { NavbarItem } from './navbar-item';
 import { Button } from '@/components/elements/button';
 import { Logo } from '@/components/logo';
+import { localizeHref } from '@/lib/url';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -81,7 +82,7 @@ export const DesktopNavbar = ({
         <div className="flex items-center gap-1.5">
           {leftNavbarItems.map((item) => (
             <NavbarItem
-              href={`/${locale}${item.URL}` as never}
+              href={localizeHref(item.URL, locale) as never}
               key={item.text}
               target={item.target}
             >
@@ -101,7 +102,7 @@ export const DesktopNavbar = ({
               index === rightNavbarItems.length - 1 ? 'primary' : 'simple'
             }
             as={Link}
-            href={`/${locale}${item.URL}`}
+            href={localizeHref(item.URL, locale)}
           >
             {item.text}
           </Button>

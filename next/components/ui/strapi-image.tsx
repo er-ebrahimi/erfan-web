@@ -1,4 +1,3 @@
-import { unstable_noStore as noStore } from 'next/cache';
 import Image from 'next/image';
 import { ComponentProps } from 'react';
 
@@ -10,15 +9,43 @@ interface StrapiImageProps
   alt: string | null;
 }
 
+export interface StrapiFormat {
+  url: string;
+  width: number;
+  height: number;
+}
+
+export type StrapiFormats = Record<string, StrapiFormat>;
+
+export function getBestFormat(
+  image: {
+    url: string;
+    width: number;
+    height: number;
+    formats?: Record<string, unknown>;
+  },
+  preferred: string[] = ['large', 'medium', 'small']
+): { url: string; width: number; height: number } {
+  for (const name of preferred) {
+    const fmt = image.formats?.[name] as
+      | { url?: string; width?: number; height?: number }
+      | undefined;
+    if (fmt?.url && fmt?.width && fmt?.height) {
+      return { url: fmt.url, width: fmt.width, height: fmt.height };
+    }
+  }
+  return { url: image.url, width: image.width, height: image.height };
+}
+
 export function getStrapiMedia(url: string | null) {
-  const strapiURL = clientEnv.NEXT_PUBLIC_API_URL;
+  const strapiURL = clientEnv.NEXT_PUBLIC_STRAPI_URL;
   if (url == null) return null;
   if (url.startsWith('data:')) return url;
   if (url.startsWith('http') || url.startsWith('//')) return url;
   if (url.startsWith('/')) {
-    return strapiURL + url;
+    return (strapiURL || '').replace(/\/$/, '') + url;
   }
-  return `${strapiURL}${url}`;
+  return `${(strapiURL || '').replace(/\/$/, '')}${url}`;
 }
 
 export function StrapiImage({
@@ -27,7 +54,6 @@ export function StrapiImage({
   className,
   ...rest
 }: Readonly<StrapiImageProps>) {
-  noStore();
   const imageUrl = getStrapiMedia(src);
   if (!imageUrl) return null;
   return (

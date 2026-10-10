@@ -1,0 +1,16 @@
+services:
+  backup:
+    image: strapi-backup:latest
+    container_name: strapi-backup
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      # Only the data dirs — NOT the whole strapi folder, or the host's
+      # node_modules shadows the image's Linux better-sqlite3 (invalid ELF header).
+      - ./.tmp:/app/strapi/.tmp
+      - ./public:/app/strapi/public
+    dns:
+      - 8.8.8.8
+      - 178.22.122.100
+      - 185.51.200.2
+      - 185.8.174.140

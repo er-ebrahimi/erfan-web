@@ -1,7 +1,8 @@
 import { Link } from 'next-view-transitions';
 
-import { EnamadLogo } from '@/components/enamad-logo';
+import { EnamadWrapper } from '@/components/enamad-wrapper';
 import { Logo } from '@/components/logo';
+import { localizeHref } from '@/lib/url';
 
 export const Footer = async ({
   data,
@@ -10,8 +11,10 @@ export const Footer = async ({
   data: any;
   locale: string;
 }) => {
+  if (!data) return null;
+
   return (
-    <div className="relative">
+    <footer className="relative">
       <div className="border-t border-border px-8 pt-20 pb-32 relative">
         <div className="max-w-7xl mx-auto text-sm text-muted-foreground flex sm:flex-row flex-col justify-between items-start ">
           <div>
@@ -20,10 +23,7 @@ export const Footer = async ({
             </div>
             <div className="max-w-xs">{data?.description}</div>
             <div className="mt-4">{data?.copyright}</div>
-            <div className="mt-4 bg-white rounded-lg p-2 inline-block h-28 w-28">
-              {/* @ts-ignore */}
-              <EnamadLogo />
-            </div>
+            <EnamadWrapper />
           </div>
           <div className="grid grid-cols-3 gap-10 items-start mt-10 md:mt-0">
             <LinkSection links={data?.internal_links} locale={locale} />
@@ -32,7 +32,7 @@ export const Footer = async ({
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
@@ -48,7 +48,7 @@ const LinkSection = ({
       <Link
         key={link.text}
         className="transition-colors hover:text-foreground/80 text-muted-foreground text-xs sm:text-sm"
-        href={`${link.URL.startsWith('http') ? '' : `/${locale}`}${link.URL}`}
+        href={localizeHref(link.URL, locale)}
       >
         {link.text}
       </Link>

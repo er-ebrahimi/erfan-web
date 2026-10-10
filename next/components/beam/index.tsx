@@ -49,8 +49,11 @@ const Beam = ({
     const meteor = meteorRef.current;
     if (!meteor) return;
     meteor.style.animation = 'none';
-    void meteor.offsetWidth; // This forces a reflow, restarting the animation
-    meteor.style.animation = '';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        meteor.style.animation = '';
+      });
+    });
   };
 
   return (

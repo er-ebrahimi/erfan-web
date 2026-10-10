@@ -5,8 +5,8 @@ import { Timeline } from '@/components/ui/timeline';
 import { clientEnv } from '@/env/client';
 
 const getImageUrl = (pic: any) => {
-  const base = clientEnv.NEXT_PUBLIC_API_URL ?? '';
-  if (!pic) return '/next.svg';
+  const base = clientEnv.NEXT_PUBLIC_STRAPI_URL ?? '';
+  if (!pic) return '/empty.webp';
 
   // Support multiple possible shapes returned by Strapi or other APIs:
   // - pic.formats.large.url
@@ -21,7 +21,7 @@ const getImageUrl = (pic: any) => {
     attrs?.formats?.small?.url ??
     attrs?.url;
 
-  if (!path || typeof path !== 'string') return '/next.svg';
+  if (!path || typeof path !== 'string') return '/empty.webp';
 
   if (path.startsWith('http')) return path;
   if (path.startsWith('/')) return base + path;
@@ -89,7 +89,7 @@ const Plans: React.FC<PlansProps> = ({ Title, Description, Plan, locale }) => {
                         width={500}
                         height={500}
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/next.svg';
+                          (e.target as HTMLImageElement).src = '/empty.webp';
                         }}
                       />
                     ))}

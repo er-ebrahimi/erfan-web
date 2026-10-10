@@ -1,43 +1,93 @@
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import type { Metadata, Viewport } from 'next';
+import { getLocale } from 'next-intl/server';
 
 import './globals.css';
+import './themes.css';
 
 import { SlugProvider } from './context/SlugContext';
 import { GlobalErrorBoundary } from '@/components/global-error-boundary';
+import { LocaleScript } from '@/components/locale-script';
+import {
+  geistSans,
+  getLanguageDir,
+  getLanguageFont,
+  iranSans,
+} from '@/lib/fonts';
+import { buildSiteStructuredData } from '@/lib/shared/site-structured-data';
+
+const siteId = process.env.NEXT_PUBLIC_SITE_ID || 'site-a';
 
 export const metadata: Metadata = {
-  title: 'ErfanWeb',
-  description: 'Professional web development services',
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      {
+        url: `/${siteId}/favicon-sets/favicon-32x32.png`,
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: `/${siteId}/favicon-sets/favicon-16x16.png`,
+        sizes: '16x16',
+        type: 'image/png',
+      },
     ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    shortcut: `/${siteId}/favicon-sets/favicon.ico`,
+    apple: `/${siteId}/favicon-sets/apple-touch-icon.png`,
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#06b6d4' },
-    { media: '(prefers-color-scheme: dark)', color: '#06b6d4' },
-  ],
-};
+export function generateViewport(): Viewport {
+  const themeVars: Record<string, { light: string; dark: string }> = {
+    'site-a': { light: '#bdac62', dark: '#bdac62' },
+    painfoolsstudio: { light: '#3b82f6', dark: '#60a5fa' },
+  };
+  const colors = themeVars[siteId] ?? themeVars['site-a'];
 
-export default function RootLayout({
+  return {
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: colors.light },
+      { media: '(prefers-color-scheme: dark)', color: colors.dark },
+    ],
+  };
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const fontVariable = getLanguageFont(locale);
+  const fontDataAttribute = fontVariable.replace('--font-', '');
   return (
-    <html suppressHydrationWarning>
-      <body suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={getLanguageDir(locale)}
+      className={`theme-${siteId}`}
+      suppressHydrationWarning
+    >
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID!} />
+      <body
+        data-font={fontDataAttribute}
+        className={`${geistSans.variable} ${iranSans.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <LocaleScript />
+        {buildSiteStructuredData().map((data) => (
+          <script
+            key={String(data['@type'])}
+            id={`site-${String(data['@type']).toLowerCase()}-structured-data`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(data).replace(/</g, '\\u003c'),
+            }}
+          />
+        ))}
         <GlobalErrorBoundary>
           <SlugProvider>{children}</SlugProvider>
         </GlobalErrorBoundary>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </body>
     </html>
   );

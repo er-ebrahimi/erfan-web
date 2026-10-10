@@ -1,0 +1,14 @@
+services:
+  app:
+    image: web-blog:latest
+    container_name: web-blog
+    ports:
+      - '3000:4000'
+    env_file:
+      - .env
+    networks:
+      - strapi
+networks:
+  strapi:
+    name: Strapi
+    driver: bridge

@@ -1,47 +1,25 @@
+# docker compose -f .\docker-compose.dev.yml up --build
 services:
-  app-blue:
-    container_name: armanstudio-blog-blue
-    image: armanstudio-blog-i:blue
+  app:
+    container_name: web-blog
+    image: web-blog:latest
     build:
       context: .
+      dockerfile: Dockerfile
+      args:
+        FRONT_URL: ${FRONT_URL:-https://studioarman.com}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://studioarman.site:2087}
+        NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-https://studioarman.site:2087}
+        NEXT_PUBLIC_SHOW_ENAMAD: ${NEXT_PUBLIC_SHOW_ENAMAD:-true}
+        NEXT_PUBLIC_ENAMAD_URL: ${NEXT_PUBLIC_ENAMAD_URL:-}
+        DOMAIN: ${DOMAIN:-localhost}
+        BACK_PORT: ${BACK_PORT:-1337}
     ports:
-      - "4001:4000"
+      - '3000:4000'
+    environment:
+      NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-https://studioarman.site:2087}
+      STRAPI_INTERNAL_URL: ${STRAPI_INTERNAL_URL:-https://studioarman.site:2087}
     env_file:
-      - .env.local
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4000"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  app-green:
-    container_name: armanstudio-blog-green
-    image: armanstudio-blog-i:green
-    build:
-      context: .
-    ports:
-      - "4002:4000"
-    env_file:
-      - .env.local
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4000"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  nginx:
-    image: nginx:alpine
-    container_name: armanstudio-proxy
-    ports:
-      - "4000:80"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./upstream.conf:/etc/nginx/upstream.conf
-    depends_on:
-      - app-blue
-      - app-green
+      - .env
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'

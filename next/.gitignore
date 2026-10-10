@@ -37,7 +37,16 @@ next-env.d.ts
 
 
 # env vars
-.env 
+.env
 .contentlayer
-/builds
-/e2e/
+
+# build
+/builds/
+
+/e2e/reports/*
+
+/.env.painfoolsstudio
+/.env.studioarman
+
+/.tmp/
+/test-results/*

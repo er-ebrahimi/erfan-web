@@ -7,7 +7,7 @@
   "options": {},
   "attributes": {
     "Position": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

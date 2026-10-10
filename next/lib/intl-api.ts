@@ -15,7 +15,7 @@ export async function getApiMessage(
   key: string,
   locale?: string
 ): Promise<string> {
-  const currentLocale = locale || (await getLocale()) || 'fa';
+  const currentLocale = locale || (await getLocale());
   const messageKeys = key.split('.');
 
   let message: any =

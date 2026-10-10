@@ -1,18 +1,18 @@
-import { unstable_noStore as noStore } from 'next/cache';
-
 import { clientEnv } from '@/env/client';
 
 export function strapiImage(url: string): string {
-  noStore();
   if (url.startsWith('/')) {
+    const base = clientEnv.NEXT_PUBLIC_STRAPI_URL;
+
     if (
-      !clientEnv.NEXT_PUBLIC_API_URL &&
+      !base &&
+      typeof document !== 'undefined' &&
       document?.location.host.endsWith('.strapidemo.com')
     ) {
       return `https://${document.location.host.replace('client-', 'api-')}${url}`;
     }
 
-    return clientEnv.NEXT_PUBLIC_API_URL + url;
+    return (base || '').replace(/\/$/, '') + url;
   }
   return url;
 }

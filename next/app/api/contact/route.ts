@@ -1,23 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { serverEnv } from '@/env/server';
+import { verifyAltchaPayload } from '@/lib/altcha';
 import { getApiMessage } from '@/lib/intl-api';
+import { getProvider } from '@/lib/notifications/registry';
+
+const ALTCHA_DISABLED = process.env.NEXT_PUBLIC_ALTCHA_DISABLED === 'true';
 
 export async function POST(request: NextRequest) {
-  let locale = 'fa'; // Default locale
+  let locale = 'fa';
 
   try {
     const body = await request.json();
     const {
       contact,
       message,
-      turnstileToken,
+      altcha: altchaPayload,
       locale: requestLocale = 'fa',
     } = body;
     locale = requestLocale;
 
-    // Validate required fields
-    if (!contact || !message || !turnstileToken) {
+    if (!contact || !message) {
       const errorMessage = await getApiMessage(
         'contact.apiErrors.requiredFields',
         locale
@@ -28,89 +30,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify Turnstile token
-    const turnstileResponse = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: serverEnv.TURNSTILE_SECRET_KEY,
-          response: turnstileToken,
-        }),
+    if (!ALTCHA_DISABLED) {
+      if (!altchaPayload) {
+        const errorMessage = await getApiMessage(
+          'contact.apiErrors.requiredFields',
+          locale
+        );
+        return NextResponse.json(
+          { success: false, message: errorMessage },
+          { status: 400 }
+        );
       }
-    );
 
-    const turnstileResult = await turnstileResponse.json();
+      const { error: altchaError } = await verifyAltchaPayload(altchaPayload);
 
-    if (!turnstileResult.success) {
-      console.error('Turnstile verification failed:', turnstileResult);
-      const errorMessage = await getApiMessage(
-        'contact.apiErrors.securityFailed',
-        locale
-      );
-      return NextResponse.json(
-        {
-          success: false,
-          message: errorMessage,
-        },
-        { status: 400 }
-      );
+      if (altchaError) {
+        console.error('ALTCHA verification failed:', altchaError);
+        const errorMessage = await getApiMessage(
+          'contact.apiErrors.securityFailed',
+          locale
+        );
+        return NextResponse.json(
+          { success: false, message: errorMessage },
+          { status: 400 }
+        );
+      }
     }
 
-    // Send email using web3forms
-    const emailPayload = {
-      access_key: serverEnv.CONTACT_EMAIL_ACCESS_KEY,
-      subject: `📧 New Message from Contact Form - ${contact}`,
-      message: `
-New message from the contact form:
+    const provider = getProvider();
+    const result = await provider.send({ contact, message });
 
-Contact Info: ${contact}
-Message: ${message}
-
-Sent at: ${new Date().toLocaleString('en-US')}
-      `,
-      from_name: 'Website Contact Form',
-      to: serverEnv.CONTACT_EMAIL || 'your-email@example.com',
-      reply_to: contact,
-    };
-
-    const emailResponse = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(emailPayload),
-    });
-
-    const emailResult = await emailResponse.json();
-
-    if (emailResponse.ok && emailResult.success) {
+    if (result.success) {
       const successMessage = await getApiMessage(
         'contact.apiErrors.sendSuccess',
         locale
       );
-      return NextResponse.json({
-        success: true,
-        message: successMessage,
-      });
-    } else {
-      console.error('Failed to send email:', emailResult);
-      const errorMessage = await getApiMessage(
-        'contact.apiErrors.sendFailed',
-        locale
-      );
-      return NextResponse.json(
-        {
-          success: false,
-          message: errorMessage,
-        },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: true, message: successMessage });
     }
+
+    const errorMessage = await getApiMessage(
+      'contact.apiErrors.sendFailed',
+      locale
+    );
+    return NextResponse.json(
+      { success: false, message: errorMessage },
+      { status: 500 }
+    );
   } catch (error) {
     console.error('Contact form error:', error);
     const errorMessage = await getApiMessage(
@@ -118,10 +83,7 @@ Sent at: ${new Date().toLocaleString('en-US')}
       locale
     );
     return NextResponse.json(
-      {
-        success: false,
-        message: errorMessage,
-      },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

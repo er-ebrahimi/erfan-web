@@ -116,6 +116,18 @@ const componentMapping: { [key: string]: any } = {
     () => import('./media').then((mod) => mod.Media),
     { ssr: true }
   ),
+  'dynamic-zone.portfolio-hero': dynamic(
+    () => import('./portfolio-hero').then((mod) => mod.PortfolioHero),
+    { ssr: true }
+  ),
+  'dynamic-zone.portfolio-about': dynamic(
+    () => import('./portfolio-about').then((mod) => mod.PortfolioAbout),
+    { ssr: true }
+  ),
+  'dynamic-zone.portfolio-projects': dynamic(
+    () => import('./portfolio-projects').then((mod) => mod.PortfolioProjects),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

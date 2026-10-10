@@ -1,5 +1,7 @@
 import { IconClipboardText } from '@tabler/icons-react';
 import { type Metadata } from 'next';
+import { draftMode } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogCard } from '@/components/blog/blog-card';
@@ -9,57 +11,91 @@ import { AmbientColor } from '@/components/decorations/ambient-color';
 import { FeatureIconContainer } from '@/components/dynamic-zone/features/feature-icon-container';
 import { Heading } from '@/components/elements/heading';
 import { Subheading } from '@/components/elements/subheading';
+import { JsonLd } from '@/components/json-ld';
 import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { Article } from '@/types/types';
+
+export const revalidate = 60;
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
+
   const pageData = await fetchContentType(
     'blog-page',
     {
       filters: { locale: params.locale },
-      populate: 'seo.metaImage',
     },
     true
   );
 
   const seo = pageData?.seo;
-  const metadata = generateMetadataObject(seo);
-  return metadata;
+  seo.canonicalURL = `${process.env.NEXT_PUBLIC_FRONT_URL}/${params.locale}/category/blog`;
+  return generateMetadataObject(seo);
 }
 
 export default async function Blog(props: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const params = await props.params;
-  const blogPage = await fetchContentType(
-    'blog-page',
-    {
-      filters: { locale: params.locale },
-    },
-    true
-  );
-  const articles = await fetchContentType(
-    'articles',
-    {
-      filters: { locale: params.locale },
-    },
-    false
-  );
+  let params;
+  try {
+    params = await props.params;
+  } catch (err) {
+    console.error(`[BlogPage] error resolving params:`, err);
+    throw err;
+  }
+  const { isEnabled } = await draftMode();
 
-  const localizedSlugs = blogPage.localizations?.reduce(
-    (acc: Record<string, string>, localization: any) => {
-      acc[localization.locale] = 'blog';
-      return acc;
-    },
-    { [params.locale]: 'blog' }
-  );
+  let blogPage;
+  try {
+    blogPage = await fetchContentType(
+      'blog-page',
+      {
+        filters: { locale: params.locale },
+      },
+      true,
+      { preview: isEnabled }
+    );
+  } catch (err) {
+    console.error(`[BlogPage] fetchContentType(blog-page) error:`, err);
+    throw err;
+  }
+
+  let articles;
+  try {
+    articles = await fetchContentType(
+      'articles',
+      {
+        filters: { locale: params.locale, slug: { $contains: 'blog' } },
+        pagination: { pageSize: 100 },
+        populate: ['image', 'categories'],
+      },
+      false,
+      { preview: isEnabled }
+    );
+  } catch (err) {
+    console.error(`[BlogPage] fetchContentType(articles) error:`, err);
+    throw err;
+  }
+
+  if (!articles?.data?.length) {
+    notFound();
+  }
+
+  const localizedSlugs: Record<string, string> =
+    blogPage?.localizations?.reduce(
+      (acc: Record<string, string>, localization: any) => {
+        acc[localization.locale] = 'blog';
+        return acc;
+      },
+      { [params.locale]: 'blog' }
+    ) ?? { [params.locale]: 'blog' };
 
   return (
     <div className="relative overflow-hidden py-20 md:py-0">
+      <JsonLd seo={blogPage?.seo} id="blog-structured-data" />
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
       <AmbientColor />
       <Container className="flex flex-col items-center justify-between pb-20">
@@ -68,22 +104,24 @@ export default async function Blog(props: {
             <IconClipboardText className="h-6 w-6 text-primary-foreground" />
           </FeatureIconContainer>
           <Heading as="h1" className="mt-4">
-            {blogPage.heading}
+            {blogPage?.heading || 'Blog'}
           </Heading>
           <Subheading className="max-w-3xl mx-auto">
-            {blogPage.sub_heading}
+            {blogPage?.sub_heading || ''}
           </Subheading>
         </div>
 
         {articles.data.slice(0, 1).map((article: Article) => {
-          return <BlogCard
-            article={article}
-            locale={params.locale}
-            key={article.title}
-          />;
+          return (
+            <BlogCard
+              article={article}
+              locale={params.locale}
+              key={article.title}
+            />
+          );
         })}
 
-        <BlogPostRows articles={articles.data.filter((article: Article) => article.slug.includes('blog')).map((article: Article) => article)} />
+        <BlogPostRows articles={articles.data} />
       </Container>
     </div>
   );

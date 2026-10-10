@@ -1,20 +1,19 @@
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import React from 'react';
-
 import 'next-intl';
 
-import { getTranslations } from 'next-intl/server';
+import { type Metadata } from 'next';
+import { draftMode } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogLayout } from '@/components/blog/blog-layout';
+import { generateMetadataObject } from '@/lib/shared/metadata';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import BlogNotFound from '@/components/blog/blog-not-found';
-import { NotFound } from '@/components/not-found';
 
-export default async function SingleArticlePage(props: {
-  params: Promise<{ slug: string[]; locale: string }>;
-}) {
-  const t = await getTranslations('common');
+export const revalidate = 60;
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const { slug, locale } = params;
   const slugString = Array.isArray(slug) ? slug.join('/') : slug;
@@ -29,8 +28,32 @@ export default async function SingleArticlePage(props: {
     true
   );
 
+  const seo = article?.seo;
+  const metadata = generateMetadataObject(seo);
+  return metadata;
+}
+
+export default async function SingleArticlePage(props: {
+  params: Promise<{ slug: string[]; locale: string }>;
+}) {
+  const params = await props.params;
+  const { slug, locale } = params;
+  const { isEnabled } = await draftMode();
+  const slugString = Array.isArray(slug) ? slug.join('/') : slug;
+  const article = await fetchContentType(
+    'articles',
+    {
+      filters: {
+        slug: slugString,
+        locale: locale,
+      },
+    },
+    true,
+    { preview: isEnabled }
+  );
+
   if (!article) {
-    return <NotFound/>;
+    notFound();
   }
 
   const localizedSlugs = article.localizations?.reduce(

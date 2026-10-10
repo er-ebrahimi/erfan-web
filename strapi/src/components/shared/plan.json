@@ -8,7 +8,7 @@
   "options": {},
   "attributes": {
     "Title": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
       "type": "text"
@@ -17,12 +17,7 @@
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     }
   }
 }

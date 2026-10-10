@@ -1,20 +1,13 @@
-import axios from 'axios';
 import { draftMode } from 'next/headers';
 import qs from 'qs';
 
 import { clientEnv } from '@/env/client';
 
-/**
- * Fetches data for a specified Strapi content type.
- *
- * @param {string} contentType - The type of content to fetch from Strapi.
- * @param {string} params - Query parameters to append to the API request.
- * @return {Promise<object>} The fetched data.
- */
+import { REVALIDATE_SECONDS } from '@/lib/revalidate';
 
 interface StrapiData {
   id: number;
-  [key: string]: any; // Allow for any additional fields
+  [key: string]: any;
 }
 
 interface StrapiResponse {
@@ -34,27 +27,50 @@ export function spreadStrapiData(data: StrapiResponse): StrapiData | null {
 export default async function fetchContentType(
   contentType: string,
   params: Record<string, unknown> = {},
-  spreadData?: boolean
+  spreadData?: boolean,
+  options?: { preview?: boolean; revalidate?: number }
 ): Promise<any> {
-  const { isEnabled } = await draftMode();
+  const { preview = false, revalidate = REVALIDATE_SECONDS } = options || {};
 
-  try {
-    const queryParams = { ...params };
+  const queryParams: Record<string, unknown> = { ...params };
 
+  if (preview) {
+    const { isEnabled } = await draftMode();
     if (isEnabled) {
       queryParams.status = 'draft';
     }
-    const url = new URL(`api/${contentType}`, clientEnv.NEXT_PUBLIC_API_URL);
-
-    const response = await axios.get<StrapiResponse>(url.href, {
-      params: queryParams,
-      paramsSerializer: (params) => qs.stringify(params as any),
-    });
-    const jsonData: StrapiResponse = response.data;
-    return spreadData ? spreadStrapiData(jsonData) : jsonData;
-  } catch (error) {
-    // Log any errors that occur during the fetch process
-    // Return appropriate fallback based on expected data structure
-    return spreadData ? null : { data: [] };
   }
+
+  const apiUrl =
+    process.env.STRAPI_INTERNAL_URL || clientEnv.NEXT_PUBLIC_API_URL;
+  const url = new URL(`api/${contentType}`, apiUrl);
+  url.search = qs.stringify(queryParams as any);
+
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      next: { revalidate },
+      signal: AbortSignal.timeout(10000),
+    });
+  } catch {
+    console.warn(
+      `fetchContentType: "${contentType}" unreachable, returning null`
+    );
+    return null;
+  }
+
+  if (!res.ok) {
+    if (res.status === 404 || res.status === 403) {
+      console.warn(
+        `fetchContentType: "${contentType}" not found (${res.status})`
+      );
+      return null;
+    }
+    throw new Error(
+      `fetchContentType failed for "${contentType}": ${res.status} ${res.statusText}`
+    );
+  }
+
+  const jsonData: StrapiResponse = await res.json();
+  return spreadData ? spreadStrapiData(jsonData) : jsonData;
 }

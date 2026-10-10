@@ -7,10 +7,10 @@
   "options": {},
   "attributes": {
     "Title": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

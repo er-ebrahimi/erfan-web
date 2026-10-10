@@ -7,20 +7,15 @@
   "options": {},
   "attributes": {
     "Profile": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
+      "allowedTypes": ["images", "files", "videos", "audios"],
       "type": "media",
       "multiple": false
     },
     "Title": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

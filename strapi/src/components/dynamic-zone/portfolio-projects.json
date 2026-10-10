@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_dynamic_zone_portfolio_projects",
+  "info": {
+    "displayName": "Portfolio Projects",
+    "icon": "stack",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": ["all", "project", "side-project"],
+      "default": "all"
+    },
+    "portfolios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::portfolio.portfolio"
+    }
+  }
+}

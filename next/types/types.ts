@@ -17,6 +17,17 @@ export interface DynamicZoneComponent {
   [key: string]: unknown;
 }
 
+export interface Seo {
+  metaTitle: string;
+  metaDescription: string;
+  keywords?: string;
+  metaRobots?: string;
+  structuredData?: Record<string, unknown>;
+  metaViewport?: string;
+  canonicalURL?: string;
+  metaImage?: Image;
+}
+
 export interface Article {
   title: string;
   description: string;
@@ -29,6 +40,7 @@ export interface Article {
   locale: string;
   image: Image;
   categories: Category[];
+  seo?: Seo;
 }
 
 export interface Perk {
@@ -50,6 +62,37 @@ export interface Product {
   featured?: boolean;
   images: StrapiImage[];
   categories?: Category[];
+}
+
+export interface PortfolioSkill {
+  name: string;
+}
+
+export interface PortfolioSocialLink {
+  name: string;
+  url: string;
+  icon?: string;
+}
+
+export interface PortfolioParagraph {
+  text: string;
+}
+
+export interface Portfolio {
+  id: number;
+  documentId?: string;
+  title: string;
+  description: string;
+  slug: string;
+  type: 'project' | 'side-project';
+  tag?: string;
+  link?: string;
+  link_text?: string;
+  technologies: PortfolioSkill[];
+  card_image?: StrapiImage;
+  featured?: boolean;
+  locale: string;
+  localizations?: any[];
 }
 
 export interface StrapiImage {

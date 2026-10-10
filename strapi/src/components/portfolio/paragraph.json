@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_portfolio_paragraphs",
+  "info": {
+    "displayName": "Paragraph",
+    "icon": "fileText",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text"
+    }
+  }
+}

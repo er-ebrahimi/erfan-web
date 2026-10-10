@@ -13,13 +13,13 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "text"
     },
     "price": {
       "type": "integer"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "slug": {
       "pluginOptions": {},
@@ -30,11 +30,7 @@
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ]
+      "allowedTypes": ["images", "files", "videos"]
     },
     "perks": {
       "type": "component",
@@ -55,10 +51,7 @@
     },
     "dynamic_zone": {
       "type": "dynamiczone",
-      "components": [
-        "dynamic-zone.related-products",
-        "dynamic-zone.cta"
-      ]
+      "components": ["dynamic-zone.related-products", "dynamic-zone.cta"]
     },
     "featured": {
       "type": "boolean",

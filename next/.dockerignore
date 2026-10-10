@@ -5,3 +5,17 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.tar
+.github
+docker-compose*.yml
+Dockerfile
+README.md
+docs
+DESIGN.md
+.eslintrc.json
+eslint.config.mjs
+.gitignore
+.env
+.env.example
+.next-env.d.ts
+tsconfig.tsbuildinfo

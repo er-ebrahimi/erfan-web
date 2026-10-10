@@ -10,8 +10,9 @@
     "setup:next": "cd next && yarn && node --loader ts-node/esm ../scripts/copy-env.mts ./",
     "setup:strapi": "cd strapi && yarn && node --loader ts-node/esm ../scripts/copy-env.mts ./",
     "setup": "yarn install && yarn setup:next && yarn setup:strapi",
-    "dev": "yarn concurrently \"cd strapi && yarn develop\" \"npx wait-on http://localhost:1337 && cd next && yarn dev\"",
+    "dev": "yarn concurrently \"cd strapi && yarn develop\" \"npx wait-on http://localhost:8080 && cd next && yarn dev\"",
     "seed": "cd strapi && yarn strapi import -f ./data/export_20250116105447.tar.gz --force",
+    "backup": "node --env-file-if-exists=strapi/.env scripts/db-backup.mjs",
     "export": "cd strapi && yarn strapi export --no-encrypt -f ./data/export_20250116105447",
     "repo:upstream": "git fetch upstream && git merge upstream/main",
     "check:format": "prettier . --check --cache",
@@ -22,12 +23,12 @@
   "dependencies": {
     "@types/node": "^22.5.2",
     "concurrently": "^8.2.2",
-    "next-sitemap": "^4.2.3",
     "typescript": "^5.0.0",
     "wait-on": "^8.0.1"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "archiver": "^8.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.5.3",

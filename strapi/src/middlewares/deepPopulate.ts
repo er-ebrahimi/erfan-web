@@ -19,70 +19,76 @@ const extractPathSegment = (url: string) =>
   url.match(/\/([^/?]+)(?:\?|$)/)?.[1] || '';
 
 const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
-  const model = strapi.getModel(uid);
+  const model: any = strapi.getModel(uid as any);
   const attributes = Object.entries(model.attributes);
 
-  return attributes.reduce((acc: any, [attributeName, attribute]) => {
-    switch (attribute.type) {
-      case 'relation': {
-        const isMorphRelation = attribute.relation
-          .toLowerCase()
-          .startsWith('morph');
-        if (isMorphRelation) {
+  return attributes.reduce(
+    (acc: any, [attributeName, attribute]: [string, any]) => {
+      switch (attribute.type) {
+        case 'relation': {
+          const isMorphRelation = attribute.relation
+            .toLowerCase()
+            .startsWith('morph');
+          if (isMorphRelation) {
+            break;
+          }
+
+          // Ignore not visible fields other than createdBy and updatedBy
+          const isVisible = contentTypes.isVisibleAttribute(
+            model,
+            attributeName
+          );
+          const isCreatorField = [
+            CREATED_BY_ATTRIBUTE,
+            UPDATED_BY_ATTRIBUTE,
+          ].includes(attributeName);
+
+          if (isVisible) {
+            if (attributeName === 'testimonials') {
+              acc[attributeName] = { populate: 'user.image' };
+            } else {
+              acc[attributeName] = { populate: '*' };
+            }
+          }
+
           break;
         }
 
-        // Ignore not visible fields other than createdBy and updatedBy
-        const isVisible = contentTypes.isVisibleAttribute(model, attributeName);
-        const isCreatorField = [
-          CREATED_BY_ATTRIBUTE,
-          UPDATED_BY_ATTRIBUTE,
-        ].includes(attributeName);
-
-        if (isVisible) {
-          if (attributeName === 'testimonials') {
-            acc[attributeName] = { populate: 'user.image' };
-          } else {
-            acc[attributeName] = { populate: '*' };
-          }
+        case 'media': {
+          acc[attributeName] = { populate: '*' };
+          break;
         }
 
-        break;
+        case 'component': {
+          const populate = getDeepPopulate(attribute.component, opts);
+          acc[attributeName] = { populate };
+          break;
+        }
+
+        case 'dynamiczone': {
+          // Use fragments to populate the dynamic zone components
+          const populatedComponents = (attribute.components || []).reduce(
+            (acc: any, componentUID: UID.Component) => {
+              acc[componentUID] = {
+                populate: getDeepPopulate(componentUID, opts),
+              };
+
+              return acc;
+            },
+            {}
+          );
+
+          acc[attributeName] = { on: populatedComponents };
+          break;
+        }
+        default:
+          break;
       }
 
-      case 'media': {
-        acc[attributeName] = { populate: '*' };
-        break;
-      }
-
-      case 'component': {
-        const populate = getDeepPopulate(attribute.component, opts);
-        acc[attributeName] = { populate };
-        break;
-      }
-
-      case 'dynamiczone': {
-        // Use fragments to populate the dynamic zone components
-        const populatedComponents = (attribute.components || []).reduce(
-          (acc: any, componentUID: UID.Component) => {
-            acc[componentUID] = {
-              populate: getDeepPopulate(componentUID, opts),
-            };
-
-            return acc;
-          },
-          {}
-        );
-
-        acc[attributeName] = { on: populatedComponents };
-        break;
-      }
-      default:
-        break;
-    }
-
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 };
 
 export default (config, { strapi }: { strapi: Core.Strapi }) => {

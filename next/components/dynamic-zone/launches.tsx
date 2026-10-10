@@ -8,6 +8,7 @@ import React, { useRef, useState } from 'react';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { FeatureIconContainer } from './features/feature-icon-container';
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 import { ThreeDCard } from '@/components/ui/three-d-card';
 import { clientEnv } from '@/env/client';
 
@@ -20,14 +21,10 @@ export const Launches = ({
   sub_heading: string;
   launches: any[];
 }) => {
-  const url = clientEnv.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_STRAPI_URL;
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
-    icon: entry.Image?.formats?.large?.url
-      ? `${url}${entry.Image.formats.large.url}`
-      : entry.Image?.url
-        ? `${url}${entry.Image.url}`
-        : null, // No fallback image, will use icon in ThreeDCard
+    icon: entry.Image ? getStrapiMedia(getBestFormat(entry.Image).url) : null,
     content: (
       <p className="text-4xl md:text-7xl font-bold text-neutral-800">
         {entry.mission_number}

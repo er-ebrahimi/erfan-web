@@ -1,15 +1,15 @@
-const fs = require("fs");
-const path = require("path");
-const glob = require("glob");
+const fs = require('fs');
+const path = require('path');
+const glob = require('glob');
 
 // Specify the directory path and the pattern to find the file
-const directoryPath = "./node_modules/@strapi/admin/dist/admin/";
-const filePattern = "index-*.mjs";
+const directoryPath = './node_modules/@strapi/admin/dist/admin/';
+const filePattern = 'index-*.mjs';
 
 // Function to find and replace the specific content in the file
 const updateFile = (filePath) => {
   // Read the file content
-  fs.readFile(filePath, "utf8", (err, data) => {
+  fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(`Error reading file ${filePath}:`, err);
       return;
@@ -33,7 +33,7 @@ const updateFile = (filePath) => {
       const updatedData = data.replace(originalContent, newContent);
 
       // Write the updated content back to the file
-      fs.writeFile(filePath, updatedData, "utf8", (err) => {
+      fs.writeFile(filePath, updatedData, 'utf8', (err) => {
         if (err) {
           console.error(`Error writing to file ${filePath}:`, err);
           return;
@@ -49,7 +49,7 @@ const updateFile = (filePath) => {
 // Find the file using glob pattern matching
 glob(path.join(directoryPath, filePattern), (err, files) => {
   if (err) {
-    console.error("Error finding files:", err);
+    console.error('Error finding files:', err);
     return;
   }
 
@@ -58,6 +58,6 @@ glob(path.join(directoryPath, filePattern), (err, files) => {
     const filePath = files[0];
     updateFile(filePath);
   } else {
-    console.log("No matching files found.");
+    console.log('No matching files found.');
   }
 });

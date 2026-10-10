@@ -7,10 +7,10 @@
   "options": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "text"
     },
     "URL": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

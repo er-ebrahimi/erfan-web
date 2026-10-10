@@ -1,0 +1,110 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'next/**'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'next/**'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+  BASE_URL: http://localhost:3000
+
+jobs:
+  e2e:
+    name: Playwright E2E (${{ matrix.shard }}/${{ strategy.job-total }})
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+
+      - name: Install dependencies
+        run: |
+          cd next
+          yarn install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: |
+          cd next
+          npx playwright install chromium --with-deps
+
+      - name: Create .env.local
+        run: |
+          cd next
+          cp .env.example .env.local
+          echo "ALTCHA_HMAC_SECRET=test-secret-for-ci" >> .env.local
+
+      - name: Start Strapi (if needed)
+        run: |
+          cd strapi
+          yarn develop &
+          npx wait-on http://localhost:1337 --timeout 30000 || true
+
+      - name: Run Playwright tests
+        run: |
+          cd next
+          npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        env:
+          ALTCHA_HMAC_SECRET: test-secret-for-ci
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-shard-${{ matrix.shard }}
+          path: next/e2e/reports/html
+          retention-days: 7
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-shard-${{ matrix.shard }}
+          path: next/test-results
+          retention-days: 7
+
+  e2e-report:
+    name: Merge & Upload E2E Report
+    if: always()
+    needs: [e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download all reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: playwright-report-*
+          merge-multiple: true
+          path: all-reports
+
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: all-reports
+          retention-days: 14

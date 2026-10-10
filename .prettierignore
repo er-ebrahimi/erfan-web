@@ -1,32 +1,59 @@
 # Dependencies
 node_modules/
 **/node_modules/
+.pnp.*
+.yarn/
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+next/.yarn/install-state.gz
 
 # Build outputs
 dist/
 build/
 out/
+builds/
 .next/
-
-# Generated files
-.turbo/
 coverage/
+.turbo/
 
-# Strapi specific
+# Strapi specific (mirrors strapi/.gitignore)
 strapi/dist/
 strapi/build/
-strapi/public/uploads/
-strapi/database/
-strapi/types/generated/
-strapi/src/api/*/content-types/*/schema.json
-strapi/src/components/*/*.json
+strapi/.strapi/
+strapi/.strapi-updater.json
+strapi/.strapi-cloud.json
+strapi/exports/
+strapi/license.txt
+strapi/public/*
+strapi/data/*
+strapi/archive/*
+strapi/.tmp/
+strapi/ssl/
 
-# Next.js specific
+# Next.js specific (mirrors next/.gitignore)
 next/.next/
 next/out/
+next/build/
+next/builds/
+next/coverage/
+next/.vercel/
+next/.contentlayer/
+next/.env*.local
+next/*.pem
+next/*.tsbuildinfo
+next/next-env.d.ts
+next/e2e/reports/*
+next/test-results/*
+next/.tmp/
 
 # Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # OS generated files
 .DS_Store
@@ -35,6 +62,19 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+.cursor/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# Husky internals (mirrors .husky/_/.gitignore)
+.husky/_/
+
+# Backup files
+strapi-backup.tar
 
 # Temporary files
 .tmp

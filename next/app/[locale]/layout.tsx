@@ -6,35 +6,15 @@ import { notFound } from 'next/navigation';
 import React from 'react';
 
 import { Footer } from '@/components/footer';
+import { JsonLd } from '@/components/json-ld';
 import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
-import { AuthProvider } from '@/context/auth-context';
 import { CartProvider } from '@/context/cart-context';
 import { routing } from '@/i18n/routing';
-import { getFontForLocale } from '@/lib/fonts';
-import { getLocaleClasses } from '@/lib/rtl-utils';
-import { generateMetadataObject } from '@/lib/shared/metadata';
+import { getDirection } from '@/lib/rtl-utils';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import { cn } from '@/lib/utils';
 
-// Default Global SEO for pages without them
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const params = await props.params;
-  const pageData = await fetchContentType(
-    'global',
-    {
-      filters: { locale: params.locale },
-      populate: 'seo.metaImage',
-    },
-    true
-  );
-
-  const seo = pageData?.seo;
-  const metadata = generateMetadataObject(seo);
-  return metadata;
-}
+export const revalidate = 60;
 
 export default async function LocaleLayout(props: {
   children: React.ReactNode;
@@ -43,14 +23,14 @@ export default async function LocaleLayout(props: {
   const params = await props.params;
 
   const { locale } = params;
-
-  // Validate that the incoming `locale` parameter is valid
   if (!routing.locales.includes(locale as any)) {
+    console.error(
+      `[LocaleLayout] Invalid locale "${locale}" - calling notFound()`
+    );
     notFound();
   }
 
-  const { fontClass, direction } = getLocaleClasses(locale);
-  const font = getFontForLocale(locale);
+  const direction = getDirection(locale);
 
   const { children } = props;
 
@@ -94,30 +74,25 @@ export default async function LocaleLayout(props: {
       <ViewTransitions>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme={process.env.NEXT_PUBLIC_DEFAULT_THEME || 'system'}
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <CartProvider>
-              <div
-                className={cn(
-                  font?.className,
-                  fontClass,
-                  'bg-background text-foreground antialiased h-full w-full'
-                )}
-                dir={direction}
-              >
-                <Navbar
-                  data={pageData.navbar}
-                  locale={locale}
-                  languages={pageData.languages}
-                />
-                {children}
-                <Footer data={pageData.footer} locale={locale} />
-              </div>
-            </CartProvider>
-          </AuthProvider>
+          <CartProvider>
+            <div
+              className="bg-background text-foreground antialiased h-full w-full"
+              dir={direction}
+            >
+              <JsonLd seo={pageData?.seo} id="global-structured-data" />
+              <Navbar
+                data={pageData.navbar}
+                locale={locale}
+                languages={pageData.languages}
+              />
+              <main id="main-content">{children}</main>
+              <Footer data={pageData.footer} locale={locale} />
+            </div>
+          </CartProvider>
         </ThemeProvider>
       </ViewTransitions>
     </NextIntlClientProvider>

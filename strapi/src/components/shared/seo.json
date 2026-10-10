@@ -8,11 +8,11 @@
   "attributes": {
     "metaTitle": {
       "required": true,
-      "type": "string",
+      "type": "text",
       "maxLength": 60
     },
     "metaDescription": {
-      "type": "string",
+      "type": "text",
       "required": true,
       "minLength": 50
     },
@@ -20,28 +20,24 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ]
+      "allowedTypes": ["images", "files", "videos"]
     },
     "keywords": {
       "type": "text",
       "regex": "[^,]+"
     },
     "metaRobots": {
-      "type": "string",
+      "type": "text",
       "regex": "[^,]+"
     },
     "structuredData": {
       "type": "json"
     },
     "metaViewport": {
-      "type": "string"
+      "type": "text"
     },
     "canonicalURL": {
-      "type": "string"
+      "type": "text"
     }
   }
 }

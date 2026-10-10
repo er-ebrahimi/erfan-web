@@ -2,10 +2,11 @@
 
 import { NextIntlClientProvider } from 'next-intl';
 import { usePathname } from 'next/navigation';
+
 import { Error500Client } from '@/components/error-500-client';
 import enMessages from '@/messages/en.json';
-import frMessages from '@/messages/fr.json';
 import faMessages from '@/messages/fa.json';
+import frMessages from '@/messages/fr.json';
 
 const messages = {
   en: enMessages,
@@ -21,7 +22,7 @@ export default function RootError({
   reset: () => void;
 }) {
   const pathname = usePathname();
-  const locale = (pathname?.split('/')[1] as keyof typeof messages) || 'fa';
+  const locale = pathname?.split('/')[1] as keyof typeof messages;
   const currentMessages = messages[locale] || messages['fa'];
 
   return (

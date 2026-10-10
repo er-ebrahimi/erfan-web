@@ -1,15 +1,14 @@
 'use client';
 
-import { format } from 'date-fns';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { format } from 'date-fns-jalali';
 import FuzzySearch from 'fuzzy-search';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from 'next-view-transitions';
 import React, { useEffect, useMemo, useState } from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 import { truncate } from '@/lib/utils';
 import { Article } from '@/types/types';
-
 
 export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
   const [search, setSearch] = useState('');
@@ -34,7 +33,10 @@ export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
   }, [search, searcher]);
 
   const totalPages = Math.ceil(results.length / itemsPerPage);
-  const paginatedResults = results.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const paginatedResults = results.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   const handlePrevious = () => {
     setPage((prev) => Math.max(prev - 1, 1));
@@ -99,9 +101,7 @@ export const BlogPostRows = ({ articles }: { articles: Article[] }) => {
 export const BlogPostRow = ({ article }: { article: Article }) => {
   const locale = useLocale();
   return (
-    <div
-      className="flex md:flex-row flex-col items-start justify-between md:items-center group py-4 relative"
-    >
+    <div className="flex md:flex-row flex-col items-start justify-between md:items-center group py-4 relative">
       {/* Main link for the whole card */}
       <Link
         href={`/${locale}/category/${article.slug}`}
@@ -125,7 +125,6 @@ export const BlogPostRow = ({ article }: { article: Article }) => {
             <p className="text-muted-foreground text-sm max-w-xl group-hover:text-foreground transition duration-200">
               {format(new Date(article.publishedAt), 'MMMM dd, yyyy')}
             </p>
-            <div className="h-1 w-1 rounded-full bg-muted-foreground"></div>
             <div className="flex gap-4 flex-wrap pointer-events-auto">
               {article.categories?.map((category, idx) => (
                 <Link

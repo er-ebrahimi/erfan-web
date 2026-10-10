@@ -8,10 +8,10 @@
   "options": {},
   "attributes": {
     "Title": {
-      "type": "string"
+      "type": "text"
     },
     "Description": {
-      "type": "string"
+      "type": "text"
     },
     "logos": {
       "type": "relation",
@@ -20,11 +20,7 @@
     },
     "span": {
       "type": "enumeration",
-      "enum": [
-        "one",
-        "two",
-        "three"
-      ]
+      "enum": ["one", "two", "three"]
     }
   }
 }

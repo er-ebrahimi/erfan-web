@@ -7,29 +7,24 @@
   "options": {},
   "attributes": {
     "Right": {
-      "type": "string"
+      "type": "text"
     },
     "Rotate": {
-      "type": "string"
+      "type": "text"
     },
     "Top": {
-      "type": "string"
+      "type": "text"
     },
     "Image": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     },
     "Name": {
-      "type": "string"
+      "type": "text"
     },
     "ClassName": {
-      "type": "string"
+      "type": "text"
     }
   },
   "config": {}

@@ -1,8 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import React from 'react';
 
 import { Cover } from '../decorations/cover';
 import ShootingStars from '../decorations/shooting-star';
@@ -11,6 +7,8 @@ import { Button } from '../elements/button';
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { StrapiImage } from '../ui/strapi-image';
+import { localizeHref } from '@/lib/url';
+import { cn } from '@/lib/utils';
 
 export const Hero = ({
   heading,
@@ -28,23 +26,19 @@ export const Hero = ({
   const backgroundImage = Background?.[0];
 
   return (
-    <div className="h-[calc(100vh-1rem)] m-2 rounded-3xl dark:h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center ">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="absolute inset-0"
-      >
+    <div className=" h-screen dark:m-0 dark:rounded-none overflow-hidden bg-background relative flex flex-col items-center justify-center bg-black">
+      <div className="absolute inset-0 overflow-hidden">
         {backgroundImage ? (
           <>
             <StrapiImage
               src={backgroundImage.url}
               alt={backgroundImage.alternativeText || 'Hero Background'}
               fill
-              className="object-cover"
-              priority
+              className="object-cover brightness-[0.6]"
+              // loading="lazy"
+              sizes="100vw"
             />
-            <div className="absolute inset-0 bg-background/50" />
+            <div className="absolute inset-0 bg-background/70" />
           </>
         ) : (
           <>
@@ -52,15 +46,17 @@ export const Hero = ({
             <ShootingStars />
           </>
         )}
-      </motion.div>
+      </div>
       <Heading
         as="h1"
-        className="text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6"
+        className={cn(
+          'text-4xl md:text-4xl lg:text-6xl text-foreground font-semibold max-w-7xl mx-auto text-center mt-6 relative z-10  py-6 text-white',
+          '!leading-relaxed'
+        )}
       >
-        {heading.substring(0, heading.lastIndexOf(' '))}{' '}
-        <Cover>{heading.split(' ').pop()}</Cover>
+        {heading}
       </Heading>
-      <Subheading className="text-center mt-2 text-gray-800 dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10">
+      <Subheading className="text-center mt-2  dark:text-gray-200 text-lg md:mt-6 md:text-xl max-w-3xl mx-auto relative z-10 text-white px-3">
         {sub_heading}
       </Subheading>
       <div className="flex space-x-2 items-center mt-8">
@@ -69,7 +65,7 @@ export const Hero = ({
             <Button
               key={cta?.id}
               as={Link}
-              href={`/${locale}${cta.URL}`}
+              href={localizeHref(cta.URL, locale)}
               {...(cta.variant && { variant: cta.variant })}
             >
               {cta.text}
@@ -77,6 +73,7 @@ export const Hero = ({
           ))}
       </div>
       <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-background to-transparent hidden dark:block" />
+      <div className="absolute inset-x-0 bottom-0 h-20 w-full bg-gradient-to-t from-background to-transparent  dark:hidden" />
     </div>
   );
 };

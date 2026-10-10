@@ -3,12 +3,12 @@
 import { IconRocket } from '@tabler/icons-react';
 import { motion, useMotionValueEvent } from 'framer-motion';
 import { useScroll } from 'framer-motion';
-import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Heading } from '../elements/heading';
 import { Subheading } from '../elements/subheading';
 import { FeatureIconContainer } from './features/feature-icon-container';
+import { getBestFormat, getStrapiMedia } from '@/components/ui/strapi-image';
 import { ThreeDCard } from '@/components/ui/three-d-card';
 import { clientEnv } from '@/env/client';
 
@@ -21,15 +21,10 @@ export const LaunchesCard = ({
   sub_heading: string;
   launches: any[];
 }) => {
-  const url = clientEnv.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_STRAPI_URL;
   const launchesWithDecoration = launches.map((entry) => ({
     ...entry,
-    icon: `${url}${entry.Image.formats.large.url}`,
-    // content: (
-    //   <p className="text-4xl md:text-7xl font-bold text-neutral-800">
-    //     {entry.mission_number}
-    //   </p>
-    // ),
+    icon: getStrapiMedia(getBestFormat(entry.Image).url),
   }));
 
   const ref = useRef<HTMLDivElement>(null);
@@ -38,9 +33,9 @@ export const LaunchesCard = ({
     offset: ['start end', 'end start'],
   });
   const backgrounds = [
-    'hsl(var(--background))',
-    'hsl(var(--muted))',
-    'hsl(var(--background))',
+    'var(--background)',
+    'var(--muted)',
+    'var(--background)',
   ];
 
   const [gradient, setGradient] = useState(backgrounds[0]);
@@ -74,7 +69,7 @@ export const LaunchesCard = ({
     >
       <div className="px-6">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <IconRocket className="h-6 w-6 text-foreground" />
+          <IconRocket className="h-6 w-6 text-white" />
         </FeatureIconContainer>
         <Heading className="mt-4 text-foreground">{heading}</Heading>
         <Subheading className="text-muted-foreground">{sub_heading}</Subheading>

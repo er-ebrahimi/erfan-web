@@ -2,6 +2,11 @@
 
 # CRITICAL RULES - MUST FOLLOW
 
+## DOCUMENTATION
+
+- Always create/update docs in the `docs/` folder for deployments, environment setup, and architecture decisions.
+- Update `.env.example` when adding new environment variables.
+
 ## RESPONSES
 
 - Keep responses concise and to the point - unless the user asks otherwise
@@ -50,20 +55,20 @@ Forked from `strapi/LaunchPad`.
 
 ## Key commands
 
-| Where | Command | What it does |
-|-------|---------|--------------|
-| root | `yarn setup` | installs root + Next + Strapi deps; copies `.env.example` → `.env` |
-| root | `yarn dev` | starts Strapi (`:1337`), waits for it, then starts Next (`:3000` via turbopack) |
-| root | `yarn seed` | `cd strapi && yarn strapi import -f ./data/export_*.tar.gz --force` |
-| root | `yarn fix:format` | `prettier . --write --cache` |
-| root | `yarn check:format` | `prettier . --check --cache` |
-| `next/` | `yarn dev` | `next dev --turbopack` |
-| `next/` | `yarn build` | `next build` (output: `standalone`; sitemap runs in `postbuild`) |
-| `next/` | `yarn lint` | `eslint . --ext .js,.jsx,.ts,.tsx` |
-| `next/` | `yarn typecheck` | `tsc --noEmit` |
-| `next/` | `yarn production` | `cross-env PORT=4000 next start` |
-| `strapi/` | `yarn develop` | Strapi dev with autoReload |
-| `strapi/` | `yarn seed` | `strapi import -f ./data/export_20250116105447.tar.gz` |
+| Where     | Command             | What it does                                                                    |
+| --------- | ------------------- | ------------------------------------------------------------------------------- |
+| root      | `yarn setup`        | installs root + Next + Strapi deps; copies `.env.example` → `.env`              |
+| root      | `yarn dev`          | starts Strapi (`:1337`), waits for it, then starts Next (`:3000` via turbopack) |
+| root      | `yarn seed`         | `cd strapi && yarn strapi import -f ./data/export_*.tar.gz --force`             |
+| root      | `yarn fix:format`   | `prettier . --write --cache`                                                    |
+| root      | `yarn check:format` | `prettier . --check --cache`                                                    |
+| `next/`   | `yarn dev`          | `next dev --turbopack`                                                          |
+| `next/`   | `yarn build`        | `next build` (output: `standalone`; sitemap runs in `postbuild`)                |
+| `next/`   | `yarn lint`         | `eslint . --ext .js,.jsx,.ts,.tsx`                                              |
+| `next/`   | `yarn typecheck`    | `tsc --noEmit`                                                                  |
+| `next/`   | `yarn production`   | `cross-env PORT=4000 next start`                                                |
+| `strapi/` | `yarn develop`      | Strapi dev with autoReload                                                      |
+| `strapi/` | `yarn seed`         | `strapi import -f ./data/export_20250116105447.tar.gz`                          |
 
 ## i18n (next-intl v4)
 
@@ -81,14 +86,47 @@ Forked from `strapi/LaunchPad`.
 - **Husky pre-commit is check-only** (stub, not actively enforcing). `lint-staged-check.json` has check-only config.
 - Order: `yarn fix:format` → `(cd next && yarn lint)` → `(cd next && yarn typecheck)`.
 
-## Deployment
+## Playwright E2E Testing
 
-- Blue-green Docker deploy via `next/deploy.sh`.
-  - Blue container port 4001, Green container port 4002.
-  - Nginx proxy on port 4000, config in `next/nginx.conf`.
-  - Active container detected from `next/upstream.conf`.
-- `next/Dockerfile` — multi-stage, `output: standalone` copied as server.
+- Suite lives at `next/playwright.config.ts` (config) and `next/e2e/` (tests, pages, fixtures).
+- Uses **Page Object Model** — all pages extend `BasePage` in `next/e2e/pages/`.
+- Tests are tagged: `@smoke` (P0 — critical), `@regression` (P1 — important), `@api` (P1 — contract).
+- Custom fixtures: `mockContactApi` (mocks `/api/contact` POST), `mockContactApiWithFailure`.
+- ALTCHA handled via auto-verify (Web Crypto in browser) + route interception fallback.
+- Runs against 3 projects: chromium (1280×720), tablet (768×1024), mobile (375×667).
+- **After adding new pages or changing existing ones, always run smoke tests:**
+  ```bash
+  cd next && yarn test:e2e:smoke
+  ```
+- **Before releasing, run full suite:**
+  ```bash
+  cd next && yarn test:e2e
+  ```
+- **When adding a new page/feature, always create:**
+  1. Page Object in `e2e/pages/`
+  2. Smoke test in `e2e/tests/smoke/` (tagged `@smoke`)
+  3. Regression test in `e2e/tests/regression/` (tagged `@regression`) if applicable
+- **Always use role-based locators** (`getByRole`, `getByPlaceholder`, `getByLabel`), never CSS selectors.
+- **Tests must be independent** — no shared state between tests.
+- **Dynamic content**: use `test.skip(count === 0, 'No items')` for Strapi-driven content.
+
+### Key commands
+
+| Where   | Command                    | What it does                     |
+| ------- | -------------------------- | -------------------------------- |
+| `next/` | `yarn test:e2e`            | Full suite (all projects)        |
+| `next/` | `yarn test:e2e:smoke`      | Smoke tests only (`@smoke`)      |
+| `next/` | `yarn test:e2e:regression` | Regression tests (`@regression`) |
+| `next/` | `yarn test:e2e:api`        | API contract tests (`@api`)      |
+| `next/` | `yarn test:e2e:debug`      | Debug mode (Inspector)           |
+| `next/` | `yarn test:e2e:ui`         | Playwright UI mode               |
+
+## Deployment (legacy)
+
+- Old blue-green Docker deploy via `next/deploy.sh` (not actively used).
 - CI: `.github/workflows/deploy-demo.yaml` triggers GitLab pipeline on push to `main`.
+
+See **Docker build & deploy** section below for the current deployment flow.
 
 ## Architecture notes
 
@@ -97,6 +135,104 @@ Forked from `strapi/LaunchPad`.
 - **SEO**: Dynamic redirects fetched from Strapi at build time in `next.config.mjs`. Metadata from Strapi `global` content type via `next/lib/shared/metadata.ts`.
 - **shadcn/ui** setup in `next/components.json`, aliases: `@/components`, `@/components/ui`, `@/lib/utils`.
 - **Path alias**: `@/*` maps to `next/` directory root (see `next/tsconfig.json`).
+
+## Docker build & deploy
+
+### Environment variables — 3 tiers
+
+| Var                      | Prefixed?      | Inlined at build? | Purpose                                              | Local (Docker)                     | Server                          |
+| ------------------------ | -------------- | :---------------: | ---------------------------------------------------- | ---------------------------------- | ------------------------------- |
+| `STRAPI_INTERNAL_URL`    | No             |    ❌ Runtime     | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_API_URL`    | `NEXT_PUBLIC_` |      ✅ Yes       | Client auth calls (auth-context.tsx)                 | `http://localhost:1337`            | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` |      ✅ Yes       | Browser-facing image URLs                            | `http://localhost:1337`            | `https://studioarman.site:2087` |
+
+`NEXT_PUBLIC_*` vars are **baked into the JS bundle at build time** — changing them requires a rebuild.  
+`STRAPI_INTERNAL_URL` is read from `process.env` at runtime — change it in `.env.local` and restart the container.
+
+### Product theming
+
+`NEXT_PUBLIC_SITE_ID` controls **both favicons and the full color theme** per deployment.
+
+| Var                   | Purpose                               | Default  |
+| --------------------- | ------------------------------------- | -------- |
+| `NEXT_PUBLIC_SITE_ID` | Selects favicon set + CSS color theme | `site-a` |
+
+**One-line brand switch:** `NEXT_PUBLIC_SITE_ID=site-b` → rebuild → new colors everywhere.
+
+**How it works:**
+
+- `next/app/layout.tsx` reads `NEXT_PUBLIC_SITE_ID` and adds `theme-<id>` class to `<html>`.
+- `next/app/themes.css` defines per-product CSS variable overrides (`.theme-site-b`, `.theme-site-b.dark`, etc.).
+- Default values live in `:root` / `.dark` in `next/app/globals.css` (= site-a).
+- `generateViewport()` picks the theme-color meta tag per product.
+
+**To add a new product theme:**
+
+1. Add a block in `next/app/themes.css` (`.theme-site-c`, `.theme-site-c.dark` — all shadcn tokens).
+2. Add favicon set in `public/favicon-sets/site-c/`.
+3. Deploy with `NEXT_PUBLIC_SITE_ID=site-c`.
+
+See `next/docs/THEME_IMPLEMENTATION.md` for full details.
+
+### Build & save image (local machine)
+
+```bash
+cd next
+docker compose -f docker-compose.dev.yml build
+docker save -o web-blog.tar web-blog:latest
+```
+
+### Deploy to server
+
+```bash
+# Copy the tar to the server, then:
+docker load -i web-blog.tar
+docker compose up -d   # start
+docker compose down    # stop
+```
+
+### Server docker-compose.yml
+
+```yaml
+services:
+  app:
+    image: web-blog:latest
+    container_name: web-blog
+    ports:
+      - '3000:4000'
+    env_file:
+      - .env.local
+    dns:
+      - 178.22.122.100
+      - 185.51.200.2
+      - 185.8.174.140
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+```
+
+> **Why `dns` is needed:** Without explicit DNS, the container may fail to resolve `studioarman.site` (`EAI_AGAIN`). The public IP `185.239.3.14` is reachable from inside the container only via DNS resolution of the domain.
+
+### Server .env.local
+
+```
+WEBSITE_URL=http://localhost:3000
+PORT=4000
+BACK_PORT=2087
+DOMAIN=studioarman.site
+STRAPI_INTERNAL_URL=https://studioarman.site:2087
+NEXT_PUBLIC_API_URL=https://studioarman.site:2087
+NEXT_PUBLIC_STRAPI_URL=https://studioarman.site:2087
+PREVIEW_SECRET=tobemodified
+IMAGE_HOSTNAME=studioarman.site:2087
+```
+
+### Architecture notes (Docker)
+
+- The server has **no Node.js** — everything (Strapi, Next.js, backups) runs in Docker containers, not directly on the host.
+- Nginx proxies `https://studioarman.site:2087` → `http://127.0.0.1:1337` (Strapi container).
+- The Next.js container connects to Strapi via Nginx at `https://studioarman.site:2087`.
+- DNS in the container resolves `studioarman.site` to the server's public IP `185.239.3.14`.
+- `host.docker.internal` is mapped to the Docker bridge gateway for local dev only.
 
 ## Local dev gotchas
 

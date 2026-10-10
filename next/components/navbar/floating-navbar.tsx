@@ -131,12 +131,24 @@ export const FloatingNavbar = ({
       ? [
           {
             title: 'Toggle Theme',
-            icon:
-              theme === 'dark' ? (
-                <IconSun className="h-full w-full" />
-              ) : (
-                <IconMoon className="h-full w-full" />
-              ),
+            icon: (
+              <div className="relative h-4 w-4">
+                <IconSun
+                  className="
+      absolute
+      rotate-0 scale-100
+      dark:-rotate-90 dark:scale-0
+    "
+                />
+                <IconMoon
+                  className="
+      absolute
+      rotate-90 scale-0
+      dark:rotate-0 dark:scale-100
+    "
+                />
+              </div>
+            ),
             href: '#',
             onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
           },

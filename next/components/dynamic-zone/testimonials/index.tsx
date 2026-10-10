@@ -24,7 +24,7 @@ export const Testimonials = ({
       <AmbientColor />
       <div className="pb-20">
         <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-          <TbLocationBolt className="h-6 w-6 text-foreground" />
+          <TbLocationBolt className="h-6 w-6 text-white" />
         </FeatureIconContainer>
         <Heading className="pt-4">{heading}</Heading>
         <Subheading>{sub_heading}</Subheading>
