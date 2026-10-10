@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { Container } from '@/components/container';
+import { clientEnv } from '@/env/client';
 import { StrapiImage } from '@/types/types';
 
 interface MediaProps {
@@ -17,7 +18,7 @@ export const Media = ({ media }: MediaProps) => {
   if (!mediaItem?.url) return null;
 
   const url = mediaItem.url.startsWith('/')
-    ? (process.env.BACKEND_URL || '') + mediaItem.url
+    ? (clientEnv.NEXT_PUBLIC_API_URL || '') + mediaItem.url
     : mediaItem.url;
 
   return (

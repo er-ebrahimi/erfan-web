@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import enamadLogo from "@/public/enamad.webp"
+import Image from 'next/image';
+
 export const EnamadLogo = () => {
   return (
     <a
@@ -11,11 +11,11 @@ export const EnamadLogo = () => {
     >
       <Image
         referrerPolicy="origin"
-        src={enamadLogo}
+        src="/enamad.webp"
         alt="enamad-logo"
         width={100}
         height={100}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
       />
     </a>
   );

@@ -1,6 +1,7 @@
 import { User } from '@/context/auth-context';
+import { clientEnv } from '@/env/client';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = clientEnv.NEXT_PUBLIC_API_URL;
 
 export interface LoginCredentials {
   identifier: string;

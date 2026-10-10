@@ -13,6 +13,11 @@ concurrency:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  NEXT_PUBLIC_API_URL: http://localhost:1337
+  DOMAIN: localhost
+  BACK_PORT: 1337
+  IMAGE_HOSTNAME: localhost:1337
+  BACKEND_URL: http://localhost:1337
 
 jobs:
   quality:
