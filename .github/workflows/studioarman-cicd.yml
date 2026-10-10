@@ -1,20 +1,20 @@
 name: Studioarman Next.js CI/CD
 
 # Frontend pipeline for studioarman/v0.0.
-# .github/workflows/ci-cd.yaml stays on main only, so the two workflows do not both run.
+# .github/workflows/ci-cd.yaml triggers only on main.
 
 on:
   push:
     branches:
       - studioarman/v0.0
       - ci/studioarman-cicd
+      - cursor/**
   pull_request:
     branches:
       - studioarman/v0.0
 
 concurrency:
   group: studioarman-${{ github.workflow }}-${{ github.ref }}
-  # Queue production deploys. Cancel superseded PR and feature-branch runs.
   cancel-in-progress: ${{ github.ref != 'refs/heads/studioarman/v0.0' }}
 
 permissions:
@@ -23,6 +23,11 @@ permissions:
 
 env:
   IMAGE_REPO: ghcr.io/er-ebrahimi/erfan-web
+  NEXT_PUBLIC_API_URL: http://localhost:1337
+  DOMAIN: localhost
+  BACK_PORT: 1337
+  IMAGE_HOSTNAME: localhost:1337
+  BACKEND_URL: http://localhost:1337
 
 jobs:
   quality:
@@ -61,10 +66,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Path context (not the default Git context) so the untracked .env.local is uploaded.
-      # Production pushes require the secret. PR and feature-branch builds may use an empty
-      # file; committed next/.env.production still applies for those builds.
       - name: Write next/.env.local
         env:
           STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
@@ -82,8 +83,13 @@ jobs:
             echo "STUDIOARMAN_ENV_LOCAL is required to publish the production image" >&2
             exit 1
           else
-            : > next/.env.local
-            echo "STUDIOARMAN_ENV_LOCAL is unset; wrote an empty next/.env.local for this non-publishing build"
+            printf '%s\n' \
+              "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" \
+              "DOMAIN=${DOMAIN}" \
+              "BACK_PORT=${BACK_PORT}" \
+              "IMAGE_HOSTNAME=${IMAGE_HOSTNAME}" \
+              "BACKEND_URL=${BACKEND_URL}" \
+              > next/.env.local
           fi
           if [ "$publish" -eq 1 ] && ! grep -q '^NEXT_PUBLIC_API_URL=.' next/.env.local; then
             echo "STUDIOARMAN_ENV_LOCAL must set a non-empty NEXT_PUBLIC_API_URL" >&2

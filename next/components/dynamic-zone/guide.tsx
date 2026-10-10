@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import React from 'react';
 
+import { clientEnv } from '@/env/client';
+
 const getImageUrl = (profile: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_API_URL;
   if (profile && typeof profile.url === 'string') {
     return url + profile.url;
   }

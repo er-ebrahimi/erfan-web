@@ -8,9 +8,10 @@ import {
   DraggableCardBody,
   DraggableCardContainer,
 } from '@/components/ui/draggable-card';
+import { clientEnv } from '@/env/client';
 
 const getImageUrl = (img: any) => {
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = clientEnv.NEXT_PUBLIC_API_URL;
   if (
     img &&
     img.formats &&

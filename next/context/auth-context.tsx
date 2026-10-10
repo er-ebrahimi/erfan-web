@@ -8,6 +8,8 @@ import React, {
   useState,
 } from 'react';
 
+import { clientEnv } from '@/env/client';
+
 export interface User {
   id: number;
   username: string;
@@ -65,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = useCallback(async (email: string, password: string) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/local`,
+        `${clientEnv.NEXT_PUBLIC_API_URL}/api/auth/local`,
         {
           method: 'POST',
           headers: {
@@ -98,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     async (username: string, email: string, password: string) => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/local/register`,
+          `${clientEnv.NEXT_PUBLIC_API_URL}/api/auth/local/register`,
           {
             method: 'POST',
             headers: {
