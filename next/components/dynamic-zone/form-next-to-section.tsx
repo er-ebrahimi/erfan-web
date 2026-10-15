@@ -75,22 +75,6 @@ export function FormNextToSection({
             );
           })}
         </ul>
-        <div className="flex-1 flex items-center justify-center absolute bottom-0">
-          <Image
-            src={`/${siteId}/logo-white.png`}
-            alt="Logo"
-            width={700}
-            height={700}
-            className="opacity-10 hidden dark:block"
-          />
-          <Image
-            src={`/${siteId}/logo-black.png`}
-            alt="Logo"
-            width={700}
-            height={700}
-            className="opacity-10 dark:hidden"
-          />
-        </div>
       </div>
       <div className="relative z-20 w-full justify-center px-4 py-4 lg:py-40 sm:px-6 lg:flex-none lg:px-20 xl:px-24 overflow-hidden">
         {image?.url && (

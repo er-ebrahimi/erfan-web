@@ -21,3 +21,4 @@ strapi/public/public/
 /strapi/data
 /strapi/archive/
 /next/test-results/
+.private
