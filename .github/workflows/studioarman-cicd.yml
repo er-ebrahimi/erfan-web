@@ -66,7 +66,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Write next/.env.local
         env:
           STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
@@ -121,3 +120,48 @@ jobs:
             ${{ env.IMAGE_REPO }}:studioarman-latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Studioarman host
+    needs: docker
+    if: github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure deploy directory
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: mkdir -p /home/ai-bot/studioarman-web
+
+      - name: Copy compose file and deploy script
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          source: next/deploy/docker-compose.prod.yml,next/deploy/remote-deploy.sh
+          target: /home/ai-bot/studioarman-web/
+          strip_components: 2
+          overwrite: true
+
+      - name: Pull image and replace container
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          STUDIOARMAN_IMAGE_TAG: studioarman-${{ github.sha }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          command_timeout: 20m
+          envs: GHCR_USERNAME,GHCR_PULL_TOKEN,STUDIOARMAN_IMAGE_TAG
+          script: sh /home/ai-bot/studioarman-web/remote-deploy.sh

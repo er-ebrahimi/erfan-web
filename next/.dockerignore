@@ -1,4 +1,5 @@
-# Host installs must not overwrite Alpine node_modules from the deps stage.
+# Host installs must not overwrite the Alpine node_modules from the deps stage.
+# That overwrite swaps musl sharp binaries for the builder's platform.
 node_modules
 .next
 .git
