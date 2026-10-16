@@ -99,7 +99,7 @@ After the first publish, open the `erfan-web` package on GHCR and grant the pull
 As `ai-bot`:
 
 ```bash
-mkdir -p /home/ai-bot/studioarman-web
+mkdir -p /home/deploy/studioarman-web
 docker login ghcr.io
 ```
 
@@ -119,12 +119,12 @@ Do not create this app under `/root/studioarman/next`. That tree is root-owned a
 On a push to `studioarman/v0.0`, after the image push:
 
 1. SSH to `DEPLOY_HOST` as `DEPLOY_USER`.
-2. Copy `next/deploy/docker-compose.prod.yml` and `next/deploy/remote-deploy.sh` to `/home/ai-bot/studioarman-web/`.
+2. Copy `next/deploy/docker-compose.prod.yml` and `next/deploy/remote-deploy.sh` to `/home/deploy/studioarman-web/`.
 3. `docker login ghcr.io` with `GHCR_USERNAME` and `GHCR_PULL_TOKEN`.
 4. Record the current `studioarman-web-blog` image id, if the container exists.
 5. `docker pull` the new `studioarman-<sha>` tag. If the pull fails, the existing container is left running.
 6. `docker rm -f studioarman-web-blog`. This is required the first time because the current container was created by another compose project. It does not delete `/root/studioarman/next`.
-7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/ai-bot/studioarman-web`.
+7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/deploy/studioarman-web`.
 
 Container settings:
 
@@ -147,10 +147,10 @@ There is no blue/green deploy and no extra nginx container. The host has roughly
 
 Automatic rollback runs only inside the failed deploy, and only if a previous image id was recorded. It does not copy env files out of `/root/studioarman/next`.
 
-Manual rollback to the image recorded in `/home/ai-bot/studioarman-web/previous-image-id`:
+Manual rollback to the image recorded in `/home/deploy/studioarman-web/previous-image-id`:
 
 ```bash
-cd /home/ai-bot/studioarman-web
+cd /home/deploy/studioarman-web
 PREV=$(cat previous-image-id)
 docker rm -f studioarman-web-blog
 docker run -d \
@@ -169,7 +169,7 @@ docker run -d \
 Or start an older published tag (still on GHCR, and still present locally if it was not dangling):
 
 ```bash
-cd /home/ai-bot/studioarman-web
+cd /home/deploy/studioarman-web
 export STUDIOARMAN_IMAGE_TAG=studioarman-<full-sha>
 docker pull "ghcr.io/er-ebrahimi/erfan-web:${STUDIOARMAN_IMAGE_TAG}"
 docker rm -f studioarman-web-blog

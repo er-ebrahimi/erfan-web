@@ -4,7 +4,7 @@
 # Does not delete /root/studioarman/next and does not touch other containers.
 set -eu
 
-DEPLOY_DIR=/home/ai-bot/studioarman-web
+DEPLOY_DIR=/home/deploy/studioarman-web
 COMPOSE_FILE=$DEPLOY_DIR/docker-compose.prod.yml
 CONTAINER=studioarman-web-blog
 IMAGE_REPO=ghcr.io/er-ebrahimi/erfan-web

@@ -137,7 +137,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
-          script: mkdir -p /home/ai-bot/studioarman-web
+          script: mkdir -p /home/deploy/studioarman-web
 
       - name: Copy compose file and deploy script
         uses: appleboy/scp-action@v0.1.7
@@ -147,7 +147,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           source: next/deploy/docker-compose.prod.yml,next/deploy/remote-deploy.sh
-          target: /home/ai-bot/studioarman-web/
+          target: /home/deploy/studioarman-web/
           strip_components: 2
           overwrite: true
 
@@ -164,4 +164,4 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           command_timeout: 20m
           envs: GHCR_USERNAME,GHCR_PULL_TOKEN,STUDIOARMAN_IMAGE_TAG
-          script: sh /home/ai-bot/studioarman-web/remote-deploy.sh
+          script: sh /home/deploy/studioarman-web/remote-deploy.sh
