@@ -84,6 +84,37 @@ const remotePatterns = [
   },
 ] satisfies NonNullable<NextConfig['images']>['remotePatterns'];
 
+// Legacy category URLs that moved from /category/<parent>/<slug> to the flat
+// /category/<slug>. Kept static (not Strapi-driven) so the 301s still fire when
+// the CMS is unreachable. Keys are locale-less; they are prefixed with the
+// locale segment below, matching the Strapi-driven redirects.
+const legacyCategoryRedirects: Record<string, string> = {
+  '/category/build-cabinet/shargh-pirozi': '/category/cabinet-pirozi',
+  '/category/build-cabinet/shargh-Tehranpars': '/category/cabinet-Tehranpars',
+  '/category/build-cabinet/gharb-tehransar': '/category/cabinet-tehransar',
+  '/category/build-cabinet/gharb-ganatabad': '/category/cabinet-ganatabad',
+  '/category/build-cabinet/gharb-ferdos': '/category/cabinet-ferdos',
+  '/category/build-cabinet/gharb-shahrara': '/category/cabinet-shahrara',
+  '/category/build-cabinet/shargh-afsariee': '/category/cabinet-afsariee',
+  '/category/build-cabinet/tehran-niyavaran': '/category/cabinet-niyavaran',
+  '/category/build-cabinet/tehran-elahiyeh': '/category/cabinet-elahiyeh',
+  '/category/build-cabinet/gharb-satarkhan': '/category/cabinet-satarkhan',
+  '/category/build-cabinet/gharb-ponak': '/category/cabinet-ponak',
+  '/category/build-cabinet/gharb-chitgar': '/category/cabint-chitgar',
+  '/category/build-cabinet/gharb-saadatabad': '/category/cabinet-saadatabad',
+  '/category/build-cabinet/tehran-gharb': '/category/tehran-gharb',
+  '/category/build-cabinet/build-closet': '/category/build-closet',
+  '/category/build-cabinet-shargh': '/category/cabinet-shargh',
+  '/category/interior-design/beauty-salon': '/category/beauty-salon',
+  '/category/interior-design/design-house': '/category/design-house',
+  '/category/interior-design/apartment': '/category/design-apartment',
+  '/category/interior-design/kitchen-design': '/category/kitchen-design',
+  '/category/interior-design/bedroom-design': '/category/bedroom-design',
+  '/category/interior-design/hall-design': '/category/hall-design',
+  '/category/interior-design/office': '/category/design-office',
+  '/build-cabinet/gharb-ferdos': '/category/cabinet-ferdos',
+};
+
 const nextConfig: NextConfig = {
   trailingSlash: false,
   compress: true,
@@ -142,27 +173,39 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    let redirections: {
-      source: string;
-      destination: string;
-      permanent: boolean;
-    }[] = [];
+    // Emit each legacy redirect twice - with and without a trailing slash - so
+    // a request resolves in a single hop regardless of the URL form.
+    const staticRedirectItems = Object.entries(legacyCategoryRedirects).flatMap(
+      ([source, destination]) => [
+        {
+          source: `/:locale${source}`,
+          destination: `/:locale${destination}`,
+          permanent: true,
+        },
+        {
+          source: `/:locale${source}/`,
+          destination: `/:locale${destination}`,
+          permanent: true,
+        },
+      ]
+    );
+
     try {
       const rawApiUrl =
         process.env.STRAPI_INTERNAL_URL || env.NEXT_PUBLIC_API_URL;
       if (!rawApiUrl) {
-        return [];
+        return staticRedirectItems;
       }
 
       const apiUrl = rawApiUrl.replace(/\/+$/, '');
       const res = await fetch(`${apiUrl}/api/redirections?populate=*`);
       if (!res.ok) {
-        return [];
+        return staticRedirectItems;
       }
 
       const result = await res.json();
       if (!result?.data) {
-        return [];
+        return staticRedirectItems;
       }
 
       const redirectItems = result.data.map(
@@ -173,15 +216,13 @@ const nextConfig: NextConfig = {
         })
       );
 
-      redirections = redirections.concat(redirectItems);
-
-      return redirections;
+      return staticRedirectItems.concat(redirectItems);
     } catch (error) {
       console.error(
         'Failed to fetch redirects from Strapi:',
         error instanceof Error ? error.message : error
       );
-      return [];
+      return staticRedirectItems;
     }
   },
 };
