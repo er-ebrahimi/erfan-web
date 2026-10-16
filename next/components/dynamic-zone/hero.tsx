@@ -73,7 +73,7 @@ export const Hero = ({
           ))}
       </div>
       <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-gradient-to-t from-background to-transparent hidden dark:block" />
-      <div className="absolute inset-x-0 bottom-0 h-20 w-full bg-gradient-to-t from-background to-transparent  dark:hidden" />
+      {/* <div className="absolute inset-x-0 bottom-0 h-20 w-full bg-gradient-to-t from-background to-transparent  dark:hidden" /> */}
     </div>
   );
 };
