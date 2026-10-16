@@ -83,8 +83,8 @@ Set these on the repository (or an environment used by this workflow). They are 
 | Secret                  | Required                 | Value                                                                           |
 | ----------------------- | ------------------------ | ------------------------------------------------------------------------------- |
 | `DEPLOY_HOST`           | yes, for deploy          | `202.133.88.169`                                                                |
-| `DEPLOY_USER`           | yes, for deploy          | `ai-bot` (in the `docker` group, no sudo)                                       |
-| `DEPLOY_SSH_KEY`        | yes, for deploy          | Private key whose public key is in `ai-bot`'s `authorized_keys`                 |
+| `DEPLOY_USER`           | yes, for deploy          | `deploy` (in the `docker` group, no sudo)                                       |
+| `DEPLOY_SSH_KEY`        | yes, for deploy          | Private key whose public key is in `deploy`'s `authorized_keys`                 |
 | `DEPLOY_PORT`           | no                       | SSH port. Empty means 22                                                        |
 | `GHCR_USERNAME`         | yes, for deploy          | GitHub username that can read the package                                       |
 | `GHCR_PULL_TOKEN`       | yes, for deploy          | PAT with `read:packages` (classic) or fine-grained Packages read on `erfan-web` |
@@ -96,7 +96,7 @@ After the first publish, open the `erfan-web` package on GHCR and grant the pull
 
 ## One-time server setup
 
-As `ai-bot`:
+As `deploy`:
 
 ```bash
 mkdir -p /home/deploy/studioarman-web
@@ -107,12 +107,12 @@ docker login ghcr.io
 
 Confirm:
 
-- `ai-bot` can run `docker` and `docker compose` without sudo
+- `deploy` can run `docker` and `docker compose` without sudo
 - `curl` is installed
 - host port `3001` is the Studioarman Next app (container `4000`)
 - nothing else should be bound to `3001`
 
-Do not create this app under `/root/studioarman/next`. That tree is root-owned and `ai-bot` cannot read it. Do not delete it.
+Do not create this app under `/root/studioarman/next`. That tree is root-owned and `deploy` cannot read it. Do not delete it.
 
 ## Deploy
 
