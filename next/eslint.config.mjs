@@ -13,6 +13,9 @@ export default [
       'e2e/**',
       'builds/**',
       'test-results/**',
+      // Temporary design-review lab: static HTML mocks plus a vendored copy of
+      // the Tailwind Play CDN. Delete this entry together with the folder.
+      'public/fa/hero-lab/**',
     ],
   },
   {

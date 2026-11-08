@@ -22,3 +22,5 @@ strapi/public/public/
 /strapi/archive/
 /next/test-results/
 .private
+.playwright-mcp
+next/public/fa/hero-lab
