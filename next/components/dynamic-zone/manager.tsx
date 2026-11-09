@@ -92,6 +92,12 @@ const componentMapping: { [key: string]: any } = {
       ssr: true,
     }
   ),
+  'dynamic-zone.bento-grid': dynamic(
+    () => import('./bento-grid').then((mod) => mod.BentoGrid),
+    {
+      ssr: true,
+    }
+  ),
   'dynamic-zone.contact': dynamic(
     () => import('./contact-us').then((mod) => mod.default),
     {

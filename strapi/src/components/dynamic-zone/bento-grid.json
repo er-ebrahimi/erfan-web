@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_dynamic_zone_bento_grids",
+  "info": {
+    "displayName": "Bento Grid",
+    "icon": "grid",
+    "description": "Centred heading and CTA above a grid of image tiles. Tile order follows the list order below."
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "CTAs": {
+      "displayName": "Button",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.button"
+    },
+    "tiles": {
+      "displayName": "Tile",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.bento-tile"
+    }
+  },
+  "config": {}
+}

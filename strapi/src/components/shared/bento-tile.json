@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_bento_tiles",
+  "info": {
+    "displayName": "Bento Tile",
+    "icon": "layout",
+    "description": "One cell of a Bento Grid. The Size preset decides how many columns and rows the cell occupies."
+  },
+  "options": {},
+  "attributes": {
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "Size": {
+      "type": "enumeration",
+      "default": "square",
+      "enum": ["lead", "wide", "tall", "square"]
+    }
+  }
+}
