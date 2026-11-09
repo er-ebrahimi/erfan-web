@@ -8,6 +8,7 @@ import './themes.css';
 import { SlugProvider } from './context/SlugContext';
 import { GlobalErrorBoundary } from '@/components/global-error-boundary';
 import { LocaleScript } from '@/components/locale-script';
+import { defaultLocale, locales } from '@/config';
 import {
   geistSans,
   getLanguageDir,
@@ -57,7 +58,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
+  const rawLocale = await getLocale();
+  const locale = locales.includes(rawLocale) ? rawLocale : defaultLocale;
   const fontVariable = getLanguageFont(locale);
   const fontDataAttribute = fontVariable.replace('--font-', '');
   return (
@@ -73,7 +75,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${iranSans.variable} antialiased`}
         suppressHydrationWarning
       >
-        <LocaleScript />
+        <LocaleScript locales={[...locales]} defaultLocale={defaultLocale} />
         {buildSiteStructuredData().map((data) => (
           <script
             key={String(data['@type'])}

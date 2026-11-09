@@ -3,36 +3,15 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { routing } from './i18n/routing';
+import { notFoundMarkdown } from '@/lib/not-found-markdown';
 
 const intlMiddleware = createMiddleware(routing);
 
-const SITE_URL = (process.env.FRONT_URL || 'https://studioarman.com').replace(
-  /\/$/,
-  ''
-);
-
-function notFoundResponse(request: NextRequest): NextResponse {
-  const accept = request.headers.get('accept') || '';
-  const wantsMarkdown = accept.includes('text/markdown');
-
-  const body = wantsMarkdown
-    ? `# 404 - Not Found
-
-The requested page does not exist.
-
-## Useful resources for agents
-
-- Sitemap: ${SITE_URL}/sitemap.xml
-- LLMs.txt: ${SITE_URL}/llms.txt
-`
-    : '404 - Not Found. See /llms.txt or /sitemap.xml for a map of this site.';
-
-  return new NextResponse(body, {
+function markdownNotFoundResponse(): NextResponse {
+  return new NextResponse(notFoundMarkdown(), {
     status: 404,
     headers: {
-      'Content-Type': wantsMarkdown
-        ? 'text/markdown; charset=utf-8'
-        : 'text/plain; charset=utf-8',
+      'Content-Type': 'text/markdown; charset=utf-8',
       Vary: 'Accept, Accept-Encoding',
       'Cache-Control': 'public, max-age=3600',
     },
@@ -52,7 +31,13 @@ export default function middleware(request: NextRequest) {
   );
 
   if (!hasLocalePrefix) {
-    return notFoundResponse(request);
+    if ((request.headers.get('accept') || '').includes('text/markdown')) {
+      return markdownNotFoundResponse();
+    }
+    // Internal prefix guarantees the rewrite matches no real route and renders
+    // the server-side 404; the browser URL stays unchanged.
+    request.nextUrl.pathname = `/${routing.defaultLocale}/_404${pathname}`;
+    return NextResponse.rewrite(request.nextUrl);
   }
 
   return intlMiddleware(request);

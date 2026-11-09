@@ -25,18 +25,23 @@ Content comes from `process.env.FRONT_URL`, `NEXT_PUBLIC_SITE_NAME` and
 
 ### Agent-friendly 404s
 
-1. Middleware (`next/proxy.ts`) now returns a real HTTP `404` for any path that
-   does not carry a supported locale prefix (e.g. `/some-path-that-does-not-exist`).
-   Previously next-intl redirected such paths (307) to the default locale, and the
-   final status depended on the client following redirects.
-   - `curl -s -o /dev/null -w "%{http_code}" https://<domain>/nonexistent` now
-     prints `404`.
-   - The 404 body points agents at `/sitemap.xml` and `/llms.txt`, and serves a
-     markdown body when `Accept: text/markdown` is present.
-2. Root `not-found.tsx` (`next/app/not-found.tsx`) renders a markdown pre block
-   for `Accept: text/markdown` requests and an HTML 404 for browsers.
-3. The existing locale-prefixed `[locale]/not-found.tsx` is unchanged and still
-   serves locale 404s with the full app shell.
+1. Middleware (`next/proxy.ts`) responds to any path without a supported locale
+   prefix (e.g. `/some-path-that-does-not-exist`):
+   - With `Accept: text/markdown`, it returns a real HTTP `404` with a markdown
+     body pointing agents at `/sitemap.xml` and `/llms.txt`.
+   - Otherwise it rewrites internally to `/{defaultLocale}/_404{pathname}`
+     (browser URL unchanged), so the app renders its server-side 404 while the
+     status stays `404`.
+   - `curl -s -o /dev/null -w "%{http_code}" https://<domain>/nonexistent` still
+     prints `404` (no redirect).
+2. Unmatched nested URLs (e.g. `/fa/foo/bar`) fall through to the root
+   `next/app/not-found.tsx`, which renders the same localized `<NotFound />`
+   component and stays server-rendered. With `Accept: text/markdown`, the body
+   contains the markdown agent payload.
+3. Locale-prefixed `[locale]/not-found.tsx` serves `notFound()` calls from real
+   routes (e.g. a deleted CMS slug). Its markdown body is rendered for
+   `Accept: text/markdown` requests (the response is still HTML — a rendered
+   page cannot set `text/markdown`).
 
 ### Server-side JSON-LD identity
 
