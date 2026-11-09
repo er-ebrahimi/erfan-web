@@ -5,12 +5,20 @@ import { useEffect } from 'react';
 
 import { getLanguageDir } from '@/lib/fonts';
 
-export function LocaleScript() {
+export function LocaleScript({
+  locales,
+  defaultLocale,
+}: {
+  locales: string[];
+  defaultLocale: string;
+}) {
   const params = useParams();
-  const locale = params?.locale as string | undefined;
+  const rawLocale = params?.locale as string | undefined;
+  const locale =
+    rawLocale && locales.includes(rawLocale) ? rawLocale : defaultLocale;
 
   useEffect(() => {
-    if (locale && typeof document !== 'undefined') {
+    if (typeof document !== 'undefined') {
       document.documentElement.lang = locale;
       document.documentElement.dir = getLanguageDir(locale);
     }
