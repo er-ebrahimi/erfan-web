@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_landing_showcase_chats",
+  "info": {
+    "displayName": "Showcase Chat",
+    "icon": "message"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "user_message": {
+      "type": "text"
+    },
+    "ai_message": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_landing_steps",
+  "info": {
+    "displayName": "Step",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": ["upload", "clipboard", "chat", "sparkles", "ruler", "palette"],
+      "default": "sparkles"
+    }
+  }
+}

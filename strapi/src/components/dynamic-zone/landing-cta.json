@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_dynamic_zone_landing_ctas",
+  "info": {
+    "displayName": "Landing CTA",
+    "icon": "cursor"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "CTAs": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": true
+    }
+  }
+}

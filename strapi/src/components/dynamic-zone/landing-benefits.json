@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_dynamic_zone_landing_benefits",
+  "info": {
+    "displayName": "Landing Benefits",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "items": {
+      "type": "component",
+      "component": "landing.benefit",
+      "repeatable": true
+    }
+  }
+}

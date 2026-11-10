@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_dynamic_zone_landing_heroes",
+  "info": {
+    "displayName": "Landing Hero",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "heading_line_1": {
+      "type": "text"
+    },
+    "heading_highlight": {
+      "type": "text"
+    },
+    "rotating_words": {
+      "type": "component",
+      "component": "landing.word",
+      "repeatable": true
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "CTAs": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "chat_label": {
+      "type": "text"
+    },
+    "chat_message": {
+      "type": "text"
+    }
+  }
+}

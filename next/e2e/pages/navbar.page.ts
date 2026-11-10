@@ -11,12 +11,21 @@ export class NavbarPage {
     return this.navbar.getByRole('link');
   }
 
-  get mobileMenuButton(): Locator {
+  get menuButton(): Locator {
     return this.page.getByRole('button', { name: 'منو' });
   }
 
+  get mobileMenuButton(): Locator {
+    return this.menuButton;
+  }
+
+  /** The popover panel is a second `<nav>` with the same accessible name. */
+  get megaMenu(): Locator {
+    return this.page.getByRole('navigation', { name: 'منو' }).last();
+  }
+
   get mobileSheet(): Locator {
-    return this.page.locator('[role="dialog"]');
+    return this.megaMenu;
   }
 
   get mobileNavLinks(): Locator {
@@ -36,16 +45,15 @@ export class NavbarPage {
   }
 
   async openMobileMenu(): Promise<void> {
-    if (await this.mobileMenuButton.isVisible()) {
-      await this.mobileMenuButton.click();
+    if (await this.menuButton.isVisible()) {
+      await this.menuButton.click();
       await this.page.waitForTimeout(300);
     }
   }
 
   async closeMobileMenu(): Promise<void> {
-    const closeButton = this.mobileSheet.getByRole('button').first();
-    if (await closeButton.isVisible()) {
-      await closeButton.click();
+    if (await this.menuButton.isVisible()) {
+      await this.menuButton.click();
       await this.page.waitForTimeout(300);
     }
   }

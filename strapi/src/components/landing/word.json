@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_landing_words",
+  "info": {
+    "displayName": "Word",
+    "icon": "text"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

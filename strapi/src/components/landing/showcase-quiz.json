@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_landing_showcase_quizzes",
+  "info": {
+    "displayName": "Showcase Quiz",
+    "icon": "question"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "question": {
+      "type": "text"
+    },
+    "option_a": {
+      "type": "text"
+    },
+    "option_b": {
+      "type": "text"
+    }
+  }
+}

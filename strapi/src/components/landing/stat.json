@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_landing_stats",
+  "info": {
+    "displayName": "Stat",
+    "icon": "chartBubble"
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "integer"
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "label": {
+      "type": "text"
+    }
+  }
+}

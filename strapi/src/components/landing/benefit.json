@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_landing_benefits",
+  "info": {
+    "displayName": "Benefit",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "camera",
+        "eye",
+        "sliders",
+        "languages",
+        "sparkles",
+        "ruler",
+        "palette",
+        "home"
+      ],
+      "default": "sparkles"
+    },
+    "url": {
+      "type": "text"
+    }
+  }
+}

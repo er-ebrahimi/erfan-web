@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_dynamic_zone_landing_how_it_works",
+  "info": {
+    "displayName": "Landing How It Works",
+    "icon": "question"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "steps": {
+      "type": "component",
+      "component": "landing.step",
+      "repeatable": true
+    }
+  }
+}

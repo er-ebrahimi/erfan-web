@@ -76,6 +76,21 @@ export interface CardsSocialMediaCard extends Struct.ComponentSchema {
   };
 }
 
+export interface DynamicZoneBentoGrid extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_bento_grids';
+  info: {
+    description: 'Centred heading and CTA above a grid of image tiles. Tile order follows the list order below.';
+    displayName: 'Bento Grid';
+    icon: 'grid';
+  };
+  attributes: {
+    CTAs: Schema.Attribute.Component<'shared.button', true>;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
+    tiles: Schema.Attribute.Component<'shared.bento-tile', true>;
+  };
+}
+
 export interface DynamicZoneBrands extends Struct.ComponentSchema {
   collectionName: 'components_dynamic_zone_brands';
   info: {
@@ -241,6 +256,102 @@ export interface DynamicZoneHowItWorks extends Struct.ComponentSchema {
     heading: Schema.Attribute.Text;
     steps: Schema.Attribute.Component<'shared.steps', true>;
     sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingBenefits extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_benefits';
+  info: {
+    displayName: 'Landing Benefits';
+    icon: 'bulletList';
+  };
+  attributes: {
+    heading: Schema.Attribute.Text;
+    items: Schema.Attribute.Component<'landing.benefit', true>;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingCta extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_ctas';
+  info: {
+    displayName: 'Landing CTA';
+    icon: 'cursor';
+  };
+  attributes: {
+    CTAs: Schema.Attribute.Component<'shared.button', true>;
+    heading: Schema.Attribute.Text;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingGallery extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_galleries';
+  info: {
+    displayName: 'Landing Gallery';
+    icon: 'picture';
+  };
+  attributes: {
+    heading: Schema.Attribute.Text;
+    items: Schema.Attribute.Component<'landing.gallery-item', true>;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingHero extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_heroes';
+  info: {
+    displayName: 'Landing Hero';
+    icon: 'layout';
+  };
+  attributes: {
+    chat_label: Schema.Attribute.Text;
+    chat_message: Schema.Attribute.Text;
+    CTAs: Schema.Attribute.Component<'shared.button', true>;
+    heading_highlight: Schema.Attribute.Text;
+    heading_line_1: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'>;
+    rotating_words: Schema.Attribute.Component<'landing.word', true>;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingHowItWorks extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_how_it_works';
+  info: {
+    displayName: 'Landing How It Works';
+    icon: 'question';
+  };
+  attributes: {
+    heading: Schema.Attribute.Text;
+    steps: Schema.Attribute.Component<'landing.step', true>;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingShowcase extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_showcases';
+  info: {
+    displayName: 'Landing Showcase';
+    icon: 'apps';
+  };
+  attributes: {
+    chat_card: Schema.Attribute.Component<'landing.showcase-chat', false>;
+    heading: Schema.Attribute.Text;
+    image_card: Schema.Attribute.Component<'landing.showcase-image', false>;
+    quiz_card: Schema.Attribute.Component<'landing.showcase-quiz', false>;
+    sub_heading: Schema.Attribute.Text;
+  };
+}
+
+export interface DynamicZoneLandingStats extends Struct.ComponentSchema {
+  collectionName: 'components_dynamic_zone_landing_stats';
+  info: {
+    displayName: 'Landing Stats';
+    icon: 'chartBubble';
+  };
+  attributes: {
+    items: Schema.Attribute.Component<'landing.stat', true>;
   };
 }
 
@@ -473,6 +584,7 @@ export interface GlobalNavbar extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
+    cta: Schema.Attribute.Component<'shared.button', false>;
     language: Schema.Attribute.Boolean;
     left_navbar_items: Schema.Attribute.Component<'shared.link', true>;
     logo: Schema.Attribute.Relation<'oneToOne', 'api::logo.logo'>;
@@ -571,6 +683,128 @@ export interface ItemsText extends Struct.ComponentSchema {
   };
 }
 
+export interface LandingBenefit extends Struct.ComponentSchema {
+  collectionName: 'components_landing_benefits';
+  info: {
+    displayName: 'Benefit';
+    icon: 'bulletList';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Enumeration<
+      [
+        'camera',
+        'eye',
+        'sliders',
+        'languages',
+        'sparkles',
+        'ruler',
+        'palette',
+        'home',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'sparkles'>;
+    title: Schema.Attribute.Text;
+    url: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingGalleryItem extends Struct.ComponentSchema {
+  collectionName: 'components_landing_gallery_items';
+  info: {
+    displayName: 'Gallery Item';
+    icon: 'picture';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingShowcaseChat extends Struct.ComponentSchema {
+  collectionName: 'components_landing_showcase_chats';
+  info: {
+    displayName: 'Showcase Chat';
+    icon: 'message';
+  };
+  attributes: {
+    ai_message: Schema.Attribute.Text;
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
+    user_message: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingShowcaseImage extends Struct.ComponentSchema {
+  collectionName: 'components_landing_showcase_images';
+  info: {
+    displayName: 'Showcase Image';
+    icon: 'picture';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'>;
+    prompt: Schema.Attribute.Text;
+    status: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingShowcaseQuiz extends Struct.ComponentSchema {
+  collectionName: 'components_landing_showcase_quizzes';
+  info: {
+    displayName: 'Showcase Quiz';
+    icon: 'question';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    option_a: Schema.Attribute.Text;
+    option_b: Schema.Attribute.Text;
+    question: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingStat extends Struct.ComponentSchema {
+  collectionName: 'components_landing_stats';
+  info: {
+    displayName: 'Stat';
+    icon: 'chartBubble';
+  };
+  attributes: {
+    label: Schema.Attribute.Text;
+    suffix: Schema.Attribute.String;
+    value: Schema.Attribute.Integer;
+  };
+}
+
+export interface LandingStep extends Struct.ComponentSchema {
+  collectionName: 'components_landing_steps';
+  info: {
+    displayName: 'Step';
+    icon: 'bulletList';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Enumeration<
+      ['upload', 'clipboard', 'chat', 'sparkles', 'ruler', 'palette']
+    > &
+      Schema.Attribute.DefaultTo<'sparkles'>;
+    title: Schema.Attribute.Text;
+  };
+}
+
+export interface LandingWord extends Struct.ComponentSchema {
+  collectionName: 'components_landing_words';
+  info: {
+    displayName: 'Word';
+    icon: 'text';
+  };
+  attributes: {
+    text: Schema.Attribute.String;
+  };
+}
+
 export interface PortfolioParagraph extends Struct.ComponentSchema {
   collectionName: 'components_portfolio_paragraphs';
   info: {
@@ -606,6 +840,20 @@ export interface PortfolioSocialLink extends Struct.ComponentSchema {
     icon: Schema.Attribute.Text;
     name: Schema.Attribute.Text;
     url: Schema.Attribute.Text;
+  };
+}
+
+export interface SharedBentoTile extends Struct.ComponentSchema {
+  collectionName: 'components_shared_bento_tiles';
+  info: {
+    description: 'One cell of a Bento Grid. The Size preset decides how many columns and rows the cell occupies.';
+    displayName: 'Bento Tile';
+    icon: 'layout';
+  };
+  attributes: {
+    Image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    Size: Schema.Attribute.Enumeration<['lead', 'wide', 'tall', 'square']> &
+      Schema.Attribute.DefaultTo<'square'>;
   };
 }
 
@@ -871,6 +1119,7 @@ declare module '@strapi/strapi' {
       'cards.member': CardsMember;
       'cards.ray-card': CardsRayCard;
       'cards.social-media-card': CardsSocialMediaCard;
+      'dynamic-zone.bento-grid': DynamicZoneBentoGrid;
       'dynamic-zone.brands': DynamicZoneBrands;
       'dynamic-zone.cons': DynamicZoneCons;
       'dynamic-zone.contact': DynamicZoneContact;
@@ -882,6 +1131,13 @@ declare module '@strapi/strapi' {
       'dynamic-zone.hero': DynamicZoneHero;
       'dynamic-zone.hero-picture': DynamicZoneHeroPicture;
       'dynamic-zone.how-it-works': DynamicZoneHowItWorks;
+      'dynamic-zone.landing-benefits': DynamicZoneLandingBenefits;
+      'dynamic-zone.landing-cta': DynamicZoneLandingCta;
+      'dynamic-zone.landing-gallery': DynamicZoneLandingGallery;
+      'dynamic-zone.landing-hero': DynamicZoneLandingHero;
+      'dynamic-zone.landing-how-it-works': DynamicZoneLandingHowItWorks;
+      'dynamic-zone.landing-showcase': DynamicZoneLandingShowcase;
+      'dynamic-zone.landing-stats': DynamicZoneLandingStats;
       'dynamic-zone.launches': DynamicZoneLaunches;
       'dynamic-zone.media': DynamicZoneMedia;
       'dynamic-zone.plans': DynamicZonePlans;
@@ -903,9 +1159,18 @@ declare module '@strapi/strapi' {
       'items.left-navbar-items': ItemsLeftNavbarItems;
       'items.ray-items': ItemsRayItems;
       'items.text': ItemsText;
+      'landing.benefit': LandingBenefit;
+      'landing.gallery-item': LandingGalleryItem;
+      'landing.showcase-chat': LandingShowcaseChat;
+      'landing.showcase-image': LandingShowcaseImage;
+      'landing.showcase-quiz': LandingShowcaseQuiz;
+      'landing.stat': LandingStat;
+      'landing.step': LandingStep;
+      'landing.word': LandingWord;
       'portfolio.paragraph': PortfolioParagraph;
       'portfolio.skill': PortfolioSkill;
       'portfolio.social-link': PortfolioSocialLink;
+      'shared.bento-tile': SharedBentoTile;
       'shared.button': SharedButton;
       'shared.cons': SharedCons;
       'shared.content': SharedContent;

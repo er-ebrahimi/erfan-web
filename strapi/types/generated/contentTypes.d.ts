@@ -792,12 +792,20 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'dynamic-zone.guide',
         'dynamic-zone.plans',
         'dynamic-zone.project-pictures',
+        'dynamic-zone.bento-grid',
         'dynamic-zone.contact',
         'dynamic-zone.team-members',
         'dynamic-zone.hero-picture',
         'dynamic-zone.portfolio-hero',
         'dynamic-zone.portfolio-about',
         'dynamic-zone.portfolio-projects',
+        'dynamic-zone.landing-hero',
+        'dynamic-zone.landing-benefits',
+        'dynamic-zone.landing-how-it-works',
+        'dynamic-zone.landing-gallery',
+        'dynamic-zone.landing-showcase',
+        'dynamic-zone.landing-stats',
+        'dynamic-zone.landing-cta',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

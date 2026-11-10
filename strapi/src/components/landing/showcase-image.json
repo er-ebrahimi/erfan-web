@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_landing_showcase_images",
+  "info": {
+    "displayName": "Showcase Image",
+    "icon": "picture"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "prompt": {
+      "type": "text"
+    },
+    "status": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

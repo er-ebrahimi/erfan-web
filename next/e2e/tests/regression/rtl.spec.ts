@@ -16,6 +16,7 @@ test.describe('RTL support', { tag: '@regression' }, () => {
   const testPages = [
     { name: 'homepage', path: ROUTES.home },
     { name: 'blog listing', path: ROUTES.blog },
+    { name: 'landing preview', path: ROUTES.landingPreview },
   ];
 
   for (const { name, path } of testPages) {

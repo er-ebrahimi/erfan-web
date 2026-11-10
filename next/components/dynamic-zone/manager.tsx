@@ -134,6 +134,40 @@ const componentMapping: { [key: string]: any } = {
     () => import('./portfolio-projects').then((mod) => mod.PortfolioProjects),
     { ssr: true }
   ),
+  'dynamic-zone.landing-hero': dynamic(
+    () => import('../landing/sections/hero').then((mod) => mod.LandingHero),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-benefits': dynamic(
+    () =>
+      import('../landing/sections/benefits').then((mod) => mod.LandingBenefits),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-how-it-works': dynamic(
+    () =>
+      import('../landing/sections/how-it-works').then(
+        (mod) => mod.LandingHowItWorks
+      ),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-gallery': dynamic(
+    () =>
+      import('../landing/sections/gallery').then((mod) => mod.LandingGallery),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-showcase': dynamic(
+    () =>
+      import('../landing/sections/showcase').then((mod) => mod.LandingShowcase),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-stats': dynamic(
+    () => import('../landing/sections/stats').then((mod) => mod.LandingStats),
+    { ssr: true }
+  ),
+  'dynamic-zone.landing-cta': dynamic(
+    () => import('../landing/sections/cta').then((mod) => mod.LandingCta),
+    { ssr: true }
+  ),
 };
 
 const DynamicZoneManager: React.FC<Props> = ({ dynamicZone, locale }) => {

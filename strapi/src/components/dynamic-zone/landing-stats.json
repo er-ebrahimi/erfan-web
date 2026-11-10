@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_dynamic_zone_landing_stats",
+  "info": {
+    "displayName": "Landing Stats",
+    "icon": "chartBubble"
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "component",
+      "component": "landing.stat",
+      "repeatable": true
+    }
+  }
+}

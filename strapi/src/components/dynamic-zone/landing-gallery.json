@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_dynamic_zone_landing_galleries",
+  "info": {
+    "displayName": "Landing Gallery",
+    "icon": "picture"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "items": {
+      "type": "component",
+      "component": "landing.gallery-item",
+      "repeatable": true
+    }
+  }
+}

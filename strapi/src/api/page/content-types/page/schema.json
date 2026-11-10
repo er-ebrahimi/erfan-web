@@ -65,7 +65,14 @@
         "dynamic-zone.hero-picture",
         "dynamic-zone.portfolio-hero",
         "dynamic-zone.portfolio-about",
-        "dynamic-zone.portfolio-projects"
+        "dynamic-zone.portfolio-projects",
+        "dynamic-zone.landing-hero",
+        "dynamic-zone.landing-benefits",
+        "dynamic-zone.landing-how-it-works",
+        "dynamic-zone.landing-gallery",
+        "dynamic-zone.landing-showcase",
+        "dynamic-zone.landing-stats",
+        "dynamic-zone.landing-cta"
       ]
     }
   }

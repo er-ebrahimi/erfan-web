@@ -26,6 +26,11 @@
     },
     "theme": {
       "type": "boolean"
+    },
+    "cta": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": false
     }
   }
 }

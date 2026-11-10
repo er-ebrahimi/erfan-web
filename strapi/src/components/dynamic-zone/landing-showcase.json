@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_dynamic_zone_landing_showcases",
+  "info": {
+    "displayName": "Landing Showcase",
+    "icon": "apps"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "text"
+    },
+    "sub_heading": {
+      "type": "text"
+    },
+    "chat_card": {
+      "type": "component",
+      "component": "landing.showcase-chat",
+      "repeatable": false
+    },
+    "image_card": {
+      "type": "component",
+      "component": "landing.showcase-image",
+      "repeatable": false
+    },
+    "quiz_card": {
+      "type": "component",
+      "component": "landing.showcase-quiz",
+      "repeatable": false
+    }
+  }
+}
