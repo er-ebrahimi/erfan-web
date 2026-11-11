@@ -7,7 +7,6 @@ import ContactUs from './contact-us';
 import { StrapiImage } from '@/components/ui/strapi-image';
 import type { StrapiImage as StrapiImageType } from '@/types/types';
 
-const siteId = process.env.NEXT_PUBLIC_SITE_ID || 'website';
 interface SocialLinkItem {
   id: number;
   image: {

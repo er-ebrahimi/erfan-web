@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import ClientSlugHandler from '../../ClientSlugHandler';
 import { BlogLayout } from '@/components/blog/blog-layout';
 import { generateMetadataObject } from '@/lib/shared/metadata';
+import { SITE_URL } from '@/lib/shared/site-url';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
 export const revalidate = 60;
@@ -28,9 +29,13 @@ export async function generateMetadata(props: {
     true
   );
 
-  const seo = article?.seo;
-  const metadata = generateMetadataObject(seo);
-  return metadata;
+  const seo = {
+    ...(article?.seo ?? {}),
+    canonicalURL:
+      article?.seo?.canonicalURL ??
+      `${SITE_URL}/${locale}/category/${slugString}`,
+  };
+  return generateMetadataObject(seo);
 }
 
 export default async function SingleArticlePage(props: {

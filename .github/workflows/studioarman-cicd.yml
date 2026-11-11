@@ -24,6 +24,9 @@ permissions:
 env:
   IMAGE_REPO: ghcr.io/er-ebrahimi/erfan-web
   NEXT_PUBLIC_API_URL: http://localhost:1337
+  NEXT_PUBLIC_SITE_ID: site-a
+  NEXT_PUBLIC_SITE_NAME: Studio Arman
+  NEXT_PUBLIC_SITE_DESCRIPTION: Studio Arman — portfolio and blog of Erfan, a web developer and designer.
   DOMAIN: localhost
   BACK_PORT: 1337
   IMAGE_HOSTNAME: localhost:1337
@@ -91,6 +94,9 @@ jobs:
             printf '%s\n' \
               "FRONT_URL=${FRONT_URL}" \
               "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" \
+              "NEXT_PUBLIC_SITE_ID=${NEXT_PUBLIC_SITE_ID}" \
+              "NEXT_PUBLIC_SITE_NAME=${NEXT_PUBLIC_SITE_NAME}" \
+              "NEXT_PUBLIC_SITE_DESCRIPTION=${NEXT_PUBLIC_SITE_DESCRIPTION}" \
               "DOMAIN=${DOMAIN}" \
               "BACK_PORT=${BACK_PORT}" \
               "IMAGE_HOSTNAME=${IMAGE_HOSTNAME}" \
@@ -140,6 +146,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Write runtime env file
+        env:
+          STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
+        run: |
+          set -eu
+          printf '%s\n' "$STUDIOARMAN_ENV_LOCAL" > next/deploy/.env.runtime
+          if ! grep -q '^FRONT_URL=.' next/deploy/.env.runtime; then
+            echo "STUDIOARMAN_ENV_LOCAL must set FRONT_URL" >&2
+            exit 1
+          fi
+
       - name: Resolve FRONT_URL
         id: site
         env:
@@ -169,7 +186,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
-          source: next/deploy/docker-compose.prod.yml,next/deploy/remote-deploy.sh
+          source: next/deploy/docker-compose.prod.yml,next/deploy/remote-deploy.sh,next/deploy/.env.runtime
           target: /home/deploy/studioarman-web/
           strip_components: 2
           overwrite: true

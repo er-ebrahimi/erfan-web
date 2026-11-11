@@ -2,7 +2,8 @@ import { clientEnv } from '@/env/client';
 
 export function strapiImage(url: string): string {
   if (url.startsWith('/')) {
-    const base = clientEnv.NEXT_PUBLIC_STRAPI_URL;
+    const base =
+      clientEnv.NEXT_PUBLIC_STRAPI_URL || clientEnv.NEXT_PUBLIC_API_URL;
 
     if (
       !base &&

@@ -1,7 +1,6 @@
 import { defaultLocale } from '@/config';
+import { SITE_NAME } from '@/lib/shared/site-metadata';
 import { SITE_URL } from '@/lib/shared/site-url';
-
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'Studio Arman';
 
 export function notFoundMarkdown(): string {
   return `# 404 - Not Found

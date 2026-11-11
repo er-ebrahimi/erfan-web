@@ -11,19 +11,26 @@ The Studioarman frontend deploys through **GitHub Actions**, never by hand:
 1. Push to `studioarman/v0.0`.
 2. `.github/workflows/studioarman-cicd.yml` runs lint, typecheck and `next build`.
 3. The same workflow builds the Docker image on the GitHub runner (`linux/amd64`) and pushes it to GHCR.
-4. The `deploy` job copies `next/deploy/docker-compose.prod.yml` and `remote-deploy.sh` to the server, then recreates `studioarman-web-blog`.
+4. The `deploy` job copies `next/deploy/docker-compose.prod.yml`, `remote-deploy.sh` and `.env.runtime` to the server, then recreates `studioarman-web-blog`.
 
 The server only pulls the image. It has no Node.js and must not build. A manual `docker run` is overwritten by the next deploy.
 
-**Required env:** the `STUDIOARMAN_ENV_LOCAL` GitHub secret must contain `FRONT_URL=https://studioarman.com` and `NEXT_PUBLIC_API_URL=...`. The build fails if `FRONT_URL` is missing. The deploy job extracts `FRONT_URL` from that secret and passes it to the container; the compose file has no hardcoded domain. `.env.local` is **not** copied into the standalone image, so any other server-only value read at runtime must be added to the container environment too.
+**Required env:** the `STUDIOARMAN_ENV_LOCAL` GitHub secret is used twice:
+
+1. **Build:** written to `next/.env.local` before the image build.
+2. **Runtime:** the deploy job copies the same secret to `next/deploy/.env.runtime`, copies it to the server with `scp`, and the compose file loads it with `env_file`. That is what gives the container `FRONT_URL`, `STRAPI_INTERNAL_URL`, `ALTCHA_HMAC_SECRET`, `PREVIEW_SECRET`, and the contact/notification vars at request time.
+
+`.env.local` is **not** copied into the standalone image. `FRONT_URL` and `NEXT_PUBLIC_API_URL` are required; the contact form additionally needs `ALTCHA_HMAC_SECRET`, `NOTIFICATION_PROVIDER`, and the selected provider's tokens. Missing `FRONT_URL` fails the build and leaves the container unready.
+
+**Site identity:** fill Strapi **Global → `siteName` / `siteDescription`** for each product. The `NEXT_PUBLIC_SITE_NAME` / `NEXT_PUBLIC_SITE_DESCRIPTION` env values are the fallback when Strapi is unavailable, and `NEXT_PUBLIC_SITE_NAME` also feeds the edge 404 markdown.
 
 ## Multi-product deployments
 
 This repo can serve multiple brands (for example `studioarman.com` and `painfoolsstudio.com`). Shared code never hardcodes a domain:
 
-- `FRONT_URL` comes from the product's `*_ENV_LOCAL` secret and is passed to the container at runtime.
-- `next/deploy/docker-compose.prod.yml` requires it: `${FRONT_URL:?FRONT_URL is required}`.
-- `remote-deploy.sh` requires it and passes it to both the compose container and the rollback container.
+- The product's `*_ENV_LOCAL` secret becomes `.env.runtime` on the server and is loaded by the container.
+- `next/deploy/docker-compose.prod.yml` requires `FRONT_URL` for interpolation: `${FRONT_URL:?FRONT_URL is required}`.
+- `remote-deploy.sh` requires the env file and passes it to both the compose container and the rollback container.
 
 The current `studioarman-cicd.yml` is the **Studioarman** pipeline: branch `studioarman/v0.0`, container `studioarman-web-blog`, host port `3001`, deploy dir `/home/deploy/studioarman-web`, image tag prefix `studioarman-`. A second product needs its own caller workflow (or a reusable workflow) with:
 
@@ -149,25 +156,25 @@ Do not create this app under `/root/studioarman/next`. That tree is root-owned a
 On a push to `studioarman/v0.0`, after the image push:
 
 1. SSH to `DEPLOY_HOST` as `DEPLOY_USER`.
-2. Copy `next/deploy/docker-compose.prod.yml` and `next/deploy/remote-deploy.sh` to `/home/deploy/studioarman-web/`.
+2. Copy `next/deploy/docker-compose.prod.yml`, `next/deploy/remote-deploy.sh` and `next/deploy/.env.runtime` to `/home/deploy/studioarman-web/`. The env file is the `STUDIOARMAN_ENV_LOCAL` secret written by the deploy job; it is `chmod 600` on the server.
 3. `docker login ghcr.io` with `GHCR_USERNAME` and `GHCR_PULL_TOKEN`.
 4. Record the current `studioarman-web-blog` image id, if the container exists.
 5. `docker pull` the new `studioarman-<sha>` tag. If the pull fails, the existing container is left running.
 6. `docker rm -f studioarman-web-blog`. This is required the first time because the current container was created by another compose project. It does not delete `/root/studioarman/next`.
-7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/deploy/studioarman-web`.
+7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/deploy/studioarman-web`. The compose file loads `.env.runtime` and requires `FRONT_URL` for interpolation.
 
 Container settings:
 
 - name: `studioarman-web-blog`
-- host `3001` to container `4000`
+- host `127.0.0.1:3001` to container `4000`
 - `restart: unless-stopped`
 - memory limit `384m`
 - DNS `178.22.122.100`, `185.51.200.2`, `185.8.174.140`
 - json-file logs capped at 10m × 3
-- runtime env: `FRONT_URL`, extracted from `STUDIOARMAN_ENV_LOCAL` by the deploy job. The compose entry is `${FRONT_URL:?FRONT_URL is required}`, so it fails loudly instead of falling back to another domain.
+- runtime env: `.env.runtime` (`env_file`). It contains `FRONT_URL` plus all server-only values from `STUDIOARMAN_ENV_LOCAL`. The compose entry `${FRONT_URL:?FRONT_URL is required}` fails loudly instead of falling back to another domain.
 
 8. Health check: `curl -L` `http://127.0.0.1:3001/` for about 60 seconds (12 tries, 5 seconds apart). Success is a final HTTP 2xx or 3xx whose URL is still `http://127.0.0.1:3001...`. A redirect to the public site does not count.
-9. On failure, remove the new container and `docker run` the previous image id with the same name, port, restart policy, memory, DNS, and log cap. Then fail the job.
+9. On failure, remove the new container and `docker run` the previous image id with the same name, port, restart policy, memory, DNS, log cap and `--env-file .env.runtime`. Then fail the job.
 10. On success, `docker image prune -f` (dangling images only). Never `docker system prune`.
 
 Other containers on the host are out of scope: `web-blog` on port 3000, `kodom-*`, Strapi containers, and host nginx.
@@ -197,7 +204,7 @@ docker run -d \
   --dns 185.8.174.140 \
   --log-opt max-size=10m \
   --log-opt max-file=3 \
-  -p 3001:4000 \
+  -p 127.0.0.1:3001:4000 \
   "$PREV"
 ```
 

@@ -20,8 +20,8 @@ site with links to `/sitemap.xml`, the homepage and supported locales.
   Accept header at runtime.
 
 Content comes from `process.env.FRONT_URL` (required — build and container
-start fail without it), `NEXT_PUBLIC_SITE_NAME` and
-`NEXT_PUBLIC_SITE_DESCRIPTION` (fallbacks: `Studio Arman`).
+start fail without it), Strapi Global `siteName` / `siteDescription`, and the
+`NEXT_PUBLIC_SITE_NAME` / `NEXT_PUBLIC_SITE_DESCRIPTION` env fallbacks.
 
 ### Agent-friendly 404s
 

@@ -14,6 +14,9 @@ export default defineConfig({
     environment: 'jsdom',
     env: {
       FRONT_URL: 'http://localhost:3000',
+      NEXT_PUBLIC_SITE_ID: 'site-a',
+      NEXT_PUBLIC_SITE_NAME: 'Test Site',
+      NEXT_PUBLIC_SITE_DESCRIPTION: 'Test site description',
     },
     setupFiles: ['./__tests__/setup.ts'],
     include: ['**/__tests__/**/*.test.{ts,tsx}'],

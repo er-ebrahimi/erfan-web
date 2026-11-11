@@ -1,3 +1,3 @@
-import { altcha } from '@/lib/altcha';
+import { altchaChallenge } from '@/lib/altcha';
 
-export const GET = altcha.challengeHandler;
+export const GET = altchaChallenge;

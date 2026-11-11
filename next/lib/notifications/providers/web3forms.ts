@@ -11,9 +11,15 @@ export class Web3FormsProvider implements NotificationProvider {
 
   async send(payload: NotificationPayload): Promise<NotificationResult> {
     const accessKey = process.env.CONTACT_EMAIL_ACCESS_KEY;
+    const to = process.env.CONTACT_EMAIL;
 
     if (!accessKey) {
       console.error('Web3Forms: missing CONTACT_EMAIL_ACCESS_KEY');
+      return { success: false };
+    }
+
+    if (!to) {
+      console.error('Web3Forms: missing CONTACT_EMAIL');
       return { success: false };
     }
 
@@ -29,7 +35,7 @@ export class Web3FormsProvider implements NotificationProvider {
         `Sent at: ${new Date().toLocaleString('en-US')}`,
       ].join('\n'),
       from_name: 'Website Contact Form',
-      to: process.env.CONTACT_EMAIL || 'your-email@example.com',
+      to,
       reply_to: payload.contact,
     };
 

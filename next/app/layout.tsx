@@ -15,11 +15,12 @@ import {
   getLanguageFont,
   iranSans,
 } from '@/lib/fonts';
-import { buildSiteStructuredData } from '@/lib/shared/site-structured-data';
+import { SITE_URL } from '@/lib/shared/site-url';
 
-const siteId = process.env.NEXT_PUBLIC_SITE_ID || 'site-a';
+const siteId = process.env.NEXT_PUBLIC_SITE_ID!;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   icons: {
     icon: [
       {
@@ -76,16 +77,6 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <LocaleScript locales={[...locales]} defaultLocale={defaultLocale} />
-        {buildSiteStructuredData().map((data) => (
-          <script
-            key={String(data['@type'])}
-            id={`site-${String(data['@type']).toLowerCase()}-structured-data`}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(data).replace(/</g, '\\u003c'),
-            }}
-          />
-        ))}
         <GlobalErrorBoundary>
           <SlugProvider>{children}</SlugProvider>
         </GlobalErrorBoundary>

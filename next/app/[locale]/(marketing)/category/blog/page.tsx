@@ -13,6 +13,7 @@ import { Heading } from '@/components/elements/heading';
 import { Subheading } from '@/components/elements/subheading';
 import { JsonLd } from '@/components/json-ld';
 import { generateMetadataObject } from '@/lib/shared/metadata';
+import { SITE_URL } from '@/lib/shared/site-url';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { Article } from '@/types/types';
 
@@ -31,8 +32,10 @@ export async function generateMetadata(props: {
     true
   );
 
-  const seo = pageData?.seo;
-  seo.canonicalURL = `${process.env.NEXT_PUBLIC_FRONT_URL}/${params.locale}/category/blog`;
+  const seo = {
+    ...(pageData?.seo ?? {}),
+    canonicalURL: `${SITE_URL}/${params.locale}/category/blog`,
+  };
   return generateMetadataObject(seo);
 }
 

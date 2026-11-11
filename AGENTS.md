@@ -7,6 +7,19 @@
 - Always create/update docs in the `docs/` folder for deployments, environment setup, and architecture decisions.
 - Update `.env.example` when adding new environment variables.
 
+## ENVIRONMENT & DEPLOYMENT
+
+- **Never** use a placeholder fallback for a required env var (e.g. `process.env.FRONT_URL || 'https://website.com'`). Required vars fail the build (`next/env/validate.ts`) and the server start (`next/instrumentation.ts`).
+- Product-specific values (`FRONT_URL`, Strapi hosts, `NEXT_PUBLIC_SITE_ID`) come from the product's `*_ENV_LOCAL` secret / `.env.<product>.example`. Never hardcode a product domain in shared code, `docker-compose.prod.yml`, or `remote-deploy.sh`; use `${VAR:?VAR is required}`.
+- `.env.local` is **build-only**. Next's standalone output copies `.env` and `.env.production`, not `.env.local`. Any env read at request time must be passed in the container environment (`env_file: .env.runtime` or `environment:`).
+- The Studioarman frontend deploys **only** through GitHub Actions (`.github/workflows/studioarman-cicd.yml`). Do not build/copy images or run containers by hand; the next deploy overwrites it.
+- Adding a required env var means updating all of: `next/env/validate.ts`, `next/.env.example`, `docs/ENV-next.md`, the CI workflow fallback, and the deploy runtime env. Add a test.
+- All site-URL output (`sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD, 404 markdown) must use `SITE_URL` from `next/lib/shared/site-url.ts`. Do not read `process.env.FRONT_URL` elsewhere.
+- After changing `sitemap.xml` or `robots.txt`, purge the WCDN cache for that URL. It caches for a year.
+- Run `yarn lint`, `yarn typecheck`, `yarn test:unit`, and `yarn build` before pushing. The pipeline enforces them too.
+
+See `docs/ENV-RULES.md` for the incident and the guard map.
+
 ## RESPONSES
 
 - Keep responses concise and to the point - unless the user asks otherwise
@@ -129,7 +142,7 @@ The Studioarman frontend deploys through **GitHub Actions**. Do not build or cop
 - Trigger: push to `studioarman/v0.0` (pull requests run lint/typecheck/build only)
 - Pipeline: lint → typecheck → `next build` → Docker image (`linux/amd64`) → GHCR → SSH deploy
 - Image: `ghcr.io/er-ebrahimi/erfan-web:studioarman-<sha>`
-- Server pulls only; it never builds. Container `studioarman-web-blog`, host `3001` → container `4000`
+- Server pulls only; it never builds. Container `studioarman-web-blog`, host `127.0.0.1:3001` → container `4000`
 - Runbook: `docs/DEPLOY-studioarman.md` · Env reference: `docs/ENV-next.md`
 
 Another product (e.g. painfoolsstudio) uses its own caller workflow and `*_ENV_LOCAL` secret; the shared compose/script take `FRONT_URL` from that secret. See **Multi-product deployments** in the runbook.
@@ -141,6 +154,7 @@ The old manual `docker save` / `docker load` flow is not used.
 - **Auth**: Next.js API routes (`next/app/api/auth/*`) proxy to Strapi's `users-permissions` plugin (JWT, 7d expiry).
 - **Strapi custom middleware**: `deepPopulate` at `strapi/src/middlewares/deepPopulate.ts`.
 - **SEO**: Dynamic redirects fetched from Strapi at build time in `next.config.mjs`. Metadata from Strapi `global` content type via `next/lib/shared/metadata.ts`.
+- **Site identity**: Strapi `Global → siteName` / `siteDescription` feeds Organization/WebSite JSON-LD and `llms.txt`. The `NEXT_PUBLIC_SITE_*` env values are fallbacks; `NEXT_PUBLIC_SITE_NAME` also feeds the edge 404 markdown.
 - **shadcn/ui** setup in `next/components.json`, aliases: `@/components`, `@/components/ui`, `@/lib/utils`.
 - **Path alias**: `@/*` maps to `next/` directory root (see `next/tsconfig.json`).
 
