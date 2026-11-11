@@ -1,11 +1,10 @@
 import { type MetadataRoute } from 'next';
 
 import { locales } from '@/config';
+import { SITE_URL } from '@/lib/shared/site-url';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
 export const revalidate = 86400; // 24 hours
-
-const BASE_URL = process.env.FRONT_URL || 'https://website.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
@@ -30,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const locale of locales) {
       entries.push(
         {
-          url: `${BASE_URL}/${locale}`,
+          url: `${SITE_URL}/${locale}`,
           lastModified: new Date(),
           changeFrequency: 'weekly',
           priority: 1.0,
@@ -38,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...(hasBlog
           ? [
               {
-                url: `${BASE_URL}/${locale}/category/blog`,
+                url: `${SITE_URL}/${locale}/category/blog`,
                 lastModified: new Date(),
                 changeFrequency: 'weekly' as const,
                 priority: 0.8,
@@ -50,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     for (const article of articles) {
       entries.push({
-        url: `${BASE_URL}/${article.locale ?? 'fa'}/category/${article.slug}`,
+        url: `${SITE_URL}/${article.locale ?? 'fa'}/category/${article.slug}`,
         lastModified: new Date(article.updatedAt ?? article.publishedAt),
         changeFrequency: 'monthly',
         priority: 0.6,

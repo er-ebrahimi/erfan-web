@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { defaultLocale, locales } from '@/config';
+import { SITE_URL } from '@/lib/shared/site-url';
 
-const SITE_URL = (process.env.FRONT_URL || 'https://studioarman.com').replace(
-  /\/$/,
-  ''
-);
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'Studio Arman';
 const SITE_DESCRIPTION =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||

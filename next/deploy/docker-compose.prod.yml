@@ -6,6 +6,8 @@ services:
     image: ghcr.io/er-ebrahimi/erfan-web:${STUDIOARMAN_IMAGE_TAG}
     platform: linux/amd64
     container_name: studioarman-web-blog
+    environment:
+      FRONT_URL: ${FRONT_URL:?FRONT_URL is required}
     ports:
       - '3001:4000'
     restart: unless-stopped

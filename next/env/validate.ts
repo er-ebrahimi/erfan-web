@@ -13,6 +13,10 @@ const optionalNonEmpty = z
   .transform((value) => (value === '' ? undefined : value));
 
 const envSchema = z.object({
+  FRONT_URL: z
+    .string()
+    .min(1, 'FRONT_URL is required')
+    .url('FRONT_URL must be a valid URL (include https://)'),
   NEXT_PUBLIC_API_URL: z
     .string()
     .min(1, 'NEXT_PUBLIC_API_URL is required')
@@ -50,6 +54,7 @@ function formatValidationError(error: z.ZodError): string {
 }
 
 const skipDefaults: ValidatedEnv = {
+  FRONT_URL: 'http://localhost:3000',
   NEXT_PUBLIC_API_URL: 'http://localhost:1337',
   NEXT_PUBLIC_STRAPI_URL: undefined,
   STRAPI_INTERNAL_URL: undefined,

@@ -12,6 +12,9 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    env: {
+      FRONT_URL: 'http://localhost:3000',
+    },
     setupFiles: ['./__tests__/setup.ts'],
     include: ['**/__tests__/**/*.test.{ts,tsx}'],
     globals: true,

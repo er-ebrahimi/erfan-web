@@ -58,6 +58,9 @@ jobs:
 
       - name: Build
         run: yarn build
+        env:
+          # CI-only value for the runner build. Production reads FRONT_URL from STUDIOARMAN_ENV_LOCAL.
+          FRONT_URL: http://localhost:3000
 
   docker:
     name: Build Docker image
@@ -71,6 +74,8 @@ jobs:
           STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
           EVENT_NAME: ${{ github.event_name }}
           REF_NAME: ${{ github.ref }}
+          # CI-only fallback for PR/feature builds. The production secret supplies the real value.
+          FRONT_URL: http://localhost:3000
         run: |
           set -eu
           publish=0
@@ -84,12 +89,17 @@ jobs:
             exit 1
           else
             printf '%s\n' \
+              "FRONT_URL=${FRONT_URL}" \
               "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" \
               "DOMAIN=${DOMAIN}" \
               "BACK_PORT=${BACK_PORT}" \
               "IMAGE_HOSTNAME=${IMAGE_HOSTNAME}" \
               "BACKEND_URL=${BACKEND_URL}" \
               > next/.env.local
+          fi
+          if [ "$publish" -eq 1 ] && ! grep -q '^FRONT_URL=.' next/.env.local; then
+            echo "STUDIOARMAN_ENV_LOCAL must set FRONT_URL" >&2
+            exit 1
           fi
           if [ "$publish" -eq 1 ] && ! grep -q '^NEXT_PUBLIC_API_URL=.' next/.env.local; then
             echo "STUDIOARMAN_ENV_LOCAL must set a non-empty NEXT_PUBLIC_API_URL" >&2
@@ -130,6 +140,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Resolve FRONT_URL
+        id: site
+        env:
+          STUDIOARMAN_ENV_LOCAL: ${{ secrets.STUDIOARMAN_ENV_LOCAL }}
+        run: |
+          set -eu
+          front_url=$(printf '%s\n' "$STUDIOARMAN_ENV_LOCAL" | sed -n 's/^FRONT_URL=//p' | tr -d '\r' | head -n1)
+          if [ -z "$front_url" ]; then
+            echo "STUDIOARMAN_ENV_LOCAL must set FRONT_URL" >&2
+            exit 1
+          fi
+          echo "front_url=$front_url" >> "$GITHUB_OUTPUT"
+
       - name: Ensure deploy directory
         uses: appleboy/ssh-action@v1.2.5
         with:
@@ -157,11 +180,12 @@ jobs:
           GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
           GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
           STUDIOARMAN_IMAGE_TAG: studioarman-${{ github.sha }}
+          FRONT_URL: ${{ steps.site.outputs.front_url }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           command_timeout: 20m
-          envs: GHCR_USERNAME,GHCR_PULL_TOKEN,STUDIOARMAN_IMAGE_TAG
+          envs: GHCR_USERNAME,GHCR_PULL_TOKEN,STUDIOARMAN_IMAGE_TAG,FRONT_URL
           script: sh /home/deploy/studioarman-web/remote-deploy.sh
