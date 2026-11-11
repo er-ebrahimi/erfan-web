@@ -9,7 +9,7 @@ services:
     environment:
       FRONT_URL: ${FRONT_URL:?FRONT_URL is required}
     ports:
-      - '3001:4000'
+      - '127.0.0.1:3001:4000'
     restart: unless-stopped
     mem_limit: 384m
     # Host DNS has failed to resolve studioarman.site (EAI_AGAIN). Use public resolvers.
