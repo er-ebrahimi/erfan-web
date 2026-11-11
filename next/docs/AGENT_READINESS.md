@@ -19,9 +19,9 @@ site with links to `/sitemap.xml`, the homepage and supported locales.
   GET handler and serve a cached content-type instead of reading the request's
   Accept header at runtime.
 
-Content comes from `process.env.FRONT_URL`, `NEXT_PUBLIC_SITE_NAME` and
-`NEXT_PUBLIC_SITE_DESCRIPTION` (fallbacks: `https://studioarman.com`,
-`Studio Arman`).
+Content comes from `process.env.FRONT_URL` (required — build and container
+start fail without it), Strapi Global `siteName` / `siteDescription`, and the
+`NEXT_PUBLIC_SITE_NAME` / `NEXT_PUBLIC_SITE_DESCRIPTION` env fallbacks.
 
 ### Agent-friendly 404s
 

@@ -20,6 +20,7 @@ test.describe('Sitemap & SEO', { tag: '@api' }, () => {
 
     for (const loc of locs) {
       expect(() => new URL(loc)).not.toThrow();
+      expect(loc).not.toContain('website.com');
     }
 
     sitemapUrls = locs;

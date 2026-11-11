@@ -7,7 +7,27 @@ const env = validateEnv();
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
+function uploadPattern(rawUrl: string | undefined) {
+  if (!rawUrl) return [];
+
+  try {
+    const url = new URL(rawUrl);
+    return [
+      {
+        protocol: url.protocol.replace(':', '') as 'http' | 'https',
+        hostname: url.hostname,
+        ...(url.port ? { port: url.port } : {}),
+        pathname: '/uploads/**',
+      },
+    ];
+  } catch {
+    return [];
+  }
+}
+
 const remotePatterns = [
+  ...uploadPattern(env.NEXT_PUBLIC_STRAPI_URL),
+  ...uploadPattern(env.NEXT_PUBLIC_API_URL),
   ...(env.DOMAIN
     ? [
         {

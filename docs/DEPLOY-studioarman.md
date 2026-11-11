@@ -4,6 +4,42 @@ CI/CD for the Next.js app in `next/`, on branch `studioarman/v0.0`.
 
 Workflow: `.github/workflows/studioarman-cicd.yml`.
 
+## CI/CD is the only deploy path
+
+The Studioarman frontend deploys through **GitHub Actions**, never by hand:
+
+1. Push to `studioarman/v0.0`.
+2. `.github/workflows/studioarman-cicd.yml` runs lint, typecheck and `next build`.
+3. The same workflow builds the Docker image on the GitHub runner (`linux/amd64`) and pushes it to GHCR.
+4. The `deploy` job copies `next/deploy/docker-compose.prod.yml`, `remote-deploy.sh` and `.env.runtime` to the server, then recreates `studioarman-web-blog`.
+
+The server only pulls the image. It has no Node.js and must not build. A manual `docker run` is overwritten by the next deploy.
+
+**Required env:** the `STUDIOARMAN_ENV_LOCAL` GitHub secret is used twice:
+
+1. **Build:** written to `next/.env.local` before the image build.
+2. **Runtime:** the deploy job copies the same secret to `next/deploy/.env.runtime`, copies it to the server with `scp`, and the compose file loads it with `env_file`. That is what gives the container `FRONT_URL`, `STRAPI_INTERNAL_URL`, `ALTCHA_HMAC_SECRET`, `PREVIEW_SECRET`, and the contact/notification vars at request time.
+
+`.env.local` is **not** copied into the standalone image. `FRONT_URL` and `NEXT_PUBLIC_API_URL` are required; the contact form additionally needs `ALTCHA_HMAC_SECRET`, `NOTIFICATION_PROVIDER`, and the selected provider's tokens. Missing `FRONT_URL` fails the build and leaves the container unready.
+
+**Site identity:** fill Strapi **Global → `siteName` / `siteDescription`** for each product. The `NEXT_PUBLIC_SITE_NAME` / `NEXT_PUBLIC_SITE_DESCRIPTION` env values are the fallback when Strapi is unavailable, and `NEXT_PUBLIC_SITE_NAME` also feeds the edge 404 markdown.
+
+## Multi-product deployments
+
+This repo can serve multiple brands (for example `studioarman.com` and `painfoolsstudio.com`). Shared code never hardcodes a domain:
+
+- The product's `*_ENV_LOCAL` secret becomes `.env.runtime` on the server and is loaded by the container.
+- `next/deploy/docker-compose.prod.yml` requires `FRONT_URL` for interpolation: `${FRONT_URL:?FRONT_URL is required}`.
+- `remote-deploy.sh` requires the env file and passes it to both the compose container and the rollback container.
+
+The current `studioarman-cicd.yml` is the **Studioarman** pipeline: branch `studioarman/v0.0`, container `studioarman-web-blog`, host port `3001`, deploy dir `/home/deploy/studioarman-web`, image tag prefix `studioarman-`. A second product needs its own caller workflow (or a reusable workflow) with:
+
+- its own branch/trigger,
+- its own `*_ENV_LOCAL` secret containing `FRONT_URL=https://<product-domain>` and the right `NEXT_PUBLIC_SITE_ID`,
+- its own container name, host port, deploy dir and image tag prefix.
+
+The compose/script pattern is identical; only the inputs differ. Do not deploy a second product through the Studioarman workflow.
+
 `.github/workflows/ci-cd.yaml` triggers only on `main`. It is unchanged. Pushes and pull requests for `studioarman/v0.0` do not run that workflow. `strapi/` and `.github/workflows/strapi-cicd.yml` are not part of this pipeline.
 
 ## What runs when
@@ -47,32 +83,33 @@ The image build is still the Dockerfile's `npm install --legacy-peer-deps` again
 
 `next/next.config.mjs` fetches redirects at build time from `${NEXT_PUBLIC_API_URL}/api/redirections`. A failed fetch is ignored and the build continues with no CMS redirects. A wrong `NEXT_PUBLIC_API_URL` is baked in.
 
-The Dockerfile copies `next/.env.local` into the build and into the final image (`/usr/src/app/.env.local`). Next's standalone server loads that file at runtime. The production compose file does not pass a host env file.
+`next/.env.local` is used **only during the build**. Next's standalone output copies `.env` and `.env.production`, but **not `.env.local`** (see `writeStandaloneDirectory` in Next). Server-only values read at runtime (`FRONT_URL`, `STRAPI_INTERNAL_URL`, contact secrets) must be passed by the container, e.g. the `environment:` block in `next/deploy/docker-compose.prod.yml`. A missing `FRONT_URL` fails the build (Zod) and the container start (`next/instrumentation.ts`).
 
 Before `docker build`, CI writes `next/.env.local` from the secret `STUDIOARMAN_ENV_LOCAL` (full multi-line env file). That file is gitignored. Do not commit it.
 
 On a production push the secret must be non-empty and must set `NEXT_PUBLIC_API_URL`. Pull requests and the feature branch may build with an empty `.env.local`. Committed `next/.env.production` still loads for those builds.
 
-Next loads `.env.production` and then `.env.local`. Keys present in `.env.local` win. Keys only in `.env.production` remain. The secret should set every production value, not only secrets, because `next/.env.production` currently points at `studioarman.com`.
+Next loads `.env.production` and then `.env.local`. Keys present in `.env.local` win. Keys only in `.env.production` remain. The secret should set every production value, not only secrets.
 
 Variables read by the Next app (from code, `next/.env.example`, and `next/.env.production`):
 
-| Variable                         | When it matters                                  | Used for                                                                                                                        |
-| -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL`            | Build (inlined) and server runtime               | Strapi origin, auth calls, image URLs, redirect fetch `${NEXT_PUBLIC_API_URL}/api/redirections`                                 |
-| `NEXT_PUBLIC_SITE_URL`           | Build (`next-sitemap`)                           | Sitemap site URL. Falls back to `DOMAIN`, then `https://example.com`                                                            |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Build (inlined into the contact form)            | Cloudflare Turnstile site key                                                                                                   |
-| `DOMAIN`                         | Build (`next.config.mjs` image `remotePatterns`) | Strapi upload hostname                                                                                                          |
-| `BACK_PORT`                      | Build (image `remotePatterns`)                   | Strapi upload port                                                                                                              |
-| `IMAGE_HOSTNAME`                 | Build (`allowedDevOrigins`)                      | Dev origin allow-list                                                                                                           |
-| `BACKEND_URL`                    | Build (`allowedDevOrigins`) and server render    | Media URLs in `components/dynamic-zone/media.tsx`                                                                               |
-| `WEBSITE_URL`                    | Server runtime via `config.ts`                   | If set, `host` becomes `https://${WEBSITE_URL}` (the code adds `https://` itself). Nothing else in `next/` imports `host` today |
-| `PORT`                           | Runtime                                          | `config.ts` fallback host. The image sets `PORT=4000`                                                                           |
-| `PREVIEW_SECRET`                 | Server runtime                                   | `app/api/preview`                                                                                                               |
-| `TURNSTILE_SECRET_KEY`           | Server runtime                                   | Contact route Turnstile verify                                                                                                  |
-| `CONTACT_EMAIL_ACCESS_KEY`       | Server runtime                                   | Web3Forms access key                                                                                                            |
-| `CONTACT_EMAIL`                  | Server runtime                                   | Contact form recipient. Falls back to `your-email@example.com`                                                                  |
-| `NODE_ENV`                       | Build and runtime                                | Set to `production` in the image                                                                                                |
+| Variable                         | When it matters                                 | Used for                                                                                                                                |
+| -------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `FRONT_URL`                      | Build **and server runtime**                    | Canonical site URL: `sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD, 404 markdown. Required: build and container start fail without it |
+| `NEXT_PUBLIC_API_URL`            | Build (inlined) and server runtime              | Strapi origin, auth calls, image URLs, redirect fetch `${NEXT_PUBLIC_API_URL}/api/redirections`                                         |
+| `NEXT_PUBLIC_SITE_URL`           | —                                               | Not used by the current app. The sitemap uses `FRONT_URL`                                                                               |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Build (inlined into the contact form)           | Cloudflare Turnstile site key                                                                                                           |
+| `DOMAIN`                         | Build (`next.config.ts` image `remotePatterns`) | Strapi upload hostname                                                                                                                  |
+| `BACK_PORT`                      | Build (image `remotePatterns`)                  | Strapi upload port                                                                                                                      |
+| `IMAGE_HOSTNAME`                 | Build (`allowedDevOrigins`)                     | Dev origin allow-list                                                                                                                   |
+| `BACKEND_URL`                    | Build (`allowedDevOrigins`) and server render   | Media URLs in `components/dynamic-zone/media.tsx`                                                                                       |
+| `WEBSITE_URL`                    | Server runtime via `config.ts`                  | If set, `host` becomes `https://${WEBSITE_URL}` (the code adds `https://` itself). Nothing else in `next/` imports `host` today         |
+| `PORT`                           | Runtime                                         | `config.ts` fallback host. The image sets `PORT=4000`                                                                                   |
+| `PREVIEW_SECRET`                 | Server runtime                                  | `app/api/preview`                                                                                                                       |
+| `TURNSTILE_SECRET_KEY`           | Server runtime                                  | Contact route Turnstile verify                                                                                                          |
+| `CONTACT_EMAIL_ACCESS_KEY`       | Server runtime                                  | Web3Forms access key                                                                                                                    |
+| `CONTACT_EMAIL`                  | Server runtime                                  | Contact form recipient. Falls back to `your-email@example.com`                                                                          |
+| `NODE_ENV`                       | Build and runtime                               | Set to `production` in the image                                                                                                        |
 
 `next/.env.example` lists the same names for local use. It is not copied into the image by itself.
 
@@ -119,29 +156,34 @@ Do not create this app under `/root/studioarman/next`. That tree is root-owned a
 On a push to `studioarman/v0.0`, after the image push:
 
 1. SSH to `DEPLOY_HOST` as `DEPLOY_USER`.
-2. Copy `next/deploy/docker-compose.prod.yml` and `next/deploy/remote-deploy.sh` to `/home/deploy/studioarman-web/`.
+2. Copy `next/deploy/docker-compose.prod.yml`, `next/deploy/remote-deploy.sh` and `next/deploy/.env.runtime` to `/home/deploy/studioarman-web/`. The env file is the `STUDIOARMAN_ENV_LOCAL` secret written by the deploy job; it is `chmod 600` on the server.
 3. `docker login ghcr.io` with `GHCR_USERNAME` and `GHCR_PULL_TOKEN`.
 4. Record the current `studioarman-web-blog` image id, if the container exists.
 5. `docker pull` the new `studioarman-<sha>` tag. If the pull fails, the existing container is left running.
 6. `docker rm -f studioarman-web-blog`. This is required the first time because the current container was created by another compose project. It does not delete `/root/studioarman/next`.
-7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/deploy/studioarman-web`.
+7. `docker compose -f docker-compose.prod.yml -p studioarman-web up -d --no-build` from `/home/deploy/studioarman-web`. The compose file loads `.env.runtime` and requires `FRONT_URL` for interpolation.
 
 Container settings:
 
 - name: `studioarman-web-blog`
-- host `3001` to container `4000`
+- host `127.0.0.1:3001` to container `4000`
 - `restart: unless-stopped`
 - memory limit `384m`
 - DNS `178.22.122.100`, `185.51.200.2`, `185.8.174.140`
 - json-file logs capped at 10m × 3
+- runtime env: `.env.runtime` (`env_file`). It contains `FRONT_URL` plus all server-only values from `STUDIOARMAN_ENV_LOCAL`. The compose entry `${FRONT_URL:?FRONT_URL is required}` fails loudly instead of falling back to another domain.
 
 8. Health check: `curl -L` `http://127.0.0.1:3001/` for about 60 seconds (12 tries, 5 seconds apart). Success is a final HTTP 2xx or 3xx whose URL is still `http://127.0.0.1:3001...`. A redirect to the public site does not count.
-9. On failure, remove the new container and `docker run` the previous image id with the same name, port, restart policy, memory, DNS, and log cap. Then fail the job.
+9. On failure, remove the new container and `docker run` the previous image id with the same name, port, restart policy, memory, DNS, log cap and `--env-file .env.runtime`. Then fail the job.
 10. On success, `docker image prune -f` (dangling images only). Never `docker system prune`.
 
 Other containers on the host are out of scope: `web-blog` on port 3000, `kodom-*`, Strapi containers, and host nginx.
 
 There is no blue/green deploy and no extra nginx container. The host has roughly 170 MB free RAM and no swap, so two copies of this app must not run at once. The replace stops the site until the new container passes the health check.
+
+## CDN cache
+
+`https://studioarman.com` is fronted by WCDN. It currently serves `/sitemap.xml` and `/robots.txt` with `cache-control: public, max-age=31536000, immutable`. After any deploy that changes those routes, purge the URL in the WCDN panel. Otherwise the CDN keeps serving the old body even though the origin is correct.
 
 ## Rollback
 
@@ -162,7 +204,7 @@ docker run -d \
   --dns 185.8.174.140 \
   --log-opt max-size=10m \
   --log-opt max-file=3 \
-  -p 3001:4000 \
+  -p 127.0.0.1:3001:4000 \
   "$PREV"
 ```
 
@@ -184,10 +226,10 @@ curl -sS -o /dev/null -w '%{http_code} %{url_effective}\n' -L --max-redirs 5 htt
 
 ## Risks
 
-- `STUDIOARMAN_ENV_LOCAL` is stored in the image layers. Anyone who can pull `ghcr.io/er-ebrahimi/erfan-web` can read those values. Keep the package private and rotate credentials if the package is exposed.
+- `STUDIOARMAN_ENV_LOCAL` is used in the builder stage only. The final image copies the standalone output, which excludes `.env.local`, so the published image does not contain the secret. Keep the package private and rotate credentials if the package is exposed.
 - Changing `NEXT_PUBLIC_*` or redirects requires a rebuild. Restarting the container is not enough for client-side values.
 - The first successful health check is followed by `docker image prune -f`. Dangling images go away. Tagged `studioarman-<sha>` images stay. If the pre-pipeline container's image had no remaining tag, prune can remove it after a successful deploy, and automatic rollback is then impossible.
-- Rollback starts the previous image id. It does not restore extra mounts, networks, or a host env file from the old compose project. Images built by this pipeline carry `.env.local` inside the image.
+- Rollback starts the previous image id with `FRONT_URL` set, matching the compose file. It does not restore extra mounts, networks, or a host env file from the old compose project.
 - If the first deploy has no previous container and the health check fails, the script does not start a replacement. The site stays down and the job fails.
 - `docker rm -f` drops the container the root compose project created. That project will show the container as missing. The directory `/root/studioarman/next` is not removed.
 - Host RAM is shared. The 384m limit bounds this container. It does not reserve memory. A pull while the old container is still running uses disk more than RAM; a full disk fails the pull before the swap. An OOM killer can still stop processes on the host.

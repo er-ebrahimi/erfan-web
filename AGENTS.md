@@ -7,6 +7,19 @@
 - Always create/update docs in the `docs/` folder for deployments, environment setup, and architecture decisions.
 - Update `.env.example` when adding new environment variables.
 
+## ENVIRONMENT & DEPLOYMENT
+
+- **Never** use a placeholder fallback for a required env var (e.g. `process.env.FRONT_URL || 'https://website.com'`). Required vars fail the build (`next/env/validate.ts`) and the server start (`next/instrumentation.ts`).
+- Product-specific values (`FRONT_URL`, Strapi hosts, `NEXT_PUBLIC_SITE_ID`) come from the product's `*_ENV_LOCAL` secret / `.env.<product>.example`. Never hardcode a product domain in shared code, `docker-compose.prod.yml`, or `remote-deploy.sh`; use `${VAR:?VAR is required}`.
+- `.env.local` is **build-only**. Next's standalone output copies `.env` and `.env.production`, not `.env.local`. Any env read at request time must be passed in the container environment (`env_file: .env.runtime` or `environment:`).
+- The Studioarman frontend deploys **only** through GitHub Actions (`.github/workflows/studioarman-cicd.yml`). Do not build/copy images or run containers by hand; the next deploy overwrites it.
+- Adding a required env var means updating all of: `next/env/validate.ts`, `next/.env.example`, `docs/ENV-next.md`, the CI workflow fallback, and the deploy runtime env. Add a test.
+- All site-URL output (`sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD, 404 markdown) must use `SITE_URL` from `next/lib/shared/site-url.ts`. Do not read `process.env.FRONT_URL` elsewhere.
+- After changing `sitemap.xml` or `robots.txt`, purge the WCDN cache for that URL. It caches for a year.
+- Run `yarn lint`, `yarn typecheck`, `yarn test:unit`, and `yarn build` before pushing. The pipeline enforces them too.
+
+See `docs/ENV-RULES.md` for the incident and the guard map.
+
 ## RESPONSES
 
 - Keep responses concise and to the point - unless the user asks otherwise
@@ -121,33 +134,43 @@ Forked from `strapi/LaunchPad`.
 | `next/` | `yarn test:e2e:debug`      | Debug mode (Inspector)           |
 | `next/` | `yarn test:e2e:ui`         | Playwright UI mode               |
 
-## Deployment (legacy)
+## Deployment — CI/CD (studioarman)
 
-- Old blue-green Docker deploy via `next/deploy.sh` (not actively used).
-- CI: `.github/workflows/deploy-demo.yaml` triggers GitLab pipeline on push to `main`.
+The Studioarman frontend deploys through **GitHub Actions**. Do not build or copy images by hand.
 
-See **Docker build & deploy** section below for the current deployment flow.
+- Workflow: `.github/workflows/studioarman-cicd.yml`
+- Trigger: push to `studioarman/v0.0` (pull requests run lint/typecheck/build only)
+- Pipeline: lint → typecheck → `next build` → Docker image (`linux/amd64`) → GHCR → SSH deploy
+- Image: `ghcr.io/er-ebrahimi/erfan-web:studioarman-<sha>`
+- Server pulls only; it never builds. Container `studioarman-web-blog`, host `127.0.0.1:3001` → container `4000`
+- Runbook: `docs/DEPLOY-studioarman.md` · Env reference: `docs/ENV-next.md`
+
+Another product (e.g. painfoolsstudio) uses its own caller workflow and `*_ENV_LOCAL` secret; the shared compose/script take `FRONT_URL` from that secret. See **Multi-product deployments** in the runbook.
+
+The old manual `docker save` / `docker load` flow is not used.
 
 ## Architecture notes
 
 - **Auth**: Next.js API routes (`next/app/api/auth/*`) proxy to Strapi's `users-permissions` plugin (JWT, 7d expiry).
 - **Strapi custom middleware**: `deepPopulate` at `strapi/src/middlewares/deepPopulate.ts`.
 - **SEO**: Dynamic redirects fetched from Strapi at build time in `next.config.mjs`. Metadata from Strapi `global` content type via `next/lib/shared/metadata.ts`.
+- **Site identity**: Strapi `Global → siteName` / `siteDescription` feeds Organization/WebSite JSON-LD and `llms.txt`. The `NEXT_PUBLIC_SITE_*` env values are fallbacks; `NEXT_PUBLIC_SITE_NAME` also feeds the edge 404 markdown.
 - **shadcn/ui** setup in `next/components.json`, aliases: `@/components`, `@/components/ui`, `@/lib/utils`.
 - **Path alias**: `@/*` maps to `next/` directory root (see `next/tsconfig.json`).
 
-## Docker build & deploy
+## Runtime environment (Docker)
 
 ### Environment variables — 3 tiers
 
-| Var                      | Prefixed?      | Inlined at build? | Purpose                                              | Local (Docker)                     | Server                          |
-| ------------------------ | -------------- | :---------------: | ---------------------------------------------------- | ---------------------------------- | ------------------------------- |
-| `STRAPI_INTERNAL_URL`    | No             |    ❌ Runtime     | Server API calls (fetchContentType, auth, redirects) | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_API_URL`    | `NEXT_PUBLIC_` |      ✅ Yes       | Client auth calls (auth-context.tsx)                 | `http://localhost:1337`            | `https://studioarman.site:2087` |
-| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` |      ✅ Yes       | Browser-facing image URLs                            | `http://localhost:1337`            | `https://studioarman.site:2087` |
+| Var                      | Prefixed?      | Read at         | Purpose                                                 | Local (Docker)                     | Server                          |
+| ------------------------ | -------------- | --------------- | ------------------------------------------------------- | ---------------------------------- | ------------------------------- |
+| `FRONT_URL`              | No             | Build + runtime | Canonical site URL (sitemap, robots, llms.txt, JSON-LD) | `http://localhost:3000`            | `https://studioarman.com`       |
+| `STRAPI_INTERNAL_URL`    | No             | Runtime         | Server API calls (fetchContentType, auth, redirects)    | `http://host.docker.internal:1337` | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_API_URL`    | `NEXT_PUBLIC_` | Build (inlined) | Client auth calls (auth-context.tsx)                    | `http://localhost:1337`            | `https://studioarman.site:2087` |
+| `NEXT_PUBLIC_STRAPI_URL` | `NEXT_PUBLIC_` | Build (inlined) | Browser-facing image URLs                               | `http://localhost:1337`            | `https://studioarman.site:2087` |
 
 `NEXT_PUBLIC_*` vars are **baked into the JS bundle at build time** — changing them requires a rebuild.  
-`STRAPI_INTERNAL_URL` is read from `process.env` at runtime — change it in `.env.local` and restart the container.
+`FRONT_URL` and other server-only vars are read from `process.env` at runtime — **`.env.local` is not in the standalone image**. The deploy job extracts `FRONT_URL` from the product's `*_ENV_LOCAL` secret and passes it to the container; the compose file requires it (`${FRONT_URL:?...}`) and has no default. Missing `FRONT_URL` fails the build (Zod) and leaves the container unready, so the deploy health check rolls back (`next/instrumentation.ts`).
 
 ### Product theming
 
@@ -173,58 +196,6 @@ See **Docker build & deploy** section below for the current deployment flow.
 3. Deploy with `NEXT_PUBLIC_SITE_ID=site-c`.
 
 See `next/docs/THEME_IMPLEMENTATION.md` for full details.
-
-### Build & save image (local machine)
-
-```bash
-cd next
-docker compose -f docker-compose.dev.yml build
-docker save -o web-blog.tar web-blog:latest
-```
-
-### Deploy to server
-
-```bash
-# Copy the tar to the server, then:
-docker load -i web-blog.tar
-docker compose up -d   # start
-docker compose down    # stop
-```
-
-### Server docker-compose.yml
-
-```yaml
-services:
-  app:
-    image: web-blog:latest
-    container_name: web-blog
-    ports:
-      - '3000:4000'
-    env_file:
-      - .env.local
-    dns:
-      - 178.22.122.100
-      - 185.51.200.2
-      - 185.8.174.140
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-```
-
-> **Why `dns` is needed:** Without explicit DNS, the container may fail to resolve `studioarman.site` (`EAI_AGAIN`). The public IP `185.239.3.14` is reachable from inside the container only via DNS resolution of the domain.
-
-### Server .env.local
-
-```
-WEBSITE_URL=http://localhost:3000
-PORT=4000
-BACK_PORT=2087
-DOMAIN=studioarman.site
-STRAPI_INTERNAL_URL=https://studioarman.site:2087
-NEXT_PUBLIC_API_URL=https://studioarman.site:2087
-NEXT_PUBLIC_STRAPI_URL=https://studioarman.site:2087
-PREVIEW_SECRET=tobemodified
-IMAGE_HOSTNAME=studioarman.site:2087
-```
 
 ### Architecture notes (Docker)
 

@@ -1,6 +1,6 @@
 import { type MetadataRoute } from 'next';
 
-const BASE_URL = process.env.FRONT_URL;
+import { SITE_URL } from '@/lib/shared/site-url';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -50,6 +50,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

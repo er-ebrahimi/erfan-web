@@ -13,10 +13,19 @@ const optionalNonEmpty = z
   .transform((value) => (value === '' ? undefined : value));
 
 const envSchema = z.object({
+  FRONT_URL: z
+    .string()
+    .min(1, 'FRONT_URL is required')
+    .url('FRONT_URL must be a valid URL (include https://)'),
   NEXT_PUBLIC_API_URL: z
     .string()
     .min(1, 'NEXT_PUBLIC_API_URL is required')
     .url('NEXT_PUBLIC_API_URL must be a valid URL'),
+  NEXT_PUBLIC_SITE_ID: z.string().min(1, 'NEXT_PUBLIC_SITE_ID is required'),
+  NEXT_PUBLIC_SITE_NAME: z.string().min(1, 'NEXT_PUBLIC_SITE_NAME is required'),
+  NEXT_PUBLIC_SITE_DESCRIPTION: z
+    .string()
+    .min(1, 'NEXT_PUBLIC_SITE_DESCRIPTION is required'),
   NEXT_PUBLIC_STRAPI_URL: optionalNonEmpty,
   STRAPI_INTERNAL_URL: optionalNonEmpty,
   LOCALES: optionalNonEmpty,
@@ -31,6 +40,12 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().optional(),
   PREVIEW_SECRET: optionalNonEmpty,
   TURNSTILE_SECRET_KEY: optionalNonEmpty,
+  ALTCHA_HMAC_SECRET: optionalNonEmpty,
+  NOTIFICATION_PROVIDER: optionalNonEmpty,
+  BALE_BOT_TOKEN: optionalNonEmpty,
+  BALE_ADMIN_CHAT_ID: optionalNonEmpty,
+  TELEGRAM_BOT_TOKEN: optionalNonEmpty,
+  TELEGRAM_ADMIN_CHAT_ID: optionalNonEmpty,
   CONTACT_EMAIL_ACCESS_KEY: optionalNonEmpty,
   CONTACT_EMAIL: optionalNonEmpty,
 });
@@ -50,7 +65,12 @@ function formatValidationError(error: z.ZodError): string {
 }
 
 const skipDefaults: ValidatedEnv = {
+  FRONT_URL: 'http://localhost:3000',
   NEXT_PUBLIC_API_URL: 'http://localhost:1337',
+  NEXT_PUBLIC_SITE_ID: 'site-a',
+  NEXT_PUBLIC_SITE_NAME: 'Studio Arman',
+  NEXT_PUBLIC_SITE_DESCRIPTION:
+    'Studio Arman — portfolio and blog of Erfan, a web developer and designer.',
   NEXT_PUBLIC_STRAPI_URL: undefined,
   STRAPI_INTERNAL_URL: undefined,
   LOCALES: undefined,
@@ -65,6 +85,12 @@ const skipDefaults: ValidatedEnv = {
   PORT: undefined,
   PREVIEW_SECRET: undefined,
   TURNSTILE_SECRET_KEY: undefined,
+  ALTCHA_HMAC_SECRET: undefined,
+  NOTIFICATION_PROVIDER: undefined,
+  BALE_BOT_TOKEN: undefined,
+  BALE_ADMIN_CHAT_ID: undefined,
+  TELEGRAM_BOT_TOKEN: undefined,
+  TELEGRAM_ADMIN_CHAT_ID: undefined,
   CONTACT_EMAIL_ACCESS_KEY: undefined,
   CONTACT_EMAIL: undefined,
 };

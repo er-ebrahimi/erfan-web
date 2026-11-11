@@ -1,17 +1,29 @@
 #!/bin/sh
 # Replace studioarman-web-blog in place and roll back if it does not become healthy.
-# Expects GHCR_USERNAME, GHCR_PULL_TOKEN, and STUDIOARMAN_IMAGE_TAG.
+# Expects GHCR_USERNAME, GHCR_PULL_TOKEN, STUDIOARMAN_IMAGE_TAG and FRONT_URL.
 # Does not delete /root/studioarman/next and does not touch other containers.
 set -eu
 
 DEPLOY_DIR=/home/deploy/studioarman-web
 COMPOSE_FILE=$DEPLOY_DIR/docker-compose.prod.yml
+ENV_FILE=$DEPLOY_DIR/.env.runtime
 CONTAINER=studioarman-web-blog
 IMAGE_REPO=ghcr.io/er-ebrahimi/erfan-web
 
 : "${GHCR_USERNAME:?GHCR_USERNAME is required}"
 : "${GHCR_PULL_TOKEN:?GHCR_PULL_TOKEN is required}"
 : "${STUDIOARMAN_IMAGE_TAG:?STUDIOARMAN_IMAGE_TAG is required}"
+: "${FRONT_URL:?FRONT_URL is required}"
+
+# docker compose reads FRONT_URL from the environment for interpolation.
+export FRONT_URL
+
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Missing $ENV_FILE" >&2
+  exit 1
+fi
+
+chmod 600 "$ENV_FILE"
 
 IMAGE="$IMAGE_REPO:$STUDIOARMAN_IMAGE_TAG"
 
@@ -68,7 +80,8 @@ rollback() {
     --dns 185.8.174.140 \
     --log-opt max-size=10m \
     --log-opt max-file=3 \
-    -p 3001:4000 \
+    --env-file "$ENV_FILE" \
+    -p 127.0.0.1:3001:4000 \
     "$PREV_IMAGE_ID"
   echo "Restored previous image $PREV_IMAGE_ID"
 }

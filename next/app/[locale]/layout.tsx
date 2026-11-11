@@ -12,6 +12,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { CartProvider } from '@/context/cart-context';
 import { routing } from '@/i18n/routing';
 import { getDirection } from '@/lib/rtl-utils';
+import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/shared/site-metadata';
+import { buildSiteStructuredData } from '@/lib/shared/site-structured-data';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 
 export const revalidate = 60;
@@ -69,6 +71,10 @@ export default async function LocaleLayout(props: {
       footer: null,
     };
   }
+
+  const siteName = pageData?.siteName || SITE_NAME;
+  const siteDescription = pageData?.siteDescription || SITE_DESCRIPTION;
+
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <ViewTransitions>
@@ -84,6 +90,18 @@ export default async function LocaleLayout(props: {
               dir={direction}
             >
               <JsonLd seo={pageData?.seo} id="global-structured-data" />
+              {buildSiteStructuredData({ siteName, siteDescription }).map(
+                (data) => (
+                  <script
+                    key={String(data['@type'])}
+                    id={`site-${String(data['@type']).toLowerCase()}-structured-data`}
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.stringify(data).replace(/</g, '\\u003c'),
+                    }}
+                  />
+                )
+              )}
               <Navbar
                 data={pageData.navbar}
                 locale={locale}

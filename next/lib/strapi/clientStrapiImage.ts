@@ -1,5 +1,6 @@
 export function clientStrapiImage(url: string): string {
-  const base = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const base =
+    process.env.NEXT_PUBLIC_STRAPI_URL || process.env.NEXT_PUBLIC_API_URL;
 
   if (url.startsWith('/')) {
     return (base || '').replace(/\/$/, '') + url;
