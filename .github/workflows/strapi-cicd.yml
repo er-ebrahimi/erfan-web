@@ -1,8 +1,8 @@
 name: Strapi CI/CD
 
 # Staging Strapi image pipeline.
-# Deployment is manual and off by default: the `deploy` job only runs from a
-# workflow_dispatch with `deploy` checked. Normal pushes build and publish the image.
+# Pushes to studioarman/v0.0 build, publish and deploy to the 1338 instance.
+# A workflow_dispatch can also deploy (with `deploy` checked) or build only.
 # The production Strapi in /root/strapi-docker is never referenced by this workflow.
 
 on:
@@ -22,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       deploy:
-        description: 'Deploy to the staging server (manual; server must be prepared first)'
+        description: 'Also deploy after the build'
         type: boolean
         default: false
 
@@ -116,9 +116,9 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    name: Deploy to staging (manual)
+    name: Deploy to staging
     needs: docker
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/studioarman/v0.0') || (github.event_name == 'workflow_dispatch' && inputs.deploy == true)
     environment:
       name: studioarman-strapi
     runs-on: ubuntu-latest
