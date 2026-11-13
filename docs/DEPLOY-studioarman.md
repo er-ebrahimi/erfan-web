@@ -40,7 +40,7 @@ The current `studioarman-cicd.yml` is the **Studioarman** pipeline: branch `stud
 
 The compose/script pattern is identical; only the inputs differ. Do not deploy a second product through the Studioarman workflow.
 
-`.github/workflows/ci-cd.yaml` triggers only on `main`. It is unchanged. Pushes and pull requests for `studioarman/v0.0` do not run that workflow. `strapi/` and `.github/workflows/strapi-cicd.yml` are not part of this pipeline.
+`.github/workflows/ci-cd.yaml` triggers only on `main`. It is unchanged. Pushes and pull requests for `studioarman/v0.0` do not run that workflow. `strapi/` and `.github/workflows/strapi-cicd.yml` are not part of this pipeline; the staging Strapi pipeline is documented in `docs/DEPLOY-strapi.md`.
 
 ## What runs when
 

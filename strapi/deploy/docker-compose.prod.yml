@@ -1,0 +1,42 @@
+# Pull-only runtime for the staging Strapi image.
+# Built in GitHub Actions; the host must not build it.
+# Project name is passed as `docker compose -p strapi-dev`.
+# This file must never reference /root/strapi-docker or the production `strapi` container.
+services:
+  strapi:
+    image: ghcr.io/er-ebrahimi/erfan-web:${STRAPI_IMAGE_TAG:?STRAPI_IMAGE_TAG is required}
+    platform: linux/amd64
+    container_name: strapi-dev
+    env_file:
+      - .env.runtime
+    environment:
+      HOST: 0.0.0.0
+      PORT: 1337
+      NODE_ENV: production
+      DATABASE_CLIENT: sqlite
+      DATABASE_FILENAME: .tmp/data.db
+      NODE_OPTIONS: --max-old-space-size=256
+      HOME: /tmp
+    # deploy's UID/GID on the host owns ./data, so the container can write SQLite and uploads.
+    user: '1002:1002'
+    ports:
+      - '127.0.0.1:1338:1337'
+    volumes:
+      - ./data/.tmp:/opt/app/.tmp
+      # Mount the whole public dir. The importer renames uploads/ during a restore,
+      # which fails if uploads/ itself is a mount point.
+      - ./data/public:/opt/app/public
+    restart: unless-stopped
+    mem_limit: 384m
+    memswap_limit: 768m
+    pull_policy: never
+    # Host DNS has failed to resolve studioarman.site (EAI_AGAIN). Use public resolvers.
+    dns:
+      - 178.22.122.100
+      - 185.51.200.2
+      - 185.8.174.140
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'

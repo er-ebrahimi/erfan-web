@@ -56,10 +56,10 @@ export default ({ env }) => {
     },
     sqlite: {
       connection: {
+        // Relative to the app root (`/opt/app` in Docker), not the compiled config dir.
+        // The import CLI loads config from a different directory than `strapi start`.
         filename: path.join(
-          __dirname,
-          '..',
-          '..',
+          process.cwd(),
           env('DATABASE_FILENAME', '.tmp/data.db')
         ),
       },
