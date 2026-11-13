@@ -36,6 +36,9 @@
     "uuid": "^14.0.0",
     "pg": "^8.13.1"
   },
+  "resolutions": {
+    "sharp": "0.33.5"
+  },
   "author": {
     "name": "A Strapi developer"
   },
