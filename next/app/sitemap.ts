@@ -58,5 +58,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('[Sitemap] Failed to fetch articles:', err);
   }
 
+  // Static pages stay outside the articles fetch so an API failure cannot
+  // silently drop them from the sitemap.
+  for (const locale of locales) {
+    for (const slug of ['project', 'faq', 'contact']) {
+      entries.push({
+        url: `${SITE_URL}/${locale}/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      });
+    }
+  }
+
   return entries;
 }
