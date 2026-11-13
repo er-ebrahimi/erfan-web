@@ -16,7 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       {
         pagination: { pageSize: 1000 },
         fields: ['slug', 'updatedAt', 'publishedAt'],
-        populate: false,
         status: 'published',
       },
       false
