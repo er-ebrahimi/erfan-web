@@ -290,6 +290,20 @@ curl -sS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:1338/_health
 Image rollback does not undo Strapi schema migrations. Restore the matching
 `data/.tmp/backups/<timestamp>/` files if the old image cannot start.
 
+## Monitoring and backups
+
+The host runs `/usr/local/bin/server-monitor.sh` from `/etc/cron.d/server-monitor`
+every 5 minutes. It checks disk, RAM, load, the new containers
+(`studioarman-web-blog`, `strapi-dev`, `strapi-backup-dev`) and the two local HTTP
+endpoints, then alerts to Bale only when the state changes.
+
+- Source of truth: `scripts/server-monitor.sh`
+- Full documentation: [SERVER-MONITOR.md](./SERVER-MONITOR.md)
+- New data backup: `strapi-backup-dev` runs daily at 03:00 (and on container
+  start), keeps 3 local copies in `data/.tmp/backups`, and uploads the archive
+  in 44 MB parts to Bale. The old `strapi-backup` only covers
+  `/root/strapi-docker`.
+
 ## Risks
 
 - The host has about 418 MB RAM available. The staging container is capped at 384 MB
@@ -302,7 +316,8 @@ Image rollback does not undo Strapi schema migrations. Restore the matching
   Strapi starts with an empty database; put your snapshot in place first.
 - The pre-deploy DB backup lives in `data/.tmp/backups`; it is a copy, not a full
   media backup.
-- Staging data is not backed up beyond the pre-deploy DB copies. It is disposable.
+- The new data is backed up daily by `strapi-backup-dev` (Bale + 3 local copies);
+  the pre-deploy DB copies are still only a rollback aid.
 - The old `.github/workflows/ci-cd.yaml` on `main` is a separate legacy pipeline. This
   workflow does not change it. Do not merge this Strapi workflow to `main` without
   removing the old Strapi/Docker-Hub workflow there too.
